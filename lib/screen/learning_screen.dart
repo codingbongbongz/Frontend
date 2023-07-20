@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
+import 'package:k_learning/screen/voice_input_screen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LearningScreen extends StatefulWidget {
@@ -186,16 +187,71 @@ class _LearningScreenState extends State<LearningScreen> {
                       child: Text('전체 자막 버튼 눌렀을 때 출력되는 화면'),
                     ),
                   if (isPartCaption)
-                    Container(
-                      child: Text('실시간 자막 눌렀을 때 출력되는 화면'),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            '안녕 내 이름은 태오야',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                print('음성 듣기 API 호출');
+                              },
+                              child: Text(
+                                '음성 듣기',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // print('학습 화면 출력');
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: VoiceInputScreen(),
+                                      insetPadding: EdgeInsets.all(8.0),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('확인'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text(
+                                '발음 연습하기',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _controller.seekTo(_controller.value.position +
-                          Duration(minutes: 1, seconds: 10));
-                    },
-                    child: Text('1분 10초 뒤로 이동'),
-                  ),
+
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     _controller.seekTo(_controller.value.position +
+                  //         Duration(minutes: 1, seconds: 10));
+                  //   },
+                  //   child: Text('1분 10초 뒤로 이동'),
+                  // ),
                 ],
               ),
             ),

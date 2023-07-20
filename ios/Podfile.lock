@@ -10,11 +10,14 @@ PODS:
   - OrderedSet (5.0.0)
   - permission_handler_apple (9.1.1):
     - Flutter
+  - record (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - record (from `.symlinks/plugins/record/ios`)
 
 SPEC REPOS:
   trunk:
@@ -27,12 +30,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  record:
+    :path: ".symlinks/plugins/record/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  record: cae05d8dd3cdb1dea3511b20e5a5811a1ae00d0d
 
 PODFILE CHECKSUM: f0c14fbd26f19b14b98a3d3e0457bb6d9f223dd8
 
