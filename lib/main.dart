@@ -107,7 +107,7 @@ class _MainScreenState extends State<MainScreen> {
       throw '마이크 권한이 없습니다.';
     }
 
-    print(microphonePermission);
-    return microphonePermission == PermissionStatus.granted;
+    // print(microphonePermission);
+    return true;
   }
 }

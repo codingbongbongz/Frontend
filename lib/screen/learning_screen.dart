@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/voice_input_screen.dart';
+import 'package:k_learning/screen/voice_listen_screen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class LearningScreen extends StatefulWidget {
@@ -201,12 +202,35 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                         Row(
                           children: [
+                            // TextButton(
+                            //   onPressed: () async {
+                            //     print('음성 듣기 API 호출');
+                            //   },
+                            //   child: VoiceListenScreen(),
+                            // ),
                             TextButton(
                               onPressed: () {
-                                print('음성 듣기 API 호출');
+                                // print('학습 화면 출력');
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: VoiceListenScreen(),
+                                      insetPadding: EdgeInsets.all(8.0),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('확인'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                               child: Text(
-                                '음성 듣기',
+                                '정확한 발음 듣기',
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
