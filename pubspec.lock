@@ -10,7 +10,7 @@ packages:
     source: hosted
     version: "2.11.0"
   audioplayers:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: audioplayers
       sha256: "61583554386721772f9309f509e17712865b38565a903c761f96b1115a979282"
@@ -151,7 +151,7 @@ packages:
     source: hosted
     version: "5.7.2+3"
   flutter_lints:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_lints
       sha256: "2118df84ef0c3ca93f96123a616ae8540879991b8b57af2f81b76a7ada49b2a4"
@@ -241,7 +241,7 @@ packages:
     source: hosted
     version: "1.8.3"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: "3087813781ab814e4157b172f1a11c46be20179fcc9bea043e0fba36bc0acaa2"
@@ -289,7 +289,7 @@ packages:
     source: hosted
     version: "2.1.7"
   permission_handler:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: permission_handler
       sha256: "63e5216aae014a72fe9579ccd027323395ce7a98271d9defa9d57320d001af81"
@@ -345,7 +345,7 @@ packages:
     source: hosted
     version: "2.1.5"
   record:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: record
       sha256: f703397f5a60d9b2b655b3acc94ba079b2d9a67dc0725bdb90ef2fee2441ebf7
@@ -502,7 +502,7 @@ packages:
     source: hosted
     version: "1.0.1"
   youtube_player_flutter:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: youtube_player_flutter
       sha256: "72d487e1a1b9155a2dc9d448c137380791101a0ff623723195275ac275ac6942"

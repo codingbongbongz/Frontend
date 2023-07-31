@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 
 import 'audio_player.dart';
@@ -26,6 +27,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   @override
   void initState() {
     _recordSub = _audioRecorder.onStateChanged().listen((recordState) {
+      // print("recordState : $recordState");
       setState(() => _recordState = recordState);
     });
 
@@ -48,16 +50,31 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
         }
 
         // final devs = await _audioRecorder.listInputDevices();
+        // String path;
+        // if (kIsWeb) {
+        //   path = '';
+        // } else {
+        //   final dir = await getApplicationDocumentsDirectory();
+        //   path = p.join(
+        //     dir.path,
+        //     'audio_${DateTime.now().millisecondsSinceEpoch}.m4a',
+        //   );
+        // }
+        // print(path);
+        await _audioRecorder.start();
+
         // final isRecording = await _audioRecorder.isRecording();
 
-        await _audioRecorder.start();
         _recordDuration = 0;
+
+        // print(devs);
+        // print(isRecording);
 
         _startTimer();
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        print("e : $e");
       }
     }
   }
@@ -204,6 +221,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   }
 
   void _startTimer() {
+    print("startTimer");
     _timer?.cancel();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {

@@ -17,8 +17,8 @@ class LearningScreen extends StatefulWidget {
 }
 
 class Caption {
-  final double duration;
-  final double start;
+  final num duration;
+  final num start;
   final String text;
 
   Caption({required this.duration, required this.start, required this.text});
@@ -86,7 +86,7 @@ class _LearningScreenState extends State<LearningScreen> {
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: false,
-        disableDragSeek: false,
+        disableDragSeek: true,
         loop: false,
         isLive: false,
         forceHD: false,
@@ -98,8 +98,6 @@ class _LearningScreenState extends State<LearningScreen> {
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
 
-    // String json =
-    // print({
     String jsonString = """{
       "transcripts": [
         {"duration": 3.46, "start": 0.48, "text": "다한 만큼"},
@@ -263,9 +261,9 @@ class _LearningScreenState extends State<LearningScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
-    _idController.dispose();
-    _seekToController.dispose();
+    // _controller?.dispose();
+    _idController?.dispose();
+    _seekToController?.dispose();
     super.dispose();
   }
 
@@ -375,13 +373,24 @@ class _LearningScreenState extends State<LearningScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           var inkWell = InkWell(
                             onTap: () {
-                              print(_captions[index].start);
-                              // int min = _captions[index].start as int;
-                              // int sec =
-                              // _categorieVideos[index].link!.substring(_categorieVideos[index].link!.indexOf('=') +1,)
-                              // _controller.seekTo(Duration());
+                              int sec = _captions[index].start ~/ 1;
+                              // print(_captions[index].start);
+                              // print("sec : $sec");
+                              _controller.seekTo(Duration(seconds: sec));
+                              toggleSelect(1);
                             },
-                            child: Text(_captions[index].text),
+                            //  if(_captions[index].duration > _controller.value.position ){
+                            child: (_captions[index].start <=
+                                        _controller.value.position.inSeconds &&
+                                    _controller.value.position.inSeconds <=
+                                        _captions[index].start +
+                                            _captions[index].duration)
+                                ? Text(
+                                    _captions[index].text,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                : Text(_captions[index].text),
                           );
                           return Row(
                             children: [
@@ -395,13 +404,29 @@ class _LearningScreenState extends State<LearningScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            '안녕 내 이름은 태오야',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                        Container(
+                          height: 50,
+                          child: ListView.builder(
+                            itemCount: _captions.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var inkWell = (_captions[index].start <=
+                                          _controller
+                                              .value.position.inSeconds &&
+                                      _controller.value.position.inSeconds <=
+                                          _captions[index].start +
+                                              _captions[index].duration)
+                                  ? InkWell(
+                                      onTap: () {},
+                                      child: Text(
+                                        _captions[index].text,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    )
+                                  : Container();
+                              return inkWell;
+                            },
                           ),
                         ),
                         Row(
@@ -448,8 +473,8 @@ class _LearningScreenState extends State<LearningScreen> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       content: VoiceInputScreen(
-                                        onStop: (String path) {
-                                          print(path);
+                                        onStop: (path) {
+                                          print('Recorded file path: $path');
                                         },
                                       ),
                                       // content: Text('asdf'),

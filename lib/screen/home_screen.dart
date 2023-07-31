@@ -91,6 +91,18 @@ class _HomeScreenState extends State<HomeScreen> {
     // 추후에 초기화 해야 함
     Video(
       videoId: 1,
+      link: "https://www.youtube.com/watch?v=YRygn_pfSIo",
+      videoTitle:
+          "[#올탁구나] 15년 차 일본 선수와의 탁구 대결에 밀리는 강승윤?🏓 각성하고 따라잡는 시합의 짜릿한 묘미🔥 | #Diggle #갓구운클립",
+      creator: "tvN D ENT",
+      duration: 5.59,
+      isDefault: true,
+      views: 9125,
+      createdAt: "2022-02-24T09:00:00.594Z",
+      youtubeViews: 91253,
+    ),
+    Video(
+      videoId: 1,
       link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
       videoTitle: "사이좋게 나눠먹는 분식",
       creator: "침착맨",
