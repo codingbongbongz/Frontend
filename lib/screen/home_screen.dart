@@ -92,8 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Video(
       videoId: 1,
       link: "https://www.youtube.com/watch?v=YRygn_pfSIo",
-      videoTitle:
-          "[#올탁구나] 15년 차 일본 선수와의 탁구 대결에 밀리는 강승윤?🏓 각성하고 따라잡는 시합의 짜릿한 묘미🔥 | #Diggle #갓구운클립",
+      videoTitle: "[#올탁구나] 15년 차 일본 선수",
       creator: "tvN D ENT",
       duration: 5.59,
       isDefault: true,

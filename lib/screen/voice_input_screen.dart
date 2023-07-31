@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import 'package:record/record.dart';
 
 import 'audio_player.dart';
@@ -45,23 +46,25 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
         final isSupported = await _audioRecorder.isEncoderSupported(
           AudioEncoder.aacLc,
         );
+        // final devs = await _audioRecorder.listInputDevices();
         if (kDebugMode) {
           print('${AudioEncoder.aacLc.name} supported: $isSupported');
+          // print('listInputDevices : ${devs.toString()}');
         }
 
-        // final devs = await _audioRecorder.listInputDevices();
-        // String path;
-        // if (kIsWeb) {
-        //   path = '';
-        // } else {
-        //   final dir = await getApplicationDocumentsDirectory();
-        //   path = p.join(
-        //     dir.path,
-        //     'audio_${DateTime.now().millisecondsSinceEpoch}.m4a',
-        //   );
-        // }
-        // print(path);
-        await _audioRecorder.start();
+        String path;
+        if (kIsWeb) {
+          path = '';
+        } else {
+          final dir = await getApplicationDocumentsDirectory();
+          path = p.join(
+            dir.path,
+            'audio_${DateTime.now().millisecondsSinceEpoch}.m4a',
+          );
+        }
+        print(path);
+
+        await _audioRecorder.start(path: path);
 
         // final isRecording = await _audioRecorder.isRecording();
 

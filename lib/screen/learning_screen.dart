@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
-import 'package:k_learning/screen/voice_input_screen.dart';
+// import 'package:k_learning/screen/voice_input_screen.dart';
+import 'package:k_learning/screen/voice_input_screen2.dart';
 import 'package:k_learning/screen/voice_listen_screen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -472,12 +473,12 @@ class _LearningScreenState extends State<LearningScreen> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      content: VoiceInputScreen(
-                                        onStop: (path) {
-                                          print('Recorded file path: $path');
-                                        },
-                                      ),
-                                      // content: Text('asdf'),
+                                      // content: VoiceInputScreen(
+                                      //   onStop: (path) {
+                                      //     print('Recorded file path: $path');
+                                      //   },
+                                      // ),
+                                      content: VoiceInputScreen(),
                                       insetPadding: EdgeInsets.all(8.0),
                                       actions: [
                                         TextButton(
