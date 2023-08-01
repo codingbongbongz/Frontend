@@ -49,6 +49,21 @@
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>${PRODUCT_NAME} MicroPhone Usage</string>
+	<!-- <key>NSAppleMusicUsageDescription</key>
+	<string>Explain why your app uses music</string> -->
+	<key>UISupportsDocumentBrowser</key>	
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<!-- <key>NSCachesDirectory</key>
+	<string>test</string> -->
+	<!-- <key>NSPhotoLibraryUsageDescription</key>
+	<string>${PRODUCT_NAME} Libaray Usage</string> -->
+
+	<!-- <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+    <key>UIFileSharingEnabled</key>
+    <true/> -->
 </dict>
 
 </plist>

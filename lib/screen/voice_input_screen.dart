@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
@@ -36,14 +39,45 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     super.dispose();
   }
 
+  Future<void> readFile() async {
+    try {
+      final file = File.fromUri(Uri.parse(audioPath));
+      final bytes = await file.readAsBytes();
+      // print(file);
+      log(bytes.toString());
+      // File audioFile = File(audioPath);
+      // final bytes = audioFile.readAsBytesSync();
+      // final byteData = bytes.buffer.asByteData();
+      // if (kDebugMode) {
+      //   print(audioFile); // print(content);
+      //   print(bytes);
+      //   print(byteData);
+      // }
+
+      // FilePickerResult? result =
+      //     await FilePicker.platform.pickFiles(initialDirectory: audioPath);
+      // if (result != null) {
+      //   print(result.files.first.toString());
+      //   // Uint8List? fileBytes = result.files.first.bytes;
+      //   // String fileName = result.files.first.name;
+      //   // print(fileBytes);
+      //   // print(fileName);
+      // }
+    } catch (e) {
+      if (kDebugMode) {
+        print("readFile Error : $e");
+      }
+    }
+  }
+
   Future<void> startRecording() async {
     try {
       if (await audioRecord.hasPermission()) {
         // 경로 지정을 통한 파일 확장자 지정
         // String path;
-        // final dir = await getApplicationDocumentsDirectory();
+        // final dir = await getTemporaryDirectory();
         // path = p.join(
-        //   dir.path,
+        //   "file://${dir.path}",
         //   'audio_${DateTime.now().millisecondsSinceEpoch}.mp4',
         // );
 
@@ -71,6 +105,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
         isRecording = false;
         audioPath = path!;
       });
+      // readFile(audioPath);
     } catch (e) {
       if (kDebugMode) {
         print('stopRecording Error : $e');
@@ -111,6 +146,10 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
           ),
           const SizedBox(
             height: 25,
+          ),
+          ElevatedButton(
+            onPressed: readFile,
+            child: Text('readFile'),
           ),
           if (!isRecording && audioPath != '')
             ElevatedButton(
