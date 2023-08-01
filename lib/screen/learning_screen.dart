@@ -405,8 +405,8 @@ class _LearningScreenState extends State<LearningScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          height: 50,
+                        SizedBox(
+                          height: 70,
                           child: ListView.builder(
                             itemCount: _captions.length,
                             itemBuilder: (BuildContext context, int index) {

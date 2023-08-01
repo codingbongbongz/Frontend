@@ -39,6 +39,18 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   Future<void> startRecording() async {
     try {
       if (await audioRecord.hasPermission()) {
+        // 경로 지정을 통한 파일 확장자 지정
+        // String path;
+        // final dir = await getApplicationDocumentsDirectory();
+        // path = p.join(
+        //   dir.path,
+        //   'audio_${DateTime.now().millisecondsSinceEpoch}.mp4',
+        // );
+
+        // if (kDebugMode) {
+        //   print(path);
+        // }
+        // await audioRecord.start(path: path);
         await audioRecord.start();
 
         setState(() {
