@@ -106,13 +106,6 @@ class _MainScreenState extends State<MainScreen> {
       throw '마이크 권한이 없습니다.';
     }
 
-    // final resp2 = await [Permission.mediaLibrary].request();
-    // final musicPermission = resp2[Permission.mediaLibrary];
-
-    // if (musicPermission != PermissionStatus.granted) {
-    //   throw '마이크 권한이 없습니다.';
-    // }
-
     // print(microphonePermission);
     return true;
   }

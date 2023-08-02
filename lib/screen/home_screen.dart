@@ -3,6 +3,9 @@ import 'package:k_learning/screen/learning_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:youtube/youtube_thumbnail.dart';
 
+import '../class/categorie.dart';
+import '../class/video.dart';
+
 class HomeScreen extends StatefulWidget {
   final int uid;
 
@@ -12,65 +15,10 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class Categorie {
-  final int? id;
-  final String? name;
-
-  Categorie({
-    this.id,
-    this.name,
-  });
-}
-
-class Video {
-  final int? videoId;
-  final String? link;
-  final String? videoTitle;
-  final String? creator;
-  final double? duration;
-  final bool? isDefault;
-  final int? views;
-  final String? createdAt;
-  final int? youtubeViews;
-
-  Video({
-    this.videoId,
-    this.link,
-    this.duration,
-    this.isDefault,
-    this.views,
-    this.createdAt,
-    this.youtubeViews,
-    this.videoTitle,
-    this.creator,
-  });
-
-  @override
-  String toString() {
-    return '''
-      videoID : $videoId
-      link : $link
-      duration : $duration
-      isDefault: $isDefault
-      views : $views,
-      createdAt : $createdAt
-      youtubeView : $youtubeViews
-      videoTitle : $videoTitle
-      creator : $creator
-    ''';
-  }
-}
-
 class _HomeScreenState extends State<HomeScreen> {
   int uid = 0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    uid = widget.uid;
-  }
-
+  List<Categorie> _selectedCategories = [];
+  // link 수정
   static final List<Categorie> _categories = [
     Categorie(id: 1, name: "BTS"),
     Categorie(id: 2, name: "BlackPink"),
@@ -302,14 +250,17 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 203113,
     ),
   ];
-
   final _items = _categories
       .map((categorie) =>
           MultiSelectItem<Categorie>(categorie, categorie.name ?? 'No Named'))
       .toList();
 
-  List<Categorie> _selectedCategories = [];
-  // final _multiSelectKey = GlobalKey<FormFieldState>();
+  @override
+  void initState() {
+    super.initState();
+
+    uid = widget.uid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -505,6 +456,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-// todo
-// API 호출 하여 인기순, 카테고리 순 영상 가져오기

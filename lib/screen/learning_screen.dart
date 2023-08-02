@@ -1,12 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
-// import 'package:k_learning/screen/voice_input_screen.dart';
 import 'package:k_learning/screen/voice_input_screen.dart';
 import 'package:k_learning/screen/voice_listen_screen.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+import '../class/caption.dart';
 
 class LearningScreen extends StatefulWidget {
   final int uid;
@@ -17,49 +16,13 @@ class LearningScreen extends StatefulWidget {
   State<LearningScreen> createState() => _LearningScreenState();
 }
 
-class Caption {
-  final num duration;
-  final num start;
-  final String text;
-
-  Caption({required this.duration, required this.start, required this.text});
-
-  factory Caption.fromJson(Map<String, dynamic> json) => Caption(
-      duration: json['duration'], start: json['start'], text: json['text']);
-
-  Map<String, dynamic> toJson() =>
-      {'duration': duration, 'start': start, 'text': text};
-}
-
-List<Caption> listCaptionsFromJson(String json) {
-  List<dynamic> parsedJson = jsonDecode(json)["transcripts"];
-  // print("parsedJson = $parsedJson");
-  List<Caption> listcaptions = [];
-  for (int i = 0; i < parsedJson.length; i++) {
-    listcaptions.add(Caption.fromJson(parsedJson[i]));
-  }
-  return listcaptions;
-}
-// class CaptionList {
-//   final List<Caption>? captions;
-//   CaptionList(this.captions);
-
-//   factory CaptionList.fromJson(String jsonString) {
-//     List<dynamic> listFromJson = json.decode(jsonString);
-//     List<Caption> captions = <Caption>[];
-
-//     captions =
-//         listFromJson.map((caption) => Caption.fromJson(caption).toList());
-//     return CaptionList(captions: captions);
-//   }
-// }
-
 class _LearningScreenState extends State<LearningScreen> {
   int uid = 0;
   String link = '';
   int currentDuration = 0;
   bool isWholeCaption = true;
   bool isPartCaption = false;
+  String? currentCaption;
   late List<bool> isSelected;
 
   late YoutubePlayerController _controller;
@@ -337,11 +300,11 @@ class _LearningScreenState extends State<LearningScreen> {
         body: ListView(
           children: [
             player,
-            _space,
-            Text(
-              'Current Time ${currentDuration ~/ 60} : ${currentDuration % 60 >= 10 ? currentDuration % 60 : '0${currentDuration % 60}'}',
-            ),
-            _space,
+            // _space,
+            // Text(
+            //   'Current Time ${currentDuration ~/ 60} : ${currentDuration % 60 >= 10 ? currentDuration % 60 : '0${currentDuration % 60}'}',
+            // ),
+            // _space,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
@@ -375,8 +338,6 @@ class _LearningScreenState extends State<LearningScreen> {
                           var inkWell = InkWell(
                             onTap: () {
                               int sec = _captions[index].start ~/ 1;
-                              // print(_captions[index].start);
-                              // print("sec : $sec");
                               _controller.seekTo(Duration(seconds: sec));
                               toggleSelect(1);
                             },
@@ -432,15 +393,10 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                         Row(
                           children: [
-                            // TextButton(
-                            //   onPressed: () async {
-                            //     print('음성 듣기 API 호출');
-                            //   },
-                            //   child: VoiceListenScreen(),
-                            // ),
                             TextButton(
                               onPressed: () {
                                 // print('학습 화면 출력');
+                                _controller.pause();
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -459,7 +415,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                   },
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 '정확한 발음 듣기',
                                 style: TextStyle(
                                   color: Colors.black,
@@ -469,15 +425,11 @@ class _LearningScreenState extends State<LearningScreen> {
                             TextButton(
                               onPressed: () {
                                 // print('학습 화면 출력');
+                                _controller.pause();
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      // content: VoiceInputScreen(
-                                      //   onStop: (path) {
-                                      //     print('Recorded file path: $path');
-                                      //   },
-                                      // ),
                                       content: VoiceInputScreen(),
                                       insetPadding: EdgeInsets.all(8.0),
                                       actions: [
@@ -492,7 +444,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                   },
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 '발음 연습하기',
                                 style: TextStyle(
                                   color: Colors.black,
