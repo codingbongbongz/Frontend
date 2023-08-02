@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class VoiceListenScreen extends StatefulWidget {
-  const VoiceListenScreen({super.key});
+  final String currentCaption;
+  const VoiceListenScreen({super.key, required this.currentCaption});
 
   @override
   State<VoiceListenScreen> createState() => _VoiceListenScreenState();
@@ -12,7 +13,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('음성 듣기'),
+        child: Text(widget.currentCaption),
       ),
     );
   }

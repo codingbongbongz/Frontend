@@ -13,7 +13,8 @@ import 'package:audioplayers/audioplayers.dart';
 // import 'audio_player.dart';
 
 class VoiceInputScreen extends StatefulWidget {
-  const VoiceInputScreen({super.key});
+  final String currentCaption;
+  const VoiceInputScreen({super.key, required this.currentCaption});
 
   @override
   State<VoiceInputScreen> createState() => _VoiceInputScreenState();
@@ -104,6 +105,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(widget.currentCaption),
           if (isRecording)
             const Column(
               children: [

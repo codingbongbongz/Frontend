@@ -22,7 +22,7 @@ class _LearningScreenState extends State<LearningScreen> {
   int currentDuration = 0;
   bool isWholeCaption = true;
   bool isPartCaption = false;
-  String? currentCaption;
+  late String currentCaption;
   late List<bool> isSelected;
 
   late YoutubePlayerController _controller;
@@ -201,6 +201,7 @@ class _LearningScreenState extends State<LearningScreen> {
     }""";
     // print(ParsedCaptions);
     _captions = listCaptionsFromJson(jsonString);
+    currentCaption = _captions[0].text;
     // print(_captions[0].duration);
   }
 
@@ -341,7 +342,6 @@ class _LearningScreenState extends State<LearningScreen> {
                               _controller.seekTo(Duration(seconds: sec));
                               toggleSelect(1);
                             },
-                            //  if(_captions[index].duration > _controller.value.position ){
                             child: (_captions[index].start <=
                                         _controller.value.position.inSeconds &&
                                     _controller.value.position.inSeconds <=
@@ -371,22 +371,23 @@ class _LearningScreenState extends State<LearningScreen> {
                           child: ListView.builder(
                             itemCount: _captions.length,
                             itemBuilder: (BuildContext context, int index) {
-                              var inkWell = (_captions[index].start <=
-                                          _controller
-                                              .value.position.inSeconds &&
-                                      _controller.value.position.inSeconds <=
-                                          _captions[index].start +
-                                              _captions[index].duration)
-                                  ? InkWell(
-                                      onTap: () {},
-                                      child: Text(
-                                        _captions[index].text,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                    )
-                                  : Container();
+                              Widget inkWell = Container();
+                              if (_captions[index].start <=
+                                      _controller.value.position.inSeconds &&
+                                  _controller.value.position.inSeconds <=
+                                      _captions[index].start +
+                                          _captions[index].duration) {
+                                inkWell = InkWell(
+                                  onTap: () {},
+                                  child: Text(
+                                    _captions[index].text,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                );
+                                currentCaption = _captions[index].text;
+                              }
                               return inkWell;
                             },
                           ),
@@ -397,11 +398,14 @@ class _LearningScreenState extends State<LearningScreen> {
                               onPressed: () {
                                 // print('학습 화면 출력');
                                 _controller.pause();
+                                print(currentCaption);
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      content: VoiceListenScreen(),
+                                      content: VoiceListenScreen(
+                                        currentCaption: currentCaption,
+                                      ),
                                       insetPadding: EdgeInsets.all(8.0),
                                       actions: [
                                         TextButton(
@@ -424,13 +428,14 @@ class _LearningScreenState extends State<LearningScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                // print('학습 화면 출력');
                                 _controller.pause();
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      content: VoiceInputScreen(),
+                                      content: VoiceInputScreen(
+                                        currentCaption: currentCaption,
+                                      ),
                                       insetPadding: EdgeInsets.all(8.0),
                                       actions: [
                                         TextButton(
