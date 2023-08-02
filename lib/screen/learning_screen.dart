@@ -338,8 +338,13 @@ class _LearningScreenState extends State<LearningScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           var inkWell = InkWell(
                             onTap: () {
-                              int sec = _captions[index].start ~/ 1;
-                              _controller.seekTo(Duration(seconds: sec));
+                              int sec = _captions[index].start.floor();
+                              int milliSec =
+                                  ((_captions[index].start - sec) * 1000)
+                                      .toInt();
+
+                              _controller.seekTo(Duration(
+                                  seconds: sec, milliseconds: milliSec));
                               toggleSelect(1);
                             },
                             child: (isCurrentCaption(context, index))
@@ -450,14 +455,6 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                       ],
                     ),
-
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     _controller.seekTo(_controller.value.position +
-                  //         Duration(minutes: 1, seconds: 10));
-                  //   },
-                  //   child: Text('1분 10초 뒤로 이동'),
-                  // ),
                 ],
               ),
             ),
