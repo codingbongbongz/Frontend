@@ -342,11 +342,7 @@ class _LearningScreenState extends State<LearningScreen> {
                               _controller.seekTo(Duration(seconds: sec));
                               toggleSelect(1);
                             },
-                            child: (_captions[index].start <=
-                                        _controller.value.position.inSeconds &&
-                                    _controller.value.position.inSeconds <=
-                                        _captions[index].start +
-                                            _captions[index].duration)
+                            child: (isCurrentCaption(context, index))
                                 ? Text(
                                     _captions[index].text,
                                     style:
@@ -372,11 +368,7 @@ class _LearningScreenState extends State<LearningScreen> {
                             itemCount: _captions.length,
                             itemBuilder: (BuildContext context, int index) {
                               Widget inkWell = Container();
-                              if (_captions[index].start <=
-                                      _controller.value.position.inSeconds &&
-                                  _controller.value.position.inSeconds <=
-                                      _captions[index].start +
-                                          _captions[index].duration) {
+                              if (isCurrentCaption(context, index)) {
                                 inkWell = InkWell(
                                   onTap: () {},
                                   child: Text(
@@ -396,9 +388,7 @@ class _LearningScreenState extends State<LearningScreen> {
                           children: [
                             TextButton(
                               onPressed: () {
-                                // print('학습 화면 출력');
                                 _controller.pause();
-                                print(currentCaption);
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -491,5 +481,16 @@ class _LearningScreenState extends State<LearningScreen> {
     setState(() {
       isSelected = [isWholeCaption, isPartCaption];
     });
+  }
+
+  bool isCurrentCaption(BuildContext context, int index) {
+    if (_captions[index].start > _controller.value.position.inSeconds) {
+      return false;
+    }
+    if (index < _captions.length - 1 &&
+        _captions[index + 1].start <= _controller.value.position.inSeconds) {
+      return false;
+    }
+    return true;
   }
 }
