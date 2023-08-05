@@ -10,8 +10,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-// import 'audio_player.dart';
-
 class VoiceInputScreen extends StatefulWidget {
   final String currentCaption;
   const VoiceInputScreen({super.key, required this.currentCaption});

@@ -210,10 +210,6 @@ class _LearningScreenState extends State<LearningScreen> {
       setState(() {
         _playerState = _controller.value.playerState;
         _videoMetaData = _controller.metadata;
-
-        if (currentDuration != _controller.value.position.inSeconds) {
-          currentDuration = _controller.value.position.inSeconds;
-        }
       });
     }
   }
@@ -226,9 +222,12 @@ class _LearningScreenState extends State<LearningScreen> {
 
   @override
   void dispose() {
-    // _controller?.dispose();
-    _idController.dispose();
-    _seekToController.dispose();
+    Future.delayed(Duration(milliseconds: 50)).then((_) {
+      _controller.dispose();
+      _idController.dispose();
+      _seekToController.dispose();
+    });
+
     super.dispose();
   }
 
