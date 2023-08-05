@@ -227,8 +227,8 @@ class _LearningScreenState extends State<LearningScreen> {
   @override
   void dispose() {
     // _controller?.dispose();
-    _idController?.dispose();
-    _seekToController?.dispose();
+    _idController.dispose();
+    _seekToController.dispose();
     super.dispose();
   }
 
