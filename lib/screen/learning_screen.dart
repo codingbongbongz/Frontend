@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:k_learning/class/evaluation.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/voice_input_screen.dart';
 import 'package:k_learning/screen/voice_listen_screen.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../class/caption.dart';
@@ -37,6 +39,10 @@ class _LearningScreenState extends State<LearningScreen> {
   bool _isPlayerReady = false;
 
   static late List<Caption> _captions;
+  Evaluation? _evaluations;
+  bool isEvaluated = false;
+  List<_ChartData>? data;
+  late TooltipBehavior _tooltip;
 
   @override
   void initState() {
@@ -199,10 +205,43 @@ class _LearningScreenState extends State<LearningScreen> {
         {"duration": 2.39, "start": 349.73, "text": "그렇죠"}
       ]
     }""";
-    // print(ParsedCaptions);
+
+    String jsonString2 = '''
+    {
+    "status": 200,
+    "message": "발음을 분석하는데 성공했습니다.",
+    "data": {
+        "evaluation": {
+            "evaluationId": 1,
+            "overall": 85,
+            "pronunciation": 82,
+            "fluency": 100,
+            "integrity": 100,
+            "rhythm": 86,
+            "speed": 189,
+            "createdAt": "2023-08-07T06:32:04.592+00:00"
+        },
+        "transcriptId": 1,
+        "userId": 1
+        }
+    }
+    ''';
     _captions = listCaptionsFromJson(jsonString);
-    currentCaption = _captions[0].text;
-    // print(_captions[0].duration);
+    _evaluations = evaluationsFromJson(jsonString2);
+    isEvaluated = true;
+
+    if (isEvaluated) {
+      data = [
+        _ChartData('overall', _evaluations!.overall),
+        _ChartData('pronunciation', _evaluations!.pronunciation),
+        _ChartData('fluency', _evaluations!.fluency),
+        _ChartData('integrity', _evaluations!.integrity),
+        _ChartData('rhythm', _evaluations!.rhythm),
+        _ChartData('speed', _evaluations!.speed),
+      ];
+    }
+    _tooltip = TooltipBehavior(enable: true);
+    print(_evaluations);
   }
 
   void listener() {
@@ -454,6 +493,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                       ],
                     ),
+                  if (isEvaluated) barChart(),
                 ],
               ),
             ),
@@ -464,6 +504,26 @@ class _LearningScreenState extends State<LearningScreen> {
   }
 
   Widget get _space => const SizedBox(height: 10);
+
+  Widget barChart() {
+    return SfCartesianChart(
+        primaryXAxis: CategoryAxis(
+            labelStyle: const TextStyle(
+          fontSize: 11,
+        )),
+        primaryYAxis: NumericAxis(minimum: 0, maximum: 200, interval: 10),
+        tooltipBehavior: _tooltip,
+        series: <ChartSeries<_ChartData, String>>[
+          ColumnSeries<_ChartData, String>(
+            dataSource: data!,
+            xValueMapper: (_ChartData data, _) => data.x,
+            yValueMapper: (_ChartData data, _) => data.y,
+            name: 'evaulation',
+            color: const Color.fromRGBO(8, 142, 255, 1),
+            width: 0.5,
+          )
+        ]);
+  }
 
   void toggleSelect(value) {
     if (value == 0) {
@@ -489,4 +549,11 @@ class _LearningScreenState extends State<LearningScreen> {
     }
     return true;
   }
+}
+
+class _ChartData {
+  _ChartData(this.x, this.y);
+
+  final String x;
+  final int y;
 }

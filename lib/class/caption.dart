@@ -12,6 +12,15 @@ class Caption {
 
   Map<String, dynamic> toJson() =>
       {'duration': duration, 'start': start, 'text': text};
+
+  @override
+  String toString() {
+    return '''
+      duration : $duration
+      start : $start
+      text : $text
+    ''';
+  }
 }
 
 List<Caption> listCaptionsFromJson(String json) {

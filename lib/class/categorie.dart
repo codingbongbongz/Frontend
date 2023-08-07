@@ -6,4 +6,12 @@ class Categorie {
     this.id,
     this.name,
   });
+
+  @override
+  String toString() {
+    return '''
+      id : $id
+      name : $name
+    ''';
+  }
 }
