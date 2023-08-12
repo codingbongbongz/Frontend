@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -5,6 +7,7 @@ import 'package:youtube/youtube_thumbnail.dart';
 
 import '../class/categorie.dart';
 import '../class/video.dart';
+import '../const/key.dart';
 
 class HomeScreen extends StatefulWidget {
   final int uid;
@@ -17,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int uid = 0;
+  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+
   List<Categorie> _selectedCategories = [];
   // link 수정
   static final List<Categorie> _categories = [
@@ -255,10 +260,20 @@ class _HomeScreenState extends State<HomeScreen> {
           MultiSelectItem<Categorie>(categorie, categorie.name ?? 'No Named'))
       .toList();
 
+  void getPopularVideos() async {
+    final response = await dio.get('videos/popular');
+
+    print("response : $response");
+    // _popularVideos 초기화
+    // link도 수정
+  }
+
   @override
   void initState() {
     super.initState();
-
+    dio.options.baseUrl = baseURL;
+    dio.options.headers = {"userID": 1};
+    getPopularVideos();
     uid = widget.uid;
   }
 

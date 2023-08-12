@@ -10,7 +10,7 @@ void main() {
   runApp(
     const MaterialApp(
       home: MainScreen(
-        uid: 4567,
+        uid: 1,
       ),
     ),
     // Scaffold(

@@ -55,6 +55,12 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+			<key>NSAppTransportSecurity</key>
+		<dict>
+			<!--Include to allow all connections (DANGER)-->
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
 	<!-- <key>NSCachesDirectory</key>
 	<string>test</string> -->
 	<!-- <key>NSPhotoLibraryUsageDescription</key>

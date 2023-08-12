@@ -32,7 +32,8 @@
       "name": "Android",
       "request": "launch",
       "type": "dart",
-      "deviceId": "android"
+      "deviceId": "android",
+      "args": ["-d", "emulator-5554"],
     },
     {
       "name": "iPhone",

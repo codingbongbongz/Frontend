@@ -21,6 +21,7 @@ class VoiceInputScreen extends StatefulWidget {
 class _VoiceInputScreenState extends State<VoiceInputScreen> {
   late Record audioRecord;
   late AudioPlayer audioPlayer;
+  // var tst;
   bool isRecording = false;
   String audioPath = '';
 
@@ -42,6 +43,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     try {
       final file = File.fromUri(Uri.parse(audioPath));
       final bytes = await file.readAsBytes();
+      // tst = bytes;
       // print(file);
       log(bytes.toString());
     } catch (e) {
@@ -85,6 +87,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   Future<void> playRecording() async {
     try {
       Source urlSource = UrlSource(audioPath);
+      // print(tst);
+      // Source urlSource = BytesSource(tst);
+
       if (kDebugMode) {
         print(urlSource);
       }

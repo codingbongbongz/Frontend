@@ -24,7 +24,7 @@ class _LearningScreenState extends State<LearningScreen> {
   int currentDuration = 0;
   bool isWholeCaption = true;
   bool isPartCaption = false;
-  late String currentCaption;
+  String currentCaption = '';
   late List<bool> isSelected;
 
   late YoutubePlayerController _controller;
@@ -229,7 +229,7 @@ class _LearningScreenState extends State<LearningScreen> {
     _captions = listCaptionsFromJson(jsonString);
     _evaluations = evaluationsFromJson(jsonString2);
     isEvaluated = true;
-
+    currentCaption = _captions[0].text;
     if (isEvaluated) {
       data = [
         _ChartData('overall', _evaluations!.overall),
@@ -241,7 +241,7 @@ class _LearningScreenState extends State<LearningScreen> {
       ];
     }
     _tooltip = TooltipBehavior(enable: true);
-    print(_evaluations);
+    // print(_evaluations);
   }
 
   void listener() {
