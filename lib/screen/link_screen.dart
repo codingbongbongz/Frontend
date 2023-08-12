@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 
 class LinkScreen extends StatefulWidget {
-  final int uid;
-  const LinkScreen({super.key, required this.uid});
+  final int userID;
+  const LinkScreen({super.key, required this.userID});
 
   @override
   State<LinkScreen> createState() => _LinkScreenState();
 }
 
 class _LinkScreenState extends State<LinkScreen> {
-  int uid = 0;
+  int userID = 0;
   final _formKey = GlobalKey<FormState>();
   String _youtubeLink = '';
 
@@ -19,7 +19,7 @@ class _LinkScreenState extends State<LinkScreen> {
   void initState() {
     super.initState();
 
-    uid = widget.uid;
+    userID = widget.userID;
   }
 
   @override
@@ -30,14 +30,17 @@ class _LinkScreenState extends State<LinkScreen> {
       final formKeyState = _formKey.currentState;
       if (formKeyState!.validate()) {
         formKeyState.save();
-
+        int videdID = 1;
+        // videoID POST해서 가져와야 함
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) => LearningScreen(
-                uid: uid,
-                link: _youtubeLink.substring(
-                  _youtubeLink.indexOf('=') + 1,
-                )),
+              userID: userID,
+              link: _youtubeLink.substring(
+                _youtubeLink.indexOf('=') + 1,
+              ),
+              videoID: videdID,
+            ),
           ),
         );
       }

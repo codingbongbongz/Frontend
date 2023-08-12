@@ -10,7 +10,11 @@ import '../const/key.dart';
 
 class VoiceListenScreen extends StatefulWidget {
   final String currentCaption;
-  const VoiceListenScreen({super.key, required this.currentCaption});
+  const VoiceListenScreen(
+      {super.key,
+      required this.currentCaption,
+      required int transcriptID,
+      required int videoID});
 
   @override
   State<VoiceListenScreen> createState() => _VoiceListenScreenState();

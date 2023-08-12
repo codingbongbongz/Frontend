@@ -1,5 +1,5 @@
 class Video {
-  final int? videoId;
+  final int videoID;
   final String? link;
   final String? videoTitle;
   final String? creator;
@@ -10,7 +10,7 @@ class Video {
   final int? youtubeViews;
 
   Video({
-    this.videoId,
+    required this.videoID,
     this.link,
     this.duration,
     this.isDefault,
@@ -24,7 +24,7 @@ class Video {
   @override
   String toString() {
     return '''
-      videoID : $videoId
+      videoID : $videoID
       link : $link
       duration : $duration
       isDefault: $isDefault

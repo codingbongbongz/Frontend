@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/class/evaluation.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
@@ -7,25 +9,35 @@ import 'package:k_learning/screen/voice_listen_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-import '../class/caption.dart';
+import '../class/transcript.dart';
+import '../const/key.dart';
 
 class LearningScreen extends StatefulWidget {
-  final int uid;
+  final int userID;
   final String link;
-  const LearningScreen({super.key, required this.uid, required this.link});
+  final int videoID;
+  const LearningScreen(
+      {super.key,
+      required this.userID,
+      required this.link,
+      required this.videoID});
 
   @override
   State<LearningScreen> createState() => _LearningScreenState();
 }
 
 class _LearningScreenState extends State<LearningScreen> {
-  int uid = 0;
+  int uid = 1;
   String link = '';
+  int videoId = 1;
   int currentDuration = 0;
   bool isWholeCaption = true;
   bool isPartCaption = false;
-  String currentCaption = '';
+  String currentTranscript = '';
+  int currentTrasncriptId = 0;
   late List<bool> isSelected;
+
+  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   late YoutubePlayerController _controller;
   late TextEditingController _idController;
@@ -38,19 +50,31 @@ class _LearningScreenState extends State<LearningScreen> {
   // bool _muted = false;
   bool _isPlayerReady = false;
 
-  static late List<Caption> _captions;
+  static late List<Transcript> _captions;
   Evaluation? _evaluations;
   bool isEvaluated = false;
   List<_ChartData>? data;
   late TooltipBehavior _tooltip;
 
+  void getTranscripts() async {
+    final response = await dio.get('videos/$videoId/transcripts');
+    //
+    print("response : $response");
+  }
+
   @override
   void initState() {
     isSelected = [isWholeCaption, isPartCaption];
+
     super.initState();
 
-    uid = widget.uid;
+    uid = widget.userID;
     link = widget.link;
+    videoId = widget.videoID;
+
+    dio.options.baseUrl = baseURL;
+    dio.options.headers = {"userID": 1};
+
     _controller = YoutubePlayerController(
       initialVideoId: link,
       flags: const YoutubePlayerFlags(
@@ -226,10 +250,10 @@ class _LearningScreenState extends State<LearningScreen> {
         }
     }
     ''';
-    _captions = listCaptionsFromJson(jsonString);
+    _captions = listTranscriptsFromJson(jsonString);
     _evaluations = evaluationsFromJson(jsonString2);
     isEvaluated = true;
-    currentCaption = _captions[0].text;
+    currentTranscript = _captions[0].text;
     if (isEvaluated) {
       data = [
         _ChartData('overall', _evaluations!.overall),
@@ -323,7 +347,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (BuildContext context) => MainScreen(
-                                uid: uid,
+                                userID: uid,
                               ),
                             ),
                             (route) => false);
@@ -339,11 +363,6 @@ class _LearningScreenState extends State<LearningScreen> {
         body: ListView(
           children: [
             player,
-            // _space,
-            // Text(
-            //   'Current Time ${currentDuration ~/ 60} : ${currentDuration % 60 >= 10 ? currentDuration % 60 : '0${currentDuration % 60}'}',
-            // ),
-            // _space,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
@@ -421,7 +440,8 @@ class _LearningScreenState extends State<LearningScreen> {
                                         fontSize: 20),
                                   ),
                                 );
-                                currentCaption = _captions[index].text;
+                                currentTranscript = _captions[index].text;
+                                currentTrasncriptId = index;
                               }
                               return inkWell;
                             },
@@ -437,7 +457,9 @@ class _LearningScreenState extends State<LearningScreen> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       content: VoiceListenScreen(
-                                        currentCaption: currentCaption,
+                                        currentCaption: currentTranscript,
+                                        transcriptID: currentTrasncriptId,
+                                        videoID: videoId,
                                       ),
                                       insetPadding: EdgeInsets.all(8.0),
                                       actions: [
@@ -467,7 +489,9 @@ class _LearningScreenState extends State<LearningScreen> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       content: VoiceInputScreen(
-                                        currentCaption: currentCaption,
+                                        currentCaption: currentTranscript,
+                                        transcriptID: currentTrasncriptId,
+                                        videoID: videoId,
                                       ),
                                       insetPadding: EdgeInsets.all(8.0),
                                       actions: [

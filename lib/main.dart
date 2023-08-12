@@ -10,7 +10,7 @@ void main() {
   runApp(
     const MaterialApp(
       home: MainScreen(
-        uid: 1,
+        userID: 1,
       ),
     ),
     // Scaffold(
@@ -20,8 +20,8 @@ void main() {
 }
 
 class MainScreen extends StatefulWidget {
-  final int uid;
-  const MainScreen({super.key, required this.uid});
+  final int userID;
+  const MainScreen({super.key, required this.userID});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -29,24 +29,24 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  static int uid = 0;
+  static int userID = 0;
   bool microPhonePermission = false;
 
   @override
   void initState() {
     super.initState();
-    uid = widget.uid;
+    userID = widget.userID;
   }
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(
-      uid: uid,
+      userID: userID,
     ),
     LinkScreen(
-      uid: uid,
+      userID: userID,
     ),
     MyPageScreen(
-      uid: uid,
+      uid: userID,
     ),
   ];
 

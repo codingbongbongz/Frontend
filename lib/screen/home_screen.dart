@@ -10,16 +10,16 @@ import '../class/video.dart';
 import '../const/key.dart';
 
 class HomeScreen extends StatefulWidget {
-  final int uid;
+  final int userID;
 
-  const HomeScreen({super.key, required this.uid});
+  const HomeScreen({super.key, required this.userID});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int uid = 0;
+  int userID = 0;
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   List<Categorie> _selectedCategories = [];
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<Video> _popularVideos = [
     // 추후에 초기화 해야 함
     Video(
-      videoId: 1,
+      videoID: 1,
       link: "https://www.youtube.com/watch?v=YRygn_pfSIo",
       videoTitle: "[#올탁구나] 15년 차 일본 선수",
       creator: "tvN D ENT",
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 91253,
     ),
     Video(
-      videoId: 1,
+      videoID: 1,
       link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
       videoTitle: "사이좋게 나눠먹는 분식",
       creator: "침착맨",
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 1203123,
     ),
     Video(
-      videoId: 2,
+      videoID: 2,
       link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
       videoTitle: "새마을금고 초유의 뱅크런 사태",
       creator: "슈카월드",
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 903265,
     ),
     Video(
-      videoId: 3,
+      videoID: 3,
       link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
       videoTitle: "HEADACHE pills , not sweet.",
       creator: "데이먼스 이어 Damons year",
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 203113,
     ),
     Video(
-      videoId: 1,
+      videoID: 1,
       link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
       videoTitle: "사이좋게 나눠먹는 분식",
       creator: "침착맨",
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 1203123,
     ),
     Video(
-      videoId: 2,
+      videoID: 2,
       link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
       videoTitle: "새마을금고 초유의 뱅크런 사태",
       creator: "슈카월드",
@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 903265,
     ),
     Video(
-      videoId: 3,
+      videoID: 3,
       link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
       videoTitle: "HEADACHE pills , not sweet.",
       creator: "데이먼스 이어 Damons year",
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 203113,
     ),
     Video(
-      videoId: 1,
+      videoID: 1,
       link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
       videoTitle: "사이좋게 나눠먹는 분식",
       creator: "침착맨",
@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 1203123,
     ),
     Video(
-      videoId: 2,
+      videoID: 2,
       link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
       videoTitle: "새마을금고 초유의 뱅크런 사태",
       creator: "슈카월드",
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 903265,
     ),
     Video(
-      videoId: 3,
+      videoID: 3,
       link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
       videoTitle: "HEADACHE pills , not sweet.",
       creator: "데이먼스 이어 Damons year",
@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<Video> _categorieVideos = [
     // 추후에 초기화 해야 함
     Video(
-      videoId: 1,
+      videoID: 1,
       link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
       videoTitle: "사이좋게 나눠먹는 분식",
       creator: "침착맨",
@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 1203123,
     ),
     Video(
-      videoId: 2,
+      videoID: 2,
       link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
       videoTitle: "새마을금고 초유의 뱅크런 사태",
       creator: "슈카월드",
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 903265,
     ),
     Video(
-      videoId: 3,
+      videoID: 3,
       link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
       videoTitle: "HEADACHE pills , not sweet.",
       creator: "데이먼스 이어 Damons year",
@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 203113,
     ),
     Video(
-      videoId: 1,
+      videoID: 1,
       link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
       videoTitle: "사이좋게 나눠먹는 분식",
       creator: "침착맨",
@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 1203123,
     ),
     Video(
-      videoId: 2,
+      videoID: 2,
       link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
       videoTitle: "새마을금고 초유의 뱅크런 사태",
       creator: "슈카월드",
@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 903265,
     ),
     Video(
-      videoId: 3,
+      videoID: 3,
       link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
       videoTitle: "HEADACHE pills , not sweet.",
       creator: "데이먼스 이어 Damons year",
@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 203113,
     ),
     Video(
-      videoId: 1,
+      videoID: 1,
       link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
       videoTitle: "사이좋게 나눠먹는 분식",
       creator: "침착맨",
@@ -233,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 1203123,
     ),
     Video(
-      videoId: 2,
+      videoID: 2,
       link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
       videoTitle: "새마을금고 초유의 뱅크런 사태",
       creator: "슈카월드",
@@ -244,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
       youtubeViews: 903265,
     ),
     Video(
-      videoId: 3,
+      videoID: 3,
       link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
       videoTitle: "HEADACHE pills , not sweet.",
       creator: "데이먼스 이어 Damons year",
@@ -268,13 +268,19 @@ class _HomeScreenState extends State<HomeScreen> {
     // link도 수정
   }
 
+  void getCategorieVideos(results) async {
+    final response = await dio.post('videos/cateogries');
+    //
+    print("response : $response");
+  }
+
   @override
   void initState() {
     super.initState();
     dio.options.baseUrl = baseURL;
     dio.options.headers = {"userID": 1};
     getPopularVideos();
-    uid = widget.uid;
+    userID = widget.userID;
   }
 
   @override
@@ -308,10 +314,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => LearningScreen(
-                          uid: uid,
+                          userID: userID,
                           link: _popularVideos[index].link!.substring(
                                 _popularVideos[index].link!.indexOf('=') + 1,
                               ),
+                          videoID: _popularVideos[index].videoID,
                         ),
                       ),
                     );
@@ -387,9 +394,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           onConfirm: (results) {
                             _selectedCategories = results;
+                            print(results);
                             print(_selectedCategories
                                 .map((categorie) => (categorie.name))
                                 .toList());
+                            // getCategorieVideos(results);
                           },
                         ),
                       ),
@@ -416,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           LearningScreen(
-                                        uid: uid,
+                                        userID: userID,
                                         link: _categorieVideos[index]
                                             .link!
                                             .substring(
@@ -425,6 +434,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .indexOf('=') +
                                                   1,
                                             ),
+                                        videoID:
+                                            _categorieVideos[index].videoID,
                                       ),
                                     ),
                                   );

@@ -12,7 +12,13 @@ import 'package:audioplayers/audioplayers.dart';
 
 class VoiceInputScreen extends StatefulWidget {
   final String currentCaption;
-  const VoiceInputScreen({super.key, required this.currentCaption});
+  final int videoID;
+  final int transcriptID;
+  const VoiceInputScreen(
+      {super.key,
+      required this.currentCaption,
+      required this.videoID,
+      required this.transcriptID});
 
   @override
   State<VoiceInputScreen> createState() => _VoiceInputScreenState();
