@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/class/evaluation.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
@@ -52,14 +53,16 @@ class _LearningScreenState extends State<LearningScreen> {
 
   static late List<Transcript> _captions;
   Evaluation? _evaluations;
-  bool isEvaluated = false;
+  // bool isEvaluated = false;
   List<_ChartData>? data;
   late TooltipBehavior _tooltip;
 
   void getTranscripts() async {
     final response = await dio.get('videos/$videoId/transcripts');
     //
-    print("response : $response");
+    if (kDebugMode) {
+      print("response : $response");
+    }
   }
 
   @override
@@ -252,18 +255,18 @@ class _LearningScreenState extends State<LearningScreen> {
     ''';
     _captions = listTranscriptsFromJson(jsonString);
     _evaluations = evaluationsFromJson(jsonString2);
-    isEvaluated = true;
+    // isEvaluated = true;
     currentTranscript = _captions[0].sentence;
-    if (isEvaluated) {
-      data = [
-        _ChartData('overall', _evaluations!.overall),
-        _ChartData('pronunciation', _evaluations!.pronunciation),
-        _ChartData('fluency', _evaluations!.fluency),
-        _ChartData('integrity', _evaluations!.integrity),
-        _ChartData('rhythm', _evaluations!.rhythm),
-        _ChartData('speed', _evaluations!.speed),
-      ];
-    }
+    // if (isEvaluated()) {
+    //   data = [
+    //     _ChartData('overall', _evaluations!.overall),
+    //     _ChartData('pronunciation', _evaluations!.pronunciation),
+    //     _ChartData('fluency', _evaluations!.fluency),
+    //     _ChartData('integrity', _evaluations!.integrity),
+    //     _ChartData('rhythm', _evaluations!.rhythm),
+    //     _ChartData('speed', _evaluations!.speed),
+    //   ];
+    // }
     _tooltip = TooltipBehavior(enable: true);
     // print(_evaluations);
   }
@@ -285,7 +288,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
   @override
   void dispose() {
-    Future.delayed(Duration(milliseconds: 50)).then((_) {
+    Future.delayed(const Duration(milliseconds: 50)).then((_) {
       _controller.dispose();
       _idController.dispose();
       _seekToController.dispose();
@@ -388,7 +391,7 @@ class _LearningScreenState extends State<LearningScreen> {
                   ),
                   _space,
                   if (isWholeCaption)
-                    Container(
+                    SizedBox(
                       height: 500,
                       child: ListView.builder(
                         itemCount: _captions.length,
@@ -407,8 +410,8 @@ class _LearningScreenState extends State<LearningScreen> {
                             child: (isCurrentCaption(context, index))
                                 ? Text(
                                     _captions[index].sentence,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   )
                                 : Text(_captions[index].sentence),
                           );
@@ -457,17 +460,17 @@ class _LearningScreenState extends State<LearningScreen> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       content: VoiceListenScreen(
-                                        currentCaption: currentTranscript,
+                                        currentTranscript: currentTranscript,
                                         transcriptID: currentTrasncriptId,
                                         videoID: videoId,
                                       ),
-                                      insetPadding: EdgeInsets.all(8.0),
+                                      insetPadding: const EdgeInsets.all(8.0),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text('확인'),
+                                          child: const Text('확인'),
                                         ),
                                       ],
                                     );
@@ -489,17 +492,17 @@ class _LearningScreenState extends State<LearningScreen> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       content: VoiceInputScreen(
-                                        currentCaption: currentTranscript,
+                                        currentTranscript: currentTranscript,
                                         transcriptID: currentTrasncriptId,
                                         videoID: videoId,
                                       ),
-                                      insetPadding: EdgeInsets.all(8.0),
+                                      insetPadding: const EdgeInsets.all(8.0),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text('확인'),
+                                          child: const Text('확인'),
                                         ),
                                       ],
                                     );
@@ -517,7 +520,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                       ],
                     ),
-                  if (isEvaluated) barChart(),
+                  if (isEvaluated()) barChart(),
                 ],
               ),
             ),
@@ -561,6 +564,20 @@ class _LearningScreenState extends State<LearningScreen> {
     setState(() {
       isSelected = [isWholeCaption, isPartCaption];
     });
+  }
+
+  bool isEvaluated() {
+    // final response =
+
+    data = [
+      _ChartData('overall', _evaluations!.overall),
+      _ChartData('pronunciation', _evaluations!.pronunciation),
+      _ChartData('fluency', _evaluations!.fluency),
+      _ChartData('integrity', _evaluations!.integrity),
+      _ChartData('rhythm', _evaluations!.rhythm),
+      _ChartData('speed', _evaluations!.speed),
+    ];
+    return true;
   }
 
   bool isCurrentCaption(BuildContext context, int index) {

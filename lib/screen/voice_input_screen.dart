@@ -2,21 +2,25 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
+// import 'package:path/path.dart' as p;
+// import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+import '../const/key.dart';
+
 class VoiceInputScreen extends StatefulWidget {
-  final String currentCaption;
+  final String currentTranscript;
   final int videoID;
   final int transcriptID;
   const VoiceInputScreen(
       {super.key,
-      required this.currentCaption,
+      required this.currentTranscript,
       required this.videoID,
       required this.transcriptID});
 
@@ -31,10 +35,21 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   bool isRecording = false;
   String audioPath = '';
 
+  String _transcript = '';
+
+  late int _transcriptID;
+  late int _videoID;
+  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+
   @override
   void initState() {
     audioPlayer = AudioPlayer();
     audioRecord = Record();
+
+    _transcript = widget.currentTranscript;
+    _transcriptID = widget.transcriptID;
+    _videoID = widget.videoID;
+    dio.options.baseUrl = baseURL;
     super.initState();
   }
 
@@ -52,6 +67,10 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       // tst = bytes;
       // print(file);
       log(bytes.toString());
+
+      final response = await dio.post(
+        'videos/$_videoID/transcripts/$_transcriptID/audio',
+      );
     } catch (e) {
       if (kDebugMode) {
         print("readFile Error : $e");
@@ -114,7 +133,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(widget.currentCaption),
+          Text(_transcript),
           if (isRecording)
             const Column(
               children: [
@@ -129,8 +148,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
             ),
           ElevatedButton(
             onPressed: isRecording ? stopRecording : startRecording,
-            child:
-                isRecording ? Text('Stop Recording') : Text('Start Recording'),
+            child: isRecording
+                ? const Text('Stop Recording')
+                : const Text('Start Recording'),
           ),
           const SizedBox(
             height: 25,
@@ -141,11 +161,11 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
               children: [
                 ElevatedButton(
                   onPressed: readFile,
-                  child: Text('submit'),
+                  child: const Text('Submit'),
                 ),
                 ElevatedButton(
                   onPressed: playRecording,
-                  child: Text('Play Recording'),
+                  child: const Text('Play Recording'),
                 )
               ],
             ),

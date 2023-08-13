@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 import '../const/key.dart';
 
 class VoiceListenScreen extends StatefulWidget {
-  final String currentCaption;
+  final String currentTranscript;
   final int transcriptID;
   final int videoID;
   const VoiceListenScreen(
       {super.key,
-      required this.currentCaption,
+      required this.currentTranscript,
       required this.transcriptID,
       required this.videoID});
 
@@ -26,13 +26,13 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   late AudioPlayer audioPlayer;
   late int _transcriptID;
   late int _videoID;
-  String _caption = '';
+  String _transcript = '';
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   @override
   void initState() {
     audioPlayer = AudioPlayer();
-    _caption = widget.currentCaption;
+    _transcript = widget.currentTranscript;
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
     dio.options.baseUrl = baseURL;
@@ -73,14 +73,14 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              _caption,
-              style: TextStyle(
+              _transcript,
+              style: const TextStyle(
                 fontSize: 15,
               ),
             ),
             ElevatedButton(
               onPressed: playRecording,
-              child: Text('Play Recording'),
+              child: const Text('Play Recording'),
             )
           ],
         ),

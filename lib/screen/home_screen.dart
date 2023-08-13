@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -274,7 +275,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void getPopularVideos() async {
     final response = await dio.get('videos/popular');
 
-    print("response : $response");
+    if (kDebugMode) {
+      print("response : $response");
+    }
     // _popularVideos 초기화
     // link도 수정
   }
@@ -282,7 +285,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void getCategorieVideos(results) async {
     final response = await dio.post('videos/categories');
     //
-    print("response : $response");
+    if (kDebugMode) {
+      print("response : $response");
+    }
   }
 
   @override
@@ -405,10 +410,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           onConfirm: (results) {
                             _selectedCategories = results;
-                            print(results);
-                            print(_selectedCategories
-                                .map((categorie) => (categorie.name))
-                                .toList());
+                            if (kDebugMode) {
+                              print(results);
+                              print(_selectedCategories
+                                  .map((categorie) => (categorie.name))
+                                  .toList());
+                            }
                             // getCategorieVideos(results);
                           },
                         ),

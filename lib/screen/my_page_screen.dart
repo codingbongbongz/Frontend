@@ -24,7 +24,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Center(
+        const Center(
           child: Text('My Page Screen'),
         ),
         Center(
