@@ -4,27 +4,27 @@ class Transcript {
   final int transcriptId;
   final num duration;
   final num start;
-  final String text;
+  final String sentence;
 
   Transcript(
       {required this.transcriptId,
       required this.duration,
       required this.start,
-      required this.text});
+      required this.sentence});
 
   factory Transcript.fromJson(Map<String, dynamic> json) => Transcript(
         // transcriptId: json['transcriptId'],
         transcriptId: 1,
         duration: json['duration'],
         start: json['start'],
-        text: json['text'],
+        sentence: json['sentence'],
       );
 
   Map<String, dynamic> toJson() => {
         'transcriptId': transcriptId,
         'duration': duration,
         'start': start,
-        'text': text
+        'sentence': sentence
       };
 
   @override
@@ -33,7 +33,7 @@ class Transcript {
       transcriptId: $transcriptId
       duration : $duration
       start : $start
-      text : $text
+      sentence : $sentence
     ''';
   }
 }

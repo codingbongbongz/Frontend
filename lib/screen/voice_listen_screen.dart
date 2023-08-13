@@ -10,11 +10,13 @@ import '../const/key.dart';
 
 class VoiceListenScreen extends StatefulWidget {
   final String currentCaption;
+  final int transcriptID;
+  final int videoID;
   const VoiceListenScreen(
       {super.key,
       required this.currentCaption,
-      required int transcriptID,
-      required int videoID});
+      required this.transcriptID,
+      required this.videoID});
 
   @override
   State<VoiceListenScreen> createState() => _VoiceListenScreenState();
@@ -22,6 +24,8 @@ class VoiceListenScreen extends StatefulWidget {
 
 class _VoiceListenScreenState extends State<VoiceListenScreen> {
   late AudioPlayer audioPlayer;
+  late int _transcriptID;
+  late int _videoID;
   String _caption = '';
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
@@ -29,6 +33,8 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   void initState() {
     audioPlayer = AudioPlayer();
     _caption = widget.currentCaption;
+    _transcriptID = widget.transcriptID;
+    _videoID = widget.videoID;
     dio.options.baseUrl = baseURL;
     super.initState();
   }
@@ -43,7 +49,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   Future<void> playRecording() async {
     try {
       final response = await dio.get(
-        'videos/1/transcripts',
+        'videos/$_videoID/transcripts/$_transcriptID/audio',
       );
       if (kDebugMode) {
         // print(response.realUri.runtimeType);
