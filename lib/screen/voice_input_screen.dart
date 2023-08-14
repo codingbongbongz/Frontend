@@ -70,6 +70,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
 
       final response = await dio.post(
         'videos/$_videoID/transcripts/$_transcriptID/audio',
+        data: bytes,
       );
     } catch (e) {
       if (kDebugMode) {

@@ -41,119 +41,121 @@ class _HomeScreenState extends State<HomeScreen> {
     Categorie(id: 13, name: "Health"),
     Categorie(id: 14, name: "Politics"),
   ];
-  static final List<Video> _popularVideos = [
-    // 추후에 초기화 해야 함
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=YRygn_pfSIo",
-      videoTitle: "[#올탁구나] 15년 차 일본 선수",
-      creator: "tvN D ENT",
-      duration: 5.59,
-      isDefault: true,
-      views: 9125,
-      createdAt: DateTime.parse("2022-02-24T09:00:00.594Z"),
-      youtubeViews: 91253,
-    ),
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-      videoTitle: "사이좋게 나눠먹는 분식",
-      creator: "침착맨",
-      duration: 30.25,
-      isDefault: true,
-      views: 2571232,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 1203123,
-    ),
-    Video(
-      videoId: 2,
-      link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-      videoTitle: "새마을금고 초유의 뱅크런 사태",
-      creator: "슈카월드",
-      duration: 23.16,
-      isDefault: true,
-      views: 90326,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 903265,
-    ),
-    Video(
-      videoId: 3,
-      link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-      videoTitle: "HEADACHE pills , not sweet.",
-      creator: "데이먼스 이어 Damons year",
-      duration: 34.10,
-      isDefault: true,
-      views: 20311,
-      createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-      youtubeViews: 203113,
-    ),
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-      videoTitle: "사이좋게 나눠먹는 분식",
-      creator: "침착맨",
-      duration: 30.25,
-      isDefault: true,
-      views: 2571232,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 1203123,
-    ),
-    Video(
-      videoId: 2,
-      link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-      videoTitle: "새마을금고 초유의 뱅크런 사태",
-      creator: "슈카월드",
-      duration: 23.16,
-      isDefault: true,
-      views: 90326,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 903265,
-    ),
-    Video(
-      videoId: 3,
-      link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-      videoTitle: "HEADACHE pills , not sweet.",
-      creator: "데이먼스 이어 Damons year",
-      duration: 34.10,
-      isDefault: true,
-      views: 20311,
-      createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-      youtubeViews: 203113,
-    ),
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-      videoTitle: "사이좋게 나눠먹는 분식",
-      creator: "침착맨",
-      duration: 30.25,
-      isDefault: true,
-      views: 2571232,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 1203123,
-    ),
-    Video(
-      videoId: 2,
-      link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-      videoTitle: "새마을금고 초유의 뱅크런 사태",
-      creator: "슈카월드",
-      duration: 23.16,
-      isDefault: true,
-      views: 90326,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 903265,
-    ),
-    Video(
-      videoId: 3,
-      link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-      videoTitle: "HEADACHE pills , not sweet.",
-      creator: "데이먼스 이어 Damons year",
-      duration: 34.10,
-      isDefault: true,
-      views: 20311,
-      createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-      youtubeViews: 203113,
-    ),
-  ];
+  late List<Video> _popularVideos = [];
+
+  // static final List<Video> _popularVideos = [
+  //   // 추후에 초기화 해야 함
+  //   Video(
+  //     videoId: 1,
+  //     link: "https://www.youtube.com/watch?v=YRygn_pfSIo",
+  //     videoTitle: "[#올탁구나] 15년 차 일본 선수",
+  //     creator: "tvN D ENT",
+  //     duration: 5.59,
+  //     isDefault: true,
+  //     views: 9125,
+  //     createdAt: DateTime.parse("2022-02-24T09:00:00.594Z"),
+  //     youtubeViews: 91253,
+  //   ),
+  //   Video(
+  //     videoId: 1,
+  //     link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
+  //     videoTitle: "사이좋게 나눠먹는 분식",
+  //     creator: "침착맨",
+  //     duration: 30.25,
+  //     isDefault: true,
+  //     views: 2571232,
+  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
+  //     youtubeViews: 1203123,
+  //   ),
+  //   Video(
+  //     videoId: 2,
+  //     link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
+  //     videoTitle: "새마을금고 초유의 뱅크런 사태",
+  //     creator: "슈카월드",
+  //     duration: 23.16,
+  //     isDefault: true,
+  //     views: 90326,
+  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
+  //     youtubeViews: 903265,
+  //   ),
+  //   Video(
+  //     videoId: 3,
+  //     link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
+  //     videoTitle: "HEADACHE pills , not sweet.",
+  //     creator: "데이먼스 이어 Damons year",
+  //     duration: 34.10,
+  //     isDefault: true,
+  //     views: 20311,
+  //     createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
+  //     youtubeViews: 203113,
+  //   ),
+  //   Video(
+  //     videoId: 1,
+  //     link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
+  //     videoTitle: "사이좋게 나눠먹는 분식",
+  //     creator: "침착맨",
+  //     duration: 30.25,
+  //     isDefault: true,
+  //     views: 2571232,
+  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
+  //     youtubeViews: 1203123,
+  //   ),
+  //   Video(
+  //     videoId: 2,
+  //     link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
+  //     videoTitle: "새마을금고 초유의 뱅크런 사태",
+  //     creator: "슈카월드",
+  //     duration: 23.16,
+  //     isDefault: true,
+  //     views: 90326,
+  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
+  //     youtubeViews: 903265,
+  //   ),
+  //   Video(
+  //     videoId: 3,
+  //     link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
+  //     videoTitle: "HEADACHE pills , not sweet.",
+  //     creator: "데이먼스 이어 Damons year",
+  //     duration: 34.10,
+  //     isDefault: true,
+  //     views: 20311,
+  //     createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
+  //     youtubeViews: 203113,
+  //   ),
+  //   Video(
+  //     videoId: 1,
+  //     link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
+  //     videoTitle: "사이좋게 나눠먹는 분식",
+  //     creator: "침착맨",
+  //     duration: 30.25,
+  //     isDefault: true,
+  //     views: 2571232,
+  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
+  //     youtubeViews: 1203123,
+  //   ),
+  //   Video(
+  //     videoId: 2,
+  //     link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
+  //     videoTitle: "새마을금고 초유의 뱅크런 사태",
+  //     creator: "슈카월드",
+  //     duration: 23.16,
+  //     isDefault: true,
+  //     views: 90326,
+  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
+  //     youtubeViews: 903265,
+  //   ),
+  //   Video(
+  //     videoId: 3,
+  //     link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
+  //     videoTitle: "HEADACHE pills , not sweet.",
+  //     creator: "데이먼스 이어 Damons year",
+  //     duration: 34.10,
+  //     isDefault: true,
+  //     views: 20311,
+  //     createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
+  //     youtubeViews: 203113,
+  //   ),
+  // ];
   static final List<Video> _categorieVideos = [
     // 추후에 초기화 해야 함
     Video(
@@ -272,18 +274,30 @@ class _HomeScreenState extends State<HomeScreen> {
           MultiSelectItem<Categorie>(categorie, categorie.name ?? 'No Named'))
       .toList();
 
-  void getPopularVideos() async {
+  Future<List<Video>> getPopularVideos() async {
     final response = await dio.get('videos/popular');
 
     if (kDebugMode) {
       print("response : $response");
+      print("response.runtimeType : ${response.runtimeType}");
+
+      print(response.data['data']['popularVideo']);
     }
-    // _popularVideos 초기화
-    // link도 수정
+    List<dynamic> responseBody = response.data['data']['popularVideo'];
+    _popularVideos =
+        responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
+
+    return responseBody.map((e) => Video.fromJson(e)).toList();
+    // print(_popularVideos.length);
   }
 
   void getCategorieVideos(results) async {
-    final response = await dio.post('videos/categories');
+    final response = await dio.post(
+      'videos/category',
+      data: {
+        "categoryId": 1,
+      },
+    );
     //
     if (kDebugMode) {
       print("response : $response");
@@ -295,7 +309,35 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     dio.options.baseUrl = baseURL;
     dio.options.headers = {"userId": 1};
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (
+        RequestOptions options,
+        RequestInterceptorHandler handler,
+      ) {
+        if (options.contentType == null) {
+          final dynamic data = options.data;
+          final String? contentType;
+          if (data is FormData) {
+            contentType = Headers.multipartFormDataContentType;
+          } else if (data is Map) {
+            contentType = Headers.formUrlEncodedContentType;
+          } else if (data is String) {
+            contentType = Headers.jsonContentType;
+          } else if (data != null) {
+            contentType =
+                Headers.textPlainContentType; // Can be removed if unnecessary.
+          } else {
+            contentType = null;
+          }
+          options.contentType = contentType;
+        }
+        handler.next(options);
+      },
+    ));
+    // dio.options.contentType = Headers.jsonContentType;
+    // print(_popularVideos.length);
     getPopularVideos();
+    // print(_popularVideos.length);
     userID = widget.userID;
   }
 
@@ -320,57 +362,73 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         SizedBox(
           height: 150,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _popularVideos.length,
-            itemBuilder: (BuildContext context, int index) {
-              var inkWell = InkWell(
-                onTap: () {
-                  {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => LearningScreen(
-                          userID: userID,
-                          link: _popularVideos[index].link!.substring(
-                                _popularVideos[index].link!.indexOf('=') + 1,
+          child: FutureBuilder(
+              future: getPopularVideos(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final data = snapshot.data;
+                  // var length = _popularVideos.length;
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: data?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var inkWell = InkWell(
+                        onTap: () {
+                          {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    LearningScreen(
+                                  userID: userID,
+                                  link: _popularVideos[index].link!.substring(
+                                        _popularVideos[index]
+                                                .link!
+                                                .indexOf('=') +
+                                            1,
+                                      ),
+                                  videoID: _popularVideos[index].videoId,
+                                ),
                               ),
-                          videoID: _popularVideos[index].videoId,
+                            );
+                          }
+                        },
+                        child: Image.network(
+                          YoutubeThumbnail(
+                            youtubeId: _popularVideos[index].link!.substring(
+                                  _popularVideos[index].link!.indexOf('=') + 1,
+                                ),
+                          ).small(),
                         ),
-                      ),
-                    );
-                  }
-                },
-                child: Image.network(
-                  YoutubeThumbnail(
-                    youtubeId: _popularVideos[index].link!.substring(
-                          _popularVideos[index].link!.indexOf('=') + 1,
+                      );
+                      return Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 3,
                         ),
-                  ).small(),
-                ),
-              );
-              return Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width / 3,
-                ),
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    inkWell,
-                    Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Text(
-                        _popularVideos[index].videoTitle!,
-                        style: const TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            inkWell,
+                            Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Text(
+                                _popularVideos[index].videoTitle!,
+                                style: const TextStyle(
+                                  fontSize: 13.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                      );
+                    },
+                  );
+                }
+              }),
         ),
         Expanded(
           child: Column(

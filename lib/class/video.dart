@@ -2,39 +2,39 @@ import 'dart:convert';
 
 class Video {
   final int videoId;
-  final String? link;
-  final String? videoTitle;
+  final String link;
+  String videoTitle = 'videoTitle';
   final String? creator;
   final double? duration;
   final bool? isDefault;
   final int? views;
-  final DateTime? createdAt;
-  // 없애도 될듯
+  DateTime? createdAt = DateTime.now();
+  // // 없애도 될듯
   final int? youtubeViews;
 
   Video({
     required this.videoId,
-    this.link,
-    this.duration,
-    this.isDefault,
-    this.views,
+    required this.link,
+    this.duration = 1.0,
+    this.isDefault = true,
+    this.views = 1,
     this.createdAt,
-    this.youtubeViews,
-    this.videoTitle,
-    this.creator,
+    this.youtubeViews = 1,
+    this.videoTitle = 'videoTitle',
+    this.creator = 'creator',
   });
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
         // transcriptId: json['transcriptId'],
         videoId: json['videoId'],
-        link: json['link'],
-        videoTitle: json['videoTitle'],
-        creator: json['creator'],
-        duration: json['duration'],
-        isDefault: json['isDefault'],
-        views: json['views'],
-        createdAt: json['createdAt'],
-        youtubeViews: json['youtubeViews'],
+        link: json['videoUrl'],
+        // videoTitle: json['videoTitle'],
+        // creator: json['creator'],
+        // duration: json['duration'],
+        // isDefault: json['isDefault'],
+        // views: json['views'],
+        // createdAt: json['createdAt'],
+        // youtubeViews: json['youtubeViews'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -53,18 +53,19 @@ class Video {
     return '''
       videoID : $videoId
       link : $link
-      duration : $duration
-      isDefault: $isDefault
-      views : $views,
-      createdAt : $createdAt
-      youtubeView : $youtubeViews
-      videoTitle : $videoTitle
-      creator : $creator
+      
     ''';
   }
+  // duration : $duration
+  //     isDefault: $isDefault
+  //     views : $views,
+  //     createdAt : $createdAt
+  //     youtubeView : $youtubeViews
+  //     videoTitle : $videoTitle
+  //     creator : $creator
 
   List<Video> listVideosFromJson(String json) {
-    List<dynamic> parsedJson = jsonDecode(json)["data"];
+    List<dynamic> parsedJson = jsonDecode(json)["data"]['popularVideo'];
     // print("parsedJson = $parsedJson");
     List<Video> listVideos = [];
     for (int i = 0; i < parsedJson.length; i++) {
