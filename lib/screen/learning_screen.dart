@@ -320,7 +320,8 @@ class _LearningScreenState extends State<LearningScreen> {
                                 );
                                 currentTranscript =
                                     _transcripts[index].sentence;
-                                currentTrasncriptId = index;
+                                currentTrasncriptId =
+                                    _transcripts[index].transcriptId;
                               }
                               return inkWell;
                             },

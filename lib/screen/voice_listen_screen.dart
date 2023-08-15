@@ -48,6 +48,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
 
   Future<void> playRecording() async {
     try {
+      // print('videos/$_videoID/transcripts/$_transcriptID/audio');
       final response = await dio.get(
         'videos/$_videoID/transcripts/$_transcriptID/audio',
       );
@@ -57,7 +58,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
       }
 
       // await audioPlayer.play(urlSource);
-      // await audioPlayer.play(UrlSource(response.realUri.toString()));
+      await audioPlayer.play(UrlSource(response.realUri.toString()));
     } catch (e) {
       if (kDebugMode) {
         print('playRecording Error : $e');
