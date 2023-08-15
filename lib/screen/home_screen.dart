@@ -42,120 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Categorie(id: 14, name: "Politics"),
   ];
   late List<Video> _popularVideos = [];
-
-  // static final List<Video> _popularVideos = [
-  //   // 추후에 초기화 해야 함
-  //   Video(
-  //     videoId: 1,
-  //     link: "https://www.youtube.com/watch?v=YRygn_pfSIo",
-  //     videoTitle: "[#올탁구나] 15년 차 일본 선수",
-  //     creator: "tvN D ENT",
-  //     duration: 5.59,
-  //     isDefault: true,
-  //     views: 9125,
-  //     createdAt: DateTime.parse("2022-02-24T09:00:00.594Z"),
-  //     youtubeViews: 91253,
-  //   ),
-  //   Video(
-  //     videoId: 1,
-  //     link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-  //     videoTitle: "사이좋게 나눠먹는 분식",
-  //     creator: "침착맨",
-  //     duration: 30.25,
-  //     isDefault: true,
-  //     views: 2571232,
-  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-  //     youtubeViews: 1203123,
-  //   ),
-  //   Video(
-  //     videoId: 2,
-  //     link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-  //     videoTitle: "새마을금고 초유의 뱅크런 사태",
-  //     creator: "슈카월드",
-  //     duration: 23.16,
-  //     isDefault: true,
-  //     views: 90326,
-  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-  //     youtubeViews: 903265,
-  //   ),
-  //   Video(
-  //     videoId: 3,
-  //     link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-  //     videoTitle: "HEADACHE pills , not sweet.",
-  //     creator: "데이먼스 이어 Damons year",
-  //     duration: 34.10,
-  //     isDefault: true,
-  //     views: 20311,
-  //     createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-  //     youtubeViews: 203113,
-  //   ),
-  //   Video(
-  //     videoId: 1,
-  //     link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-  //     videoTitle: "사이좋게 나눠먹는 분식",
-  //     creator: "침착맨",
-  //     duration: 30.25,
-  //     isDefault: true,
-  //     views: 2571232,
-  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-  //     youtubeViews: 1203123,
-  //   ),
-  //   Video(
-  //     videoId: 2,
-  //     link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-  //     videoTitle: "새마을금고 초유의 뱅크런 사태",
-  //     creator: "슈카월드",
-  //     duration: 23.16,
-  //     isDefault: true,
-  //     views: 90326,
-  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-  //     youtubeViews: 903265,
-  //   ),
-  //   Video(
-  //     videoId: 3,
-  //     link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-  //     videoTitle: "HEADACHE pills , not sweet.",
-  //     creator: "데이먼스 이어 Damons year",
-  //     duration: 34.10,
-  //     isDefault: true,
-  //     views: 20311,
-  //     createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-  //     youtubeViews: 203113,
-  //   ),
-  //   Video(
-  //     videoId: 1,
-  //     link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-  //     videoTitle: "사이좋게 나눠먹는 분식",
-  //     creator: "침착맨",
-  //     duration: 30.25,
-  //     isDefault: true,
-  //     views: 2571232,
-  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-  //     youtubeViews: 1203123,
-  //   ),
-  //   Video(
-  //     videoId: 2,
-  //     link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-  //     videoTitle: "새마을금고 초유의 뱅크런 사태",
-  //     creator: "슈카월드",
-  //     duration: 23.16,
-  //     isDefault: true,
-  //     views: 90326,
-  //     createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-  //     youtubeViews: 903265,
-  //   ),
-  //   Video(
-  //     videoId: 3,
-  //     link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-  //     videoTitle: "HEADACHE pills , not sweet.",
-  //     creator: "데이먼스 이어 Damons year",
-  //     duration: 34.10,
-  //     isDefault: true,
-  //     views: 20311,
-  //     createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-  //     youtubeViews: 203113,
-  //   ),
-  // ];
   static final List<Video> _categorieVideos = [
     // 추후에 초기화 해야 함
     Video(
@@ -277,12 +163,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<Video>> getPopularVideos() async {
     final response = await dio.get('videos/popular');
 
-    if (kDebugMode) {
-      print("response : $response");
-      print("response.runtimeType : ${response.runtimeType}");
-
-      print(response.data['data']['popularVideo']);
-    }
     List<dynamic> responseBody = response.data['data']['popularVideo'];
     _popularVideos =
         responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
@@ -371,10 +251,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   final data = snapshot.data;
+                  // print(data![0].link);
                   // var length = _popularVideos.length;
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: data?.length,
+                    itemCount: data!.length,
                     itemBuilder: (BuildContext context, int index) {
                       var inkWell = InkWell(
                         onTap: () {
@@ -384,13 +265,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 builder: (BuildContext context) =>
                                     LearningScreen(
                                   userID: userID,
-                                  link: _popularVideos[index].link!.substring(
-                                        _popularVideos[index]
-                                                .link!
-                                                .indexOf('=') +
-                                            1,
-                                      ),
-                                  videoID: _popularVideos[index].videoId,
+                                  link: data[index].link,
+                                  videoID: data[index].videoId,
                                 ),
                               ),
                             );
@@ -398,9 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         child: Image.network(
                           YoutubeThumbnail(
-                            youtubeId: _popularVideos[index].link!.substring(
-                                  _popularVideos[index].link!.indexOf('=') + 1,
-                                ),
+                            youtubeId: _popularVideos[index].link,
                           ).small(),
                         ),
                       );

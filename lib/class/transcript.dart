@@ -3,27 +3,26 @@ import 'dart:convert';
 class Transcript {
   final int transcriptId;
   final num duration;
-  final num start;
+  final num startTime;
   final String sentence;
 
   Transcript(
       {required this.transcriptId,
       required this.duration,
-      required this.start,
+      required this.startTime,
       required this.sentence});
 
   factory Transcript.fromJson(Map<String, dynamic> json) => Transcript(
-        // transcriptId: json['transcriptId'],
-        transcriptId: 1,
+        transcriptId: json['transcriptId'],
         duration: json['duration'],
-        start: json['start'],
+        startTime: json['startTime'],
         sentence: json['sentence'],
       );
 
   Map<String, dynamic> toJson() => {
         'transcriptId': transcriptId,
         'duration': duration,
-        'start': start,
+        'start': startTime,
         'sentence': sentence
       };
 
@@ -32,7 +31,7 @@ class Transcript {
     return '''
       transcriptId: $transcriptId
       duration : $duration
-      start : $start
+      startTime : $startTime
       sentence : $sentence
     ''';
   }
