@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -30,7 +32,7 @@ class LearningScreen extends StatefulWidget {
 }
 
 class _LearningScreenState extends State<LearningScreen> {
-  int uid = 1;
+  int userId = 1;
   String link = '';
   int videoId = 1;
   int currentDuration = 0;
@@ -56,7 +58,7 @@ class _LearningScreenState extends State<LearningScreen> {
   bool _isPlayerReady = false;
 
   List<Transcript> _transcripts = [];
-  var _evaluations;
+  List<Evaluation> _evaluations = [];
   // bool isEvaluated = false;
   // List<_ChartData>? data;
   late TooltipBehavior _tooltip;
@@ -83,23 +85,31 @@ class _LearningScreenState extends State<LearningScreen> {
   }
 
   void getEvaluation() async {
+    FormData formData = FormData.fromMap({
+      "userId": userId,
+    });
     final response = await dio.get(
-      'videos/$videoId/transcripts/audio/previous',
-      data: {'userId': 1},
-      // options: Options(
-      //   headers: {"Content-Type": "multipart/form-data"},
-      //   // contentType: Headers.multipartFormDataContentType,
-      // ),
+      'videos/$videoId/audio/previous',
+      data: formData,
+      options: Options(
+        headers: {"Content-Type": "multipart/form-data"},
+        // contentType: Headers.multipartFormDataContentType,
+      ),
     );
 
     if (kDebugMode) {
       print("response : $response");
     }
-    List<dynamic> responseBody = response.data['data']['evaluation'];
-    _evaluations = responseBody
-        .map((e) => Evaluation.fromJson(e))
-        .toList(); // map을 오브젝트로 변환
-    _data.add(_evaluations);
+    if (response.statusCode == 404) {
+      _data.add([]);
+    } else {
+      List<dynamic> responseBody = response.data['data']['evaluations'];
+      _evaluations = responseBody
+          .map((e) => Evaluation.fromJson(e))
+          .toList(); // map을 오브젝트로 변환
+      print(_evaluations[0].overall);
+      // _data.add(chartData);
+    }
   }
 
   @override
@@ -109,13 +119,22 @@ class _LearningScreenState extends State<LearningScreen> {
     super.initState();
 
     _data = StreamController<List<_ChartData>>();
-    uid = widget.userID;
+    _data.add([
+      _ChartData('overall', 0),
+      _ChartData('pronunciation', 0),
+      _ChartData('fluency', 0),
+      _ChartData('integrity', 0),
+      _ChartData('rhythm', 0),
+      _ChartData('speed', 0),
+    ]);
+    userId = widget.userID;
     link = widget.link;
     videoId = widget.videoID;
 
     dio.options.baseUrl = baseURL;
     dio.options.headers = {"userID": 1};
     getTranscripts();
+    getEvaluation();
     _controller = YoutubePlayerController(
       initialVideoId: link,
       flags: const YoutubePlayerFlags(
@@ -157,16 +176,7 @@ class _LearningScreenState extends State<LearningScreen> {
     // _evaluations = evaluationsFromJson(jsonString2);
     // isEvaluated = true;
     // currentTranscript = _transcripts[0].sentence;
-    // if (isEvaluated()) {
-    //   data = [
-    //     _ChartData('overall', _evaluations!.overall),
-    //     _ChartData('pronunciation', _evaluations!.pronunciation),
-    //     _ChartData('fluency', _evaluations!.fluency),
-    //     _ChartData('integrity', _evaluations!.integrity),
-    //     _ChartData('rhythm', _evaluations!.rhythm),
-    //     _ChartData('speed', _evaluations!.speed),
-    //   ];
-    // }
+
     _tooltip = TooltipBehavior(enable: true);
     // print(_evaluations);
   }
@@ -250,7 +260,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (BuildContext context) => MainScreen(
-                                userID: uid,
+                                userID: userId,
                               ),
                             ),
                             (route) => false);
@@ -347,6 +357,21 @@ class _LearningScreenState extends State<LearningScreen> {
                                     _transcripts[index].sentence;
                                 currentTrasncriptId =
                                     _transcripts[index].transcriptId;
+                                // 현재 자막에 해당하는 학습 결과 출력
+                                // _data.add([
+                                //   _ChartData(
+                                //       'overall', _evaluations[index].overall),
+                                //   _ChartData('pronunciation',
+                                //       _evaluations[index].pronunciation),
+                                //   _ChartData(
+                                //       'fluency', _evaluations[index].fluency),
+                                //   _ChartData('integrity',
+                                //       _evaluations[index].integrity),
+                                //   _ChartData(
+                                //       'rhythm', _evaluations[index].rhythm),
+                                //   _ChartData(
+                                //       'speed', _evaluations[index].speed),
+                                // ]);
                               }
                               return inkWell;
                             },
@@ -422,19 +447,19 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                       ],
                     ),
-                  // StreamBuilder(
-                  //     stream: _data.stream,
-                  //     builder: (context, snapshot) {
-                  //       if (snapshot.connectionState ==
-                  //           ConnectionState.waiting) {
-                  //         return LinearProgressIndicator();
-                  //       } else if (snapshot.hasError) {
-                  //         return Text('Error: ${snapshot.error}');
-                  //       } else {
-                  //         final data = snapshot.data;
-                  //         return barChart(data);
-                  //       }
-                  //     }),
+                  StreamBuilder(
+                      stream: _data.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return LinearProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          final data = snapshot.data;
+                          return barChart(data);
+                        }
+                      }),
                 ],
               ),
             ),
