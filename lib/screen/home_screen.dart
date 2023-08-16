@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int userID = 0;
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  late StreamController<List<Video>> _events;
 
   List<Categorie> _selectedCategories = [];
   // link 수정
@@ -42,119 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Categorie(id: 14, name: "Politics"),
   ];
   late List<Video> _popularVideos = [];
-  static final List<Video> _categorieVideos = [
-    // 추후에 초기화 해야 함
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=YRygn_pfSIo",
-      videoTitle: "[#올탁구나] 15년 차 일본 선수",
-      creator: "tvN D ENT",
-      duration: 5.59,
-      isDefault: true,
-      views: 9125,
-      createdAt: DateTime.parse("2022-02-24T09:00:00.594Z"),
-      youtubeViews: 91253,
-    ),
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-      videoTitle: "사이좋게 나눠먹는 분식",
-      creator: "침착맨",
-      duration: 30.25,
-      isDefault: true,
-      views: 2571232,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 1203123,
-    ),
-    Video(
-      videoId: 2,
-      link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-      videoTitle: "새마을금고 초유의 뱅크런 사태",
-      creator: "슈카월드",
-      duration: 23.16,
-      isDefault: true,
-      views: 90326,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 903265,
-    ),
-    Video(
-      videoId: 3,
-      link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-      videoTitle: "HEADACHE pills , not sweet.",
-      creator: "데이먼스 이어 Damons year",
-      duration: 34.10,
-      isDefault: true,
-      views: 20311,
-      createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-      youtubeViews: 203113,
-    ),
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-      videoTitle: "사이좋게 나눠먹는 분식",
-      creator: "침착맨",
-      duration: 30.25,
-      isDefault: true,
-      views: 2571232,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 1203123,
-    ),
-    Video(
-      videoId: 2,
-      link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-      videoTitle: "새마을금고 초유의 뱅크런 사태",
-      creator: "슈카월드",
-      duration: 23.16,
-      isDefault: true,
-      views: 90326,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 903265,
-    ),
-    Video(
-      videoId: 3,
-      link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-      videoTitle: "HEADACHE pills , not sweet.",
-      creator: "데이먼스 이어 Damons year",
-      duration: 34.10,
-      isDefault: true,
-      views: 20311,
-      createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-      youtubeViews: 203113,
-    ),
-    Video(
-      videoId: 1,
-      link: "https://www.youtube.com/watch?v=FwAf4mbaVis",
-      videoTitle: "사이좋게 나눠먹는 분식",
-      creator: "침착맨",
-      duration: 30.25,
-      isDefault: true,
-      views: 2571232,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 1203123,
-    ),
-    Video(
-      videoId: 2,
-      link: "https://www.youtube.com/watch?v=ZFrya-B0VQo",
-      videoTitle: "새마을금고 초유의 뱅크런 사태",
-      creator: "슈카월드",
-      duration: 23.16,
-      isDefault: true,
-      views: 90326,
-      createdAt: DateTime.parse("2022-10-31T09:00:00.594Z"),
-      youtubeViews: 903265,
-    ),
-    Video(
-      videoId: 3,
-      link: "https://www.youtube.com/watch?v=4ActM8eu6Lg",
-      videoTitle: "HEADACHE pills , not sweet.",
-      creator: "데이먼스 이어 Damons year",
-      duration: 34.10,
-      isDefault: true,
-      views: 20311,
-      createdAt: DateTime.parse("2021-10-26T09:00:00.594Z"),
-      youtubeViews: 203113,
-    ),
-  ];
+  List<Video> _categoryVideos = [];
   final _items = _categories
       .map((categorie) =>
           MultiSelectItem<Categorie>(categorie, categorie.name ?? 'No Named'))
@@ -172,21 +63,41 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void getCategorieVideos(results) async {
-    final response = await dio.post(
+    if (results.isEmpty) {
+      _categoryVideos.clear();
+      _events.add([]);
+      return;
+    }
+    _selectedCategories = results;
+    FormData formData = FormData.fromMap({
+      "categoryId": results[0].id,
+    });
+
+    final response = await dio.get(
       'videos/category',
-      data: {
-        "categoryId": 1,
-      },
+      data: formData,
+      options: Options(
+        headers: {"Content-Type": "multipart/form-data"},
+        // contentType: Headers.multipartFormDataContentType,
+      ),
     );
-    //
+
     if (kDebugMode) {
       print("response : $response");
     }
+    List<dynamic> responseBody = response.data['data']['categoryVideo'];
+    _categoryVideos =
+        responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
+    print(_categoryVideos);
+    _events.add(_categoryVideos);
   }
 
   @override
   void initState() {
     super.initState();
+    _events = StreamController<List<Video>>();
+    _events.add([]);
+
     dio.options.baseUrl = baseURL;
     dio.options.headers = {"userId": 1};
     dio.interceptors.add(InterceptorsWrapper(
@@ -214,11 +125,14 @@ class _HomeScreenState extends State<HomeScreen> {
         handler.next(options);
       },
     ));
-    // dio.options.contentType = Headers.jsonContentType;
-    // print(_popularVideos.length);
     getPopularVideos();
-    // print(_popularVideos.length);
     userID = widget.userID;
+  }
+
+  @override
+  void dispose() {
+    _events.close();
+    super.dispose();
   }
 
   @override
@@ -341,14 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           onConfirm: (results) {
-                            _selectedCategories = results;
-                            if (kDebugMode) {
-                              print(results);
-                              print(_selectedCategories
-                                  .map((categorie) => (categorie.name))
-                                  .toList());
-                            }
-                            // getCategorieVideos(results);
+                            getCategorieVideos(results);
                           },
                         ),
                       ),
@@ -357,73 +264,71 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(),
-                  itemCount: _categorieVideos.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () {
-                                {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          LearningScreen(
-                                        userID: userID,
-                                        link: _categorieVideos[index]
-                                            .link!
-                                            .substring(
-                                              _categorieVideos[index]
-                                                      .link!
-                                                      .indexOf('=') +
-                                                  1,
+                child: StreamBuilder(
+                    stream: _events.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return LinearProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final data = snapshot.data;
+                        return ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                          itemCount: data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  LearningScreen(
+                                                userID: userID,
+                                                link: data[index].link,
+                                                videoID: data[index].videoId,
+                                              ),
                                             ),
-                                        videoID:
-                                            _categorieVideos[index].videoId,
-                                      ),
+                                          );
+                                        }
+                                      },
+                                      child: Image.network(YoutubeThumbnail(
+                                        youtubeId: data[index].link,
+                                      ).small()),
                                     ),
-                                  );
-                                }
-                              },
-                              child: Image.network(YoutubeThumbnail(
-                                youtubeId:
-                                    _categorieVideos[index].link!.substring(
-                                          _categorieVideos[index]
-                                                  .link!
-                                                  .indexOf('=') +
-                                              1,
-                                        ),
-                              ).small()),
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'videoTitle : ${_categorieVideos[index].videoTitle!}',
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'videoTitle : ${_categoryVideos[index].videoTitle!}',
+                                      ),
+                                      Text(
+                                        'creator : ${_categoryVideos[index].creator!}',
+                                      ),
+                                      Text(
+                                        'duration : ${_categoryVideos[index].duration!}',
+                                      ),
+                                      Text(
+                                        'views : ${_categoryVideos[index].views!}',
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              Text(
-                                'creator : ${_categorieVideos[index].creator!}',
-                              ),
-                              Text(
-                                'duration : ${_categorieVideos[index].duration!}',
-                              ),
-                              Text(
-                                'views : ${_categorieVideos[index].views!}',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                            );
+                          },
+                        );
+                      }
+                    }),
               ),
             ],
           ),

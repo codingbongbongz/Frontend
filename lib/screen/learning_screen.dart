@@ -64,7 +64,7 @@ class _LearningScreenState extends State<LearningScreen> {
       // print("response : $response");
       // print("response.runtimeType : ${response.runtimeType}");
 
-      print(response.data['data']['transcripts']);
+      // print(response.data['data']['transcripts']);
     }
     List<dynamic> responseBody = response.data['data']['transcripts'];
     // _popularVideos =

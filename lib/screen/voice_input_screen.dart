@@ -7,6 +7,7 @@ import 'package:dio/io.dart';
 // import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 // import 'package:path/path.dart' as p;
 // import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
@@ -50,6 +51,33 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
     dio.options.baseUrl = baseURL;
+
+    // dio.options.headers = {"userID": 1};
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (
+        RequestOptions options,
+        RequestInterceptorHandler handler,
+      ) {
+        if (options.contentType == null) {
+          final dynamic data = options.data;
+          final String? contentType;
+          if (data is FormData) {
+            contentType = Headers.multipartFormDataContentType;
+          } else if (data is Map) {
+            contentType = Headers.formUrlEncodedContentType;
+          } else if (data is String) {
+            contentType = Headers.jsonContentType;
+          } else if (data != null) {
+            contentType =
+                Headers.textPlainContentType; // Can be removed if unnecessary.
+          } else {
+            contentType = null;
+          }
+          options.contentType = contentType;
+        }
+        handler.next(options);
+      },
+    ));
     super.initState();
   }
 
@@ -64,14 +92,21 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     try {
       final file = File.fromUri(Uri.parse(audioPath));
       final bytes = await file.readAsBytes();
-      // tst = bytes;
-      // print(file);
-      log(bytes.toString());
+
+      FormData formData = FormData.fromMap({
+        "audio": MultipartFile.fromBytes(bytes, filename: "$_transcript.m4a"),
+        "userId": 1
+      });
 
       final response = await dio.post(
         'videos/$_videoID/transcripts/$_transcriptID/audio',
-        data: bytes,
+        data: formData,
+        options: Options(
+          headers: {"Content-Type": "multipart/form-data"},
+          // contentType: Headers.multipartFormDataContentType,
+        ),
       );
+      print(response);
     } catch (e) {
       if (kDebugMode) {
         print("readFile Error : $e");
@@ -82,6 +117,15 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   Future<void> startRecording() async {
     try {
       if (await audioRecord.hasPermission()) {
+        // final tempDir = await getTemporaryDirectory();
+        // String path = '${tempDir.path}/audio.m4a';
+        // if (path.startsWith('/Users')) {
+        //   path = 'file://$path';
+        // }
+        // print(path);
+
+        // await audioRecord.start(path: path, encoder: AudioEncoder.aacLc);
+
         await audioRecord.start();
 
         setState(() {
@@ -97,12 +141,11 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
 
   Future<void> stopRecording() async {
     try {
-      String? path = await audioRecord.stop();
+      final path = await audioRecord.stop();
       setState(() {
         isRecording = false;
         audioPath = path!;
       });
-      // readFile(audioPath);
     } catch (e) {
       if (kDebugMode) {
         print('stopRecording Error : $e');
@@ -113,11 +156,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   Future<void> playRecording() async {
     try {
       Source urlSource = UrlSource(audioPath);
-      // print(tst);
-      // Source urlSource = BytesSource(tst);
 
       if (kDebugMode) {
-        print(urlSource);
+        print(audioPath);
       }
       await audioPlayer.play(urlSource);
     } catch (e) {
