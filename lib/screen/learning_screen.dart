@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
@@ -38,6 +40,8 @@ class _LearningScreenState extends State<LearningScreen> {
   int currentTrasncriptId = 0;
   late List<bool> isSelected;
 
+  late StreamController<List<_ChartData>> _data;
+
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   late YoutubePlayerController _controller;
@@ -52,9 +56,9 @@ class _LearningScreenState extends State<LearningScreen> {
   bool _isPlayerReady = false;
 
   List<Transcript> _transcripts = [];
-  Evaluation? _evaluations;
+  var _evaluations;
   // bool isEvaluated = false;
-  List<_ChartData>? data;
+  // List<_ChartData>? data;
   late TooltipBehavior _tooltip;
 
   Future<List<Transcript>> getTranscripts() async {
@@ -78,12 +82,33 @@ class _LearningScreenState extends State<LearningScreen> {
     // return null;
   }
 
+  void getEvaluation() async {
+    final response = await dio.get(
+      'videos/$videoId/transcripts/audio/previous',
+      data: {'userId': 1},
+      // options: Options(
+      //   headers: {"Content-Type": "multipart/form-data"},
+      //   // contentType: Headers.multipartFormDataContentType,
+      // ),
+    );
+
+    if (kDebugMode) {
+      print("response : $response");
+    }
+    List<dynamic> responseBody = response.data['data']['evaluation'];
+    _evaluations = responseBody
+        .map((e) => Evaluation.fromJson(e))
+        .toList(); // map을 오브젝트로 변환
+    _data.add(_evaluations);
+  }
+
   @override
   void initState() {
     isSelected = [isWholeCaption, isPartCaption];
 
     super.initState();
 
+    _data = StreamController<List<_ChartData>>();
     uid = widget.userID;
     link = widget.link;
     videoId = widget.videoID;
@@ -108,28 +133,28 @@ class _LearningScreenState extends State<LearningScreen> {
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
 
-    String jsonString2 = '''
-    {
-    "status": 200,
-    "message": "발음을 분석하는데 성공했습니다.",
-    "data": {
-        "evaluation": {
-            "evaluationId": 1,
-            "overall": 85,
-            "pronunciation": 82,
-            "fluency": 100,
-            "integrity": 100,
-            "rhythm": 86,
-            "speed": 189,
-            "createdAt": "2023-08-07T06:32:04.592+00:00"
-        },
-        "transcriptId": 1,
-        "userId": 1
-        }
-    }
-    ''';
+    // String jsonString2 = '''
+    // {
+    // "status": 200,
+    // "message": "발음을 분석하는데 성공했습니다.",
+    // "data": {
+    //     "evaluation": {
+    //         "evaluationId": 1,
+    //         "overall": 85,
+    //         "pronunciation": 82,
+    //         "fluency": 100,
+    //         "integrity": 100,
+    //         "rhythm": 86,
+    //         "speed": 189,
+    //         "createdAt": "2023-08-07T06:32:04.592+00:00"
+    //     },
+    //     "transcriptId": 1,
+    //     "userId": 1
+    //     }
+    // }
+    // ''';
     // _captions = listTranscriptsFromJson(jsonString);
-    _evaluations = evaluationsFromJson(jsonString2);
+    // _evaluations = evaluationsFromJson(jsonString2);
     // isEvaluated = true;
     // currentTranscript = _transcripts[0].sentence;
     // if (isEvaluated()) {
@@ -168,7 +193,7 @@ class _LearningScreenState extends State<LearningScreen> {
       _idController.dispose();
       _seekToController.dispose();
     });
-
+    _data.close();
     super.dispose();
   }
 
@@ -397,7 +422,19 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                       ],
                     ),
-                  if (isEvaluated()) barChart(),
+                  // StreamBuilder(
+                  //     stream: _data.stream,
+                  //     builder: (context, snapshot) {
+                  //       if (snapshot.connectionState ==
+                  //           ConnectionState.waiting) {
+                  //         return LinearProgressIndicator();
+                  //       } else if (snapshot.hasError) {
+                  //         return Text('Error: ${snapshot.error}');
+                  //       } else {
+                  //         final data = snapshot.data;
+                  //         return barChart(data);
+                  //       }
+                  //     }),
                 ],
               ),
             ),
@@ -409,7 +446,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
   Widget get _space => const SizedBox(height: 10);
 
-  Widget barChart() {
+  Widget barChart(data) {
     return SfCartesianChart(
         primaryXAxis: CategoryAxis(
             labelStyle: const TextStyle(
@@ -443,19 +480,19 @@ class _LearningScreenState extends State<LearningScreen> {
     });
   }
 
-  bool isEvaluated() {
-    // final response =
+  // bool isEvaluated() {
+  //   // final response =
 
-    data = [
-      _ChartData('overall', _evaluations!.overall),
-      _ChartData('pronunciation', _evaluations!.pronunciation),
-      _ChartData('fluency', _evaluations!.fluency),
-      _ChartData('integrity', _evaluations!.integrity),
-      _ChartData('rhythm', _evaluations!.rhythm),
-      _ChartData('speed', _evaluations!.speed),
-    ];
-    return true;
-  }
+  //   data = [
+  //     _ChartData('overall', _evaluations!.overall),
+  //     _ChartData('pronunciation', _evaluations!.pronunciation),
+  //     _ChartData('fluency', _evaluations!.fluency),
+  //     _ChartData('integrity', _evaluations!.integrity),
+  //     _ChartData('rhythm', _evaluations!.rhythm),
+  //     _ChartData('speed', _evaluations!.speed),
+  //   ];
+  //   return true;
+  // }
 
   bool isCurrentCaption(BuildContext context, int index) {
     if (_transcripts[index].startTime > _controller.value.position.inSeconds) {

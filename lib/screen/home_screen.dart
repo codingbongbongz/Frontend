@@ -82,13 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    if (kDebugMode) {
-      print("response : $response");
-    }
+    // if (kDebugMode) {
+    //   print("response : $response");
+    // }
     List<dynamic> responseBody = response.data['data']['categoryVideo'];
     _categoryVideos =
         responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
-    print(_categoryVideos);
+    // print(_categoryVideos);
     _events.add(_categoryVideos);
   }
 

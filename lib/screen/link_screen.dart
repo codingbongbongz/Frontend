@@ -1,6 +1,10 @@
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 import 'package:k_learning/screen/learning_screen.dart';
+
+import '../const/key.dart';
 
 class LinkScreen extends StatefulWidget {
   final int userID;
@@ -11,14 +15,71 @@ class LinkScreen extends StatefulWidget {
 }
 
 class _LinkScreenState extends State<LinkScreen> {
-  int userID = 0;
+  int userID = 1;
+  int videoID = 1;
   final _formKey = GlobalKey<FormState>();
   String _youtubeLink = '';
+
+  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+
+  void uploadLink(context) async {
+    // print(_youtubeLink);
+    FormData formData = FormData.fromMap({
+      "userId": userID,
+      "link": _youtubeLink,
+    });
+
+    final response = await dio.post(
+      'upload',
+      data: formData,
+      options: Options(
+        headers: {"Content-Type": "multipart/form-data"},
+        // contentType: Headers.multipartFormDataContentType,
+      ),
+    );
+    // print(response.data['data']['videoId']);
+    videoID = response.data['data']['videoId'];
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => LearningScreen(
+          userID: userID,
+          link: _youtubeLink,
+          videoID: videoID,
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-
+    dio.options.baseUrl = baseURL;
+    dio.options.headers = {"userId": 1};
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (
+        RequestOptions options,
+        RequestInterceptorHandler handler,
+      ) {
+        if (options.contentType == null) {
+          final dynamic data = options.data;
+          final String? contentType;
+          if (data is FormData) {
+            contentType = Headers.multipartFormDataContentType;
+          } else if (data is Map) {
+            contentType = Headers.formUrlEncodedContentType;
+          } else if (data is String) {
+            contentType = Headers.jsonContentType;
+          } else if (data != null) {
+            contentType =
+                Headers.textPlainContentType; // Can be removed if unnecessary.
+          } else {
+            contentType = null;
+          }
+          options.contentType = contentType;
+        }
+        handler.next(options);
+      },
+    ));
     userID = widget.userID;
   }
 
@@ -30,19 +91,7 @@ class _LinkScreenState extends State<LinkScreen> {
       final formKeyState = _formKey.currentState;
       if (formKeyState!.validate()) {
         formKeyState.save();
-        int videdID = 1;
-        // videoID POST해서 가져와야 함
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) => LearningScreen(
-              userID: userID,
-              link: _youtubeLink.substring(
-                _youtubeLink.indexOf('=') + 1,
-              ),
-              videoID: videdID,
-            ),
-          ),
-        );
+        uploadLink(context);
       }
     }
 
@@ -64,7 +113,7 @@ class _LinkScreenState extends State<LinkScreen> {
     }
 
     void onSaved(String? value) {
-      _youtubeLink = value!;
+      _youtubeLink = value!.substring(value.indexOf('=') + 1);
     }
 
     return Column(
