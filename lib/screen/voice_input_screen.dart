@@ -100,7 +100,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
           headers: {"Content-Type": "multipart/form-data"},
         ),
       );
-      print(response);
+      if (kDebugMode) {
+        print(response);
+      }
     } catch (e) {
       if (kDebugMode) {
         print("readFile Error : $e");

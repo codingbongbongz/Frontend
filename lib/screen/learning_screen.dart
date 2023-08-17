@@ -457,7 +457,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return LinearProgressIndicator();
+                            return const LinearProgressIndicator();
                           } else if (snapshot.hasError) {
                             return Text('Error: ${snapshot.error}');
                           } else {

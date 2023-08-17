@@ -4,12 +4,6 @@ import 'package:dio/dio.dart';
 
 const String baseURL = "http://43.200.72.190:8081/";
 
-var options = BaseOptions(
-  baseUrl: 'https://www.xx.com/api',
-  connectTimeout: Duration(seconds: 5),
-  receiveTimeout: Duration(seconds: 3),
-);
-
 class CustomInterceptors extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -46,5 +40,3 @@ class CustomInterceptors extends Interceptor {
     super.onError(err, handler);
   }
 }
-
-Dio dio = Dio(options);

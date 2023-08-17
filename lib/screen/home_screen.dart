@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
   late StreamController<List<Video>> _events;
 
-  // link 수정
   static final List<Categorie> _categories = [
     Categorie(id: 1, name: "BTS"),
     Categorie(id: 2, name: "BlackPink"),
@@ -57,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
         responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
 
     return responseBody.map((e) => Video.fromJson(e)).toList();
-    // print(_popularVideos.length);
   }
 
   void getCategorieVideos(results) async {
@@ -83,9 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //   print("response : $response");
     // }
     List<dynamic> responseBody = response.data['data']['categoryVideo'];
-    _categoryVideos =
-        responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
-    // print(_categoryVideos);
+    _categoryVideos = responseBody.map((e) => Video.fromJson(e)).toList();
     _events.add(_categoryVideos);
   }
 
@@ -157,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
               future: getPopularVideos(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
@@ -265,15 +261,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     stream: _events.stream,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return LinearProgressIndicator();
+                        return const LinearProgressIndicator();
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        final data = snapshot.data;
+                        final data = snapshot.data!;
                         return ListView.separated(
                           separatorBuilder: (BuildContext context, int index) =>
                               const Divider(),
-                          itemCount: data!.length,
+                          itemCount: data.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               alignment: Alignment.centerLeft,

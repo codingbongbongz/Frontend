@@ -53,7 +53,6 @@ class Video {
     return '''
       videoID : $videoId
       link : $link
-      
     ''';
   }
   // duration : $duration
