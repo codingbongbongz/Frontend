@@ -112,7 +112,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
     super.initState();
 
-    _data = StreamController<List<_ChartData>>();
+    _data = StreamController<List<_ChartData>>.broadcast();
     _data.add([
       _ChartData('overall', 0),
       _ChartData('pronunciation', 0),
@@ -282,6 +282,19 @@ class _LearningScreenState extends State<LearningScreen> {
 
                               _controller.seekTo(Duration(
                                   seconds: sec, milliseconds: milliSec));
+                              // _data.add([
+                              //   _ChartData(
+                              //       'overall', _evaluations[index].overall),
+                              //   _ChartData('pronunciation',
+                              //       _evaluations[index].pronunciation),
+                              //   _ChartData(
+                              //       'fluency', _evaluations[index].fluency),
+                              //   _ChartData(
+                              //       'integrity', _evaluations[index].integrity),
+                              //   _ChartData(
+                              //       'rhythm', _evaluations[index].rhythm),
+                              //   _ChartData('speed', _evaluations[index].speed),
+                              // ]);
                               toggleSelect(1);
                             },
                             child: (isCurrentCaption(context, index))
