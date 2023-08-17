@@ -59,6 +59,18 @@ class _LearningScreenState extends State<LearningScreen> {
   List<Evaluation> _evaluations = [];
   late TooltipBehavior _tooltip;
 
+  bool learnedPreviously(currentCaptionEvaluation) {
+    if (currentCaptionEvaluation.overall == 0 &&
+        currentCaptionEvaluation.pronunciation == 0 &&
+        currentCaptionEvaluation.fluency == 0 &&
+        currentCaptionEvaluation.integrity == 0 &&
+        currentCaptionEvaluation.rhythm == 0 &&
+        currentCaptionEvaluation.speed == 0) {
+      return false;
+    }
+    return true;
+  }
+
   Future<List<Transcript>> getTranscripts() async {
     final response = await dio.get('videos/$videoId/transcripts');
     List<dynamic> responseBody = response.data['data']['transcripts'];
@@ -273,12 +285,25 @@ class _LearningScreenState extends State<LearningScreen> {
                               toggleSelect(1);
                             },
                             child: (isCurrentCaption(context, index))
-                                ? Text(
-                                    _transcripts[index].sentence,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                : Text(_transcripts[index].sentence),
+                                ? (learnedPreviously(_evaluations[index])
+                                    ? Text(
+                                        _transcripts[index].sentence,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green),
+                                      )
+                                    : Text(
+                                        _transcripts[index].sentence,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ))
+                                : ((learnedPreviously(_evaluations[index])
+                                    ? Text(
+                                        _transcripts[index].sentence,
+                                        style: const TextStyle(
+                                            color: Colors.green),
+                                      )
+                                    : Text(_transcripts[index].sentence))),
                           );
                           return Row(
                             children: [
@@ -301,18 +326,28 @@ class _LearningScreenState extends State<LearningScreen> {
                               if (isCurrentCaption(context, index)) {
                                 inkWell = InkWell(
                                   onTap: () {},
-                                  child: Text(
-                                    _transcripts[index].sentence,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
+                                  child:
+                                      (learnedPreviously(_evaluations[index]))
+                                          ? Text(
+                                              _transcripts[index].sentence,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.green,
+                                                  fontSize: 20),
+                                            )
+                                          : Text(
+                                              _transcripts[index].sentence,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                            ),
                                 );
                                 currentTranscript =
                                     _transcripts[index].sentence;
                                 currentTrasncriptId =
                                     _transcripts[index].transcriptId;
                                 // 현재 자막에 해당하는 학습 결과 출력
+
                                 _data.add([
                                   _ChartData(
                                       'overall', _evaluations[index].overall),
@@ -403,19 +438,20 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                       ],
                     ),
-                  StreamBuilder(
-                      stream: _data.stream,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return LinearProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          final data = snapshot.data;
-                          return barChart(data);
-                        }
-                      }),
+                  if (isPartCaption)
+                    StreamBuilder(
+                        stream: _data.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return LinearProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            final data = snapshot.data;
+                            return barChart(data);
+                          }
+                        }),
                 ],
               ),
             ),
