@@ -98,16 +98,17 @@ class _LearningScreenState extends State<LearningScreen> {
     );
 
     if (kDebugMode) {
+      print('videoId : $videoId');
       print("response : $response");
     }
-    if (response.statusCode == 404) {
+    if (response.data['status'] == 404) {
       _data.add([]);
     } else {
       List<dynamic> responseBody = response.data['data']['evaluations'];
       _evaluations = responseBody
           .map((e) => Evaluation.fromJson(e))
           .toList(); // map을 오브젝트로 변환
-      print(_evaluations[0].overall);
+      // print(_evaluations[0].overall);
       // _data.add(chartData);
     }
   }
@@ -358,20 +359,20 @@ class _LearningScreenState extends State<LearningScreen> {
                                 currentTrasncriptId =
                                     _transcripts[index].transcriptId;
                                 // 현재 자막에 해당하는 학습 결과 출력
-                                // _data.add([
-                                //   _ChartData(
-                                //       'overall', _evaluations[index].overall),
-                                //   _ChartData('pronunciation',
-                                //       _evaluations[index].pronunciation),
-                                //   _ChartData(
-                                //       'fluency', _evaluations[index].fluency),
-                                //   _ChartData('integrity',
-                                //       _evaluations[index].integrity),
-                                //   _ChartData(
-                                //       'rhythm', _evaluations[index].rhythm),
-                                //   _ChartData(
-                                //       'speed', _evaluations[index].speed),
-                                // ]);
+                                _data.add([
+                                  _ChartData(
+                                      'overall', _evaluations[index].overall),
+                                  _ChartData('pronunciation',
+                                      _evaluations[index].pronunciation),
+                                  _ChartData(
+                                      'fluency', _evaluations[index].fluency),
+                                  _ChartData('integrity',
+                                      _evaluations[index].integrity),
+                                  _ChartData(
+                                      'rhythm', _evaluations[index].rhythm),
+                                  _ChartData(
+                                      'speed', _evaluations[index].speed),
+                                ]);
                               }
                               return inkWell;
                             },
