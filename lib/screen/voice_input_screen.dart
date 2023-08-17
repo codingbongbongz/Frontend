@@ -4,12 +4,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-// import 'package:path_provider/path_provider.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -94,7 +92,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       final bytes = await file.readAsBytes();
 
       FormData formData = FormData.fromMap({
-        "audio": MultipartFile.fromBytes(bytes, filename: "$_transcript.opus"),
+        "audio": MultipartFile.fromBytes(bytes, filename: "$_transcript.m4a"),
         "userId": 1
       });
 
@@ -103,10 +101,8 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
         data: formData,
         options: Options(
           headers: {"Content-Type": "multipart/form-data"},
-          // contentType: Headers.multipartFormDataContentType,
         ),
       );
-      print(response);
     } catch (e) {
       if (kDebugMode) {
         print("readFile Error : $e");
@@ -117,23 +113,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   Future<void> startRecording() async {
     try {
       if (await audioRecord.hasPermission()) {
-        // final tempDir = await getApplicationDocumentsDirectory();
-        // String path = '${tempDir.path}/audio.m4a';
-        // if (path.startsWith('/Users')) {
-        //   path = 'file://$path';
-        // }
-        // print(path);
-        String path = Directory.systemTemp.path;
-        // path ??= p.join(
-        //   Directory.systemTemp.path,
-        // );
-
-        path = p.withoutExtension(p.normalize(path));
-        path += '/$_transcript.ogg';
-        print(path);
-        await audioRecord.start(path: path, encoder: AudioEncoder.opus);
-
-        // await audioRecord.start();
+        await audioRecord.start();
 
         setState(() {
           isRecording = true;
@@ -164,13 +144,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     try {
       Source urlSource = UrlSource(audioPath);
 
-      // final file = File.fromUri(Uri.parse(audioPath));
-      // final bytes = await file.readAsBytes();
-      // Source byteSource = BytesSource(bytes);
       if (kDebugMode) {
         print(audioPath);
       }
-      // await audioPlayer.play(byteSource);
 
       await audioPlayer.play(urlSource);
     } catch (e) {

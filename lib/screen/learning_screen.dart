@@ -59,29 +59,14 @@ class _LearningScreenState extends State<LearningScreen> {
 
   List<Transcript> _transcripts = [];
   List<Evaluation> _evaluations = [];
-  // bool isEvaluated = false;
-  // List<_ChartData>? data;
   late TooltipBehavior _tooltip;
 
   Future<List<Transcript>> getTranscripts() async {
     final response = await dio.get('videos/$videoId/transcripts');
-
-    if (kDebugMode) {
-      // print("response : $response");
-      // print("response.runtimeType : ${response.runtimeType}");
-
-      // print(response.data['data']['transcripts']);
-    }
     List<dynamic> responseBody = response.data['data']['transcripts'];
-    // _popularVideos =
-    //     responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
 
-    // return responseBody.map((e) => Video.fromJson(e)).toList();
-    // print(_popularVideos.length);
-    // print(responseBody);
-    _transcripts = responseBody.map((e) => Transcript.fromJson(e)).toList();
-    return responseBody.map((e) => Transcript.fromJson(e)).toList();
-    // return null;
+    return _transcripts =
+        responseBody.map((e) => Transcript.fromJson(e)).toList();
   }
 
   void getEvaluation() async {
@@ -99,7 +84,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
     if (kDebugMode) {
       print('videoId : $videoId');
-      print("response : $response");
+      // print("response : $response");
     }
     if (response.data['status'] == 404) {
       _data.add([]);
@@ -108,8 +93,6 @@ class _LearningScreenState extends State<LearningScreen> {
       _evaluations = responseBody
           .map((e) => Evaluation.fromJson(e))
           .toList(); // map을 오브젝트로 변환
-      // print(_evaluations[0].overall);
-      // _data.add(chartData);
     }
   }
 
@@ -152,34 +135,7 @@ class _LearningScreenState extends State<LearningScreen> {
     _seekToController = TextEditingController();
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
-
-    // String jsonString2 = '''
-    // {
-    // "status": 200,
-    // "message": "발음을 분석하는데 성공했습니다.",
-    // "data": {
-    //     "evaluation": {
-    //         "evaluationId": 1,
-    //         "overall": 85,
-    //         "pronunciation": 82,
-    //         "fluency": 100,
-    //         "integrity": 100,
-    //         "rhythm": 86,
-    //         "speed": 189,
-    //         "createdAt": "2023-08-07T06:32:04.592+00:00"
-    //     },
-    //     "transcriptId": 1,
-    //     "userId": 1
-    //     }
-    // }
-    // ''';
-    // _captions = listTranscriptsFromJson(jsonString);
-    // _evaluations = evaluationsFromJson(jsonString2);
-    // isEvaluated = true;
-    // currentTranscript = _transcripts[0].sentence;
-
     _tooltip = TooltipBehavior(enable: true);
-    // print(_evaluations);
   }
 
   void listener() {
@@ -429,6 +385,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
+                                            getEvaluation();
                                           },
                                           child: const Text('확인'),
                                         ),
@@ -505,20 +462,6 @@ class _LearningScreenState extends State<LearningScreen> {
       isSelected = [isWholeCaption, isPartCaption];
     });
   }
-
-  // bool isEvaluated() {
-  //   // final response =
-
-  //   data = [
-  //     _ChartData('overall', _evaluations!.overall),
-  //     _ChartData('pronunciation', _evaluations!.pronunciation),
-  //     _ChartData('fluency', _evaluations!.fluency),
-  //     _ChartData('integrity', _evaluations!.integrity),
-  //     _ChartData('rhythm', _evaluations!.rhythm),
-  //     _ChartData('speed', _evaluations!.speed),
-  //   ];
-  //   return true;
-  // }
 
   bool isCurrentCaption(BuildContext context, int index) {
     if (_transcripts[index].startTime > _controller.value.position.inSeconds) {
