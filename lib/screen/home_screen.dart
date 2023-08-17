@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -26,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
   late StreamController<List<Video>> _events;
 
-  List<Categorie> _selectedCategories = [];
   // link 수정
   static final List<Categorie> _categories = [
     Categorie(id: 1, name: "BTS"),
@@ -68,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _events.add([]);
       return;
     }
-    _selectedCategories = results;
     FormData formData = FormData.fromMap({
       "categoryId": results[0].id,
     });
@@ -203,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Padding(
                               padding: const EdgeInsets.all(3.0),
                               child: Text(
-                                _popularVideos[index].videoTitle!,
+                                _popularVideos[index].videoTitle,
                                 style: const TextStyle(
                                   fontSize: 13.0,
                                   fontWeight: FontWeight.bold,
@@ -309,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'videoTitle : ${_categoryVideos[index].videoTitle!}',
+                                        'videoTitle : ${_categoryVideos[index].videoTitle}',
                                       ),
                                       Text(
                                         'creator : ${_categoryVideos[index].creator!}',
