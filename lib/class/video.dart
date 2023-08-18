@@ -3,38 +3,37 @@
 class Video {
   final int videoId;
   final String link;
-  String videoTitle = 'videoTitle';
-  final String? creator;
-  final double? duration;
+  String videoTitle;
+  final String creator;
+  final int duration;
   final bool? isDefault;
-  final int? views;
+  final int views;
   DateTime? createdAt = DateTime.now();
   // // 없애도 될듯
-  final int? youtubeViews;
+  final int youtubeViews;
 
   Video({
     required this.videoId,
     required this.link,
-    this.duration = 1.0,
+    required this.duration,
+    required this.views,
+    required this.youtubeViews,
+    required this.videoTitle,
+    required this.creator,
     this.isDefault = true,
-    this.views = 1,
     this.createdAt,
-    this.youtubeViews = 1,
-    this.videoTitle = 'videoTitle',
-    this.creator = 'creator',
   });
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
-        // transcriptId: json['transcriptId'],
         videoId: json['videoId'],
         link: json['videoUrl'],
-        // videoTitle: json['videoTitle'],
-        // creator: json['creator'],
-        // duration: json['duration'],
+        videoTitle: json['videoTitle'],
+        creator: json['creator'],
+        duration: json['duration'],
         // isDefault: json['isDefault'],
-        // views: json['views'],
+        views: json['views'],
         // createdAt: json['createdAt'],
-        // youtubeViews: json['youtubeViews'],
+        youtubeViews: json['youtubeViews'],
       );
 
   Map<String, dynamic> toJson() => {
