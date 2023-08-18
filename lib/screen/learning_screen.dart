@@ -29,6 +29,13 @@ class LearningScreen extends StatefulWidget {
   State<LearningScreen> createState() => _LearningScreenState();
 }
 
+class _ChartData {
+  final String x;
+  final int y;
+
+  _ChartData(this.x, this.y);
+}
+
 class _LearningScreenState extends State<LearningScreen> {
   int userId = 1;
   String link = '';
@@ -127,6 +134,8 @@ class _LearningScreenState extends State<LearningScreen> {
 
     dio.options.baseUrl = baseURL;
     dio.options.headers = {"userID": 1};
+    dio.interceptors.add(CustomInterceptors());
+
     getTranscripts();
     getEvaluation();
     _controller = YoutubePlayerController(
@@ -521,11 +530,4 @@ class _LearningScreenState extends State<LearningScreen> {
     }
     return true;
   }
-}
-
-class _ChartData {
-  _ChartData(this.x, this.y);
-
-  final String x;
-  final int y;
 }

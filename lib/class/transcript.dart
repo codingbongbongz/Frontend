@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 class Transcript {
   final int transcriptId;
@@ -37,12 +37,12 @@ class Transcript {
   }
 }
 
-List<Transcript> listTranscriptsFromJson(String json) {
-  List<dynamic> parsedJson = jsonDecode(json)["transcripts"];
-  // print("parsedJson = $parsedJson");
-  List<Transcript> listTranscripts = [];
-  for (int i = 0; i < parsedJson.length; i++) {
-    listTranscripts.add(Transcript.fromJson(parsedJson[i]));
-  }
-  return listTranscripts;
-}
+// List<Transcript> listTranscriptsFromJson(String json) {
+//   List<dynamic> parsedJson = jsonDecode(json)["transcripts"];
+//   // print("parsedJson = $parsedJson");
+//   List<Transcript> listTranscripts = [];
+//   for (int i = 0; i < parsedJson.length; i++) {
+//     listTranscripts.add(Transcript.fromJson(parsedJson[i]));
+//   }
+//   return listTranscripts;
+// }

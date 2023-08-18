@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -34,6 +37,8 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
     dio.options.baseUrl = baseURL;
+    dio.interceptors.add(CustomInterceptors());
+
     super.initState();
   }
 
@@ -49,14 +54,18 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
       // print('videos/$_videoID/transcripts/$_transcriptID/audio');
       final response = await dio.get(
         'videos/$_videoID/transcripts/$_transcriptID/audio',
+        // options: Options(
+        //   headers: {"Content-Type": "multipart/form-data"},
+        // )
       );
       if (kDebugMode) {
-        // print(response.realUri.runtimeType);
-        print(response);
+        print(response.realUri.toString());
+        // print('${baseURL}videos/$_videoID/transcripts/$_transcriptID/audio');
+        // print(response.data);
       }
-
-      // await audioPlayer.play(urlSource);
       await audioPlayer.play(UrlSource(response.realUri.toString()));
+      // await audioPlayer.play(UrlSource(
+      //     '${baseURL}videos/$_videoID/transcripts/$_transcriptID/audio'));
     } catch (e) {
       if (kDebugMode) {
         print('playRecording Error : $e');

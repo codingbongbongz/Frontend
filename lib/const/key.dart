@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 
 const String baseURL = "http://43.200.72.190:8081/";
 
@@ -40,3 +41,5 @@ class CustomInterceptors extends Interceptor {
     super.onError(err, handler);
   }
 }
+
+Dio dio = Dio();

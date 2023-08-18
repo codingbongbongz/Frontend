@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 class Evaluation {
   final int overall;
@@ -48,10 +48,10 @@ class Evaluation {
   }
 }
 
-Evaluation evaluationsFromJson(String json) {
-  dynamic parsedJson = jsonDecode(json)["data"]["evaluation"];
-  // print("parsedJson = $parsedJson");
-  Evaluation evaluations = (Evaluation.fromJson(parsedJson));
+// Evaluation evaluationsFromJson(String json) {
+//   dynamic parsedJson = jsonDecode(json)["data"]["evaluation"];
+//   // print("parsedJson = $parsedJson");
+//   Evaluation evaluations = (Evaluation.fromJson(parsedJson));
 
-  return evaluations;
-}
+//   return evaluations;
+// }

@@ -38,6 +38,8 @@ class _LinkScreenState extends State<LinkScreen> {
       ),
     );
     // print(response.data['data']['videoId']);
+    // codingbongbongz://video/3fa0fsafsah
+    // iOS: x-callback-url
     videoID = response.data['data']['videoId'];
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -55,31 +57,7 @@ class _LinkScreenState extends State<LinkScreen> {
     super.initState();
     dio.options.baseUrl = baseURL;
     dio.options.headers = {"userId": 1};
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (
-        RequestOptions options,
-        RequestInterceptorHandler handler,
-      ) {
-        if (options.contentType == null) {
-          final dynamic data = options.data;
-          final String? contentType;
-          if (data is FormData) {
-            contentType = Headers.multipartFormDataContentType;
-          } else if (data is Map) {
-            contentType = Headers.formUrlEncodedContentType;
-          } else if (data is String) {
-            contentType = Headers.jsonContentType;
-          } else if (data != null) {
-            contentType =
-                Headers.textPlainContentType; // Can be removed if unnecessary.
-          } else {
-            contentType = null;
-          }
-          options.contentType = contentType;
-        }
-        handler.next(options);
-      },
-    ));
+    dio.interceptors.add(CustomInterceptors());
     userID = widget.userID;
   }
 
