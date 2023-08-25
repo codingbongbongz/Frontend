@@ -45,6 +45,7 @@ class _LearningScreenState extends State<LearningScreen> {
   bool isPartCaption = false;
   String currentTranscript = '';
   int currentTrasncriptId = 0;
+  int currentIndex = 0;
   late List<bool> isSelected;
 
   late StreamController<List<_ChartData>> _data;
@@ -291,19 +292,6 @@ class _LearningScreenState extends State<LearningScreen> {
 
                               _controller.seekTo(Duration(
                                   seconds: sec, milliseconds: milliSec));
-                              // _data.add([
-                              //   _ChartData(
-                              //       'overall', _evaluations[index].overall),
-                              //   _ChartData('pronunciation',
-                              //       _evaluations[index].pronunciation),
-                              //   _ChartData(
-                              //       'fluency', _evaluations[index].fluency),
-                              //   _ChartData(
-                              //       'integrity', _evaluations[index].integrity),
-                              //   _ChartData(
-                              //       'rhythm', _evaluations[index].rhythm),
-                              //   _ChartData('speed', _evaluations[index].speed),
-                              // ]);
                               toggleSelect(1);
                             },
                             child: (isCurrentCaption(context, index))
@@ -368,8 +356,9 @@ class _LearningScreenState extends State<LearningScreen> {
                                     _transcripts[index].sentence;
                                 currentTrasncriptId =
                                     _transcripts[index].transcriptId;
-                                // 현재 자막에 해당하는 학습 결과 출력
+                                currentIndex = index;
 
+                                // 현재 자막에 해당하는 학습 결과 출력
                                 _data.add([
                                   _ChartData(
                                       'overall', _evaluations[index].overall),
@@ -441,6 +430,19 @@ class _LearningScreenState extends State<LearningScreen> {
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                             getEvaluation();
+                                            int sec = _transcripts[currentIndex]
+                                                .startTime
+                                                .floor();
+                                            int milliSec =
+                                                ((_transcripts[currentIndex]
+                                                                .startTime -
+                                                            sec) *
+                                                        1000)
+                                                    .toInt();
+
+                                            _controller.seekTo(Duration(
+                                                seconds: sec,
+                                                milliseconds: milliSec));
                                           },
                                           child: const Text('확인'),
                                         ),
