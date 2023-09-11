@@ -100,10 +100,6 @@ class _LearningScreenState extends State<LearningScreen> {
       ),
     );
 
-    if (kDebugMode) {
-      print('videoId : $videoId');
-      // print("response : $response");
-    }
     if (response.data['status'] == 404) {
       _data.add([]);
     } else {
@@ -493,7 +489,7 @@ class _LearningScreenState extends State<LearningScreen> {
             labelStyle: const TextStyle(
           fontSize: 11,
         )),
-        primaryYAxis: NumericAxis(minimum: 0, maximum: 200, interval: 10),
+        primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
         tooltipBehavior: _tooltip,
         series: <ChartSeries<_ChartData, String>>[
           ColumnSeries<_ChartData, String>(

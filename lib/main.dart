@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:k_learning/screen/home_screen.dart';
 import 'package:k_learning/screen/link_screen.dart';
+import 'package:k_learning/screen/login_screen.dart';
 import 'package:k_learning/screen/my_page_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -9,9 +10,10 @@ import 'layout/my_app_bar.dart';
 void main() {
   runApp(
     const MaterialApp(
-      home: MainScreen(
-        userID: 1,
-      ),
+      home: LoginScreen(),
+      // home: MainScreen(
+      //   userID: 1,
+      // ),
     ),
     // Scaffold(
     //   body: MainScreen(uid: 4567),
