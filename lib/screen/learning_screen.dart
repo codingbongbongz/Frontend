@@ -16,12 +16,12 @@ import '../class/transcript.dart';
 import '../const/key.dart';
 
 class LearningScreen extends StatefulWidget {
-  final int userID;
+  final String accessToken;
   final String link;
   final int videoID;
   const LearningScreen(
       {super.key,
-      required this.userID,
+      required this.accessToken,
       required this.link,
       required this.videoID});
 
@@ -37,7 +37,7 @@ class _ChartData {
 }
 
 class _LearningScreenState extends State<LearningScreen> {
-  int userId = 1;
+  String accessToken = '';
   String link = '';
   int videoId = 1;
   int currentDuration = 0;
@@ -89,7 +89,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
   void getEvaluation() async {
     FormData formData = FormData.fromMap({
-      "userId": userId,
+      "Authorization": accessToken,
     });
     final response = await dio.get(
       'videos/$videoId/audio/previous',
@@ -125,12 +125,12 @@ class _LearningScreenState extends State<LearningScreen> {
       _ChartData('rhythm', 0),
       _ChartData('speed', 0),
     ]);
-    userId = widget.userID;
+    accessToken = widget.accessToken;
     link = widget.link;
     videoId = widget.videoID;
 
     dio.options.baseUrl = baseURL;
-    dio.options.headers = {"userID": 1};
+    dio.options.headers = {"Authorization": accessToken};
     dio.interceptors.add(CustomInterceptors());
 
     getTranscripts();
@@ -233,7 +233,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (BuildContext context) => MainScreen(
-                                userID: userId,
+                                accessToken: accessToken,
                               ),
                             ),
                             (route) => false);
@@ -387,6 +387,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                         currentTranscript: currentTranscript,
                                         transcriptID: currentTrasncriptId,
                                         videoID: videoId,
+                                        accessToken: accessToken,
                                       ),
                                       insetPadding: const EdgeInsets.all(8.0),
                                       actions: [
@@ -419,6 +420,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                         currentTranscript: currentTranscript,
                                         transcriptID: currentTrasncriptId,
                                         videoID: videoId,
+                                        accessToken: accessToken,
                                       ),
                                       insetPadding: const EdgeInsets.all(8.0),
                                       actions: [

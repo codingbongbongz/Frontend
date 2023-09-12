@@ -12,16 +12,16 @@ import '../class/video.dart';
 import '../const/key.dart';
 
 class HomeScreen extends StatefulWidget {
-  final int userID;
+  final String accessToken;
 
-  const HomeScreen({super.key, required this.userID});
+  const HomeScreen({super.key, required this.accessToken});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int userID = 0;
+  String accessToken = '';
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
   late StreamController<List<Video>> _events;
 
@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await dio.get('videos/popular');
 
     List<dynamic> responseBody = response.data['data']['popularVideo'];
+    print(responseBody);
     _popularVideos =
         responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
 
@@ -91,12 +92,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _events = StreamController<List<Video>>();
     _events.add([]);
 
+    accessToken = widget.accessToken;
     dio.options.baseUrl = baseURL;
-    dio.options.headers = {"userId": 1};
+    dio.options.headers = {"Authorization": accessToken};
+
     dio.interceptors.add(CustomInterceptors());
 
     getPopularVideos();
-    userID = widget.userID;
   }
 
   @override
@@ -148,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     LearningScreen(
-                                  userID: userID,
+                                  accessToken: accessToken,
                                   link: data[index].link,
                                   videoID: data[index].videoId,
                                 ),
@@ -261,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
                                                   LearningScreen(
-                                                userID: userID,
+                                                accessToken: accessToken,
                                                 link: data[index].link,
                                                 videoID: data[index].videoId,
                                               ),

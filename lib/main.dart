@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:k_learning/screen/home_screen.dart';
 import 'package:k_learning/screen/link_screen.dart';
 import 'package:k_learning/screen/login_screen.dart';
@@ -7,13 +10,19 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'layout/my_app_bar.dart';
 
-void main() {
+void main() async {
+  // login 세션 관리
+  // final storage = FlutterSecureStorage();
+  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+
+  // final response = await dio.get('');
   runApp(
     const MaterialApp(
-      home: LoginScreen(),
-      // home: MainScreen(
-      //   userID: 1,
-      // ),
+      // home: LoginScreen(),
+      home: MainScreen(
+        accessToken:
+            "eyJ0eXBlIjoicmVmcmVzaFRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJyZWZyZXNoVG9rZW4iLCJ1c2VySWQiOjExLCJpYXQiOjE2OTQ0OTcxNjUsImV4cCI6MTY5NTcwNjc2NX0.DZYW1qhnsyXhpAj-KbN_XVPDSODjGviq3jLRmXKdLz0",
+      ),
     ),
     // Scaffold(
     //   body: MainScreen(uid: 4567),
@@ -22,8 +31,8 @@ void main() {
 }
 
 class MainScreen extends StatefulWidget {
-  final int userID;
-  const MainScreen({super.key, required this.userID});
+  final String accessToken;
+  const MainScreen({super.key, required this.accessToken});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -31,24 +40,24 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  static int userID = 0;
+  static String accessToken = '';
   bool microPhonePermission = false;
 
   @override
   void initState() {
     super.initState();
-    userID = widget.userID;
+    accessToken = widget.accessToken;
   }
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(
-      userID: userID,
+      accessToken: accessToken,
     ),
     LinkScreen(
-      userID: userID,
+      accessToken: accessToken,
     ),
     MyPageScreen(
-      uid: userID,
+      accessToken: accessToken,
     ),
   ];
 

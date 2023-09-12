@@ -22,7 +22,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
 
     dio.options.baseUrl = baseURL;
-    dio.options.headers = {"userId": 1};
     dio.interceptors.add(CustomInterceptors());
   }
 
@@ -32,13 +31,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: const MyAppBar(),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 150,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 // prefixIcon: Icon(Icons.link),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -48,13 +47,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: TextField(
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 // prefixIcon: Icon(Icons.link),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -64,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           ElevatedButton(

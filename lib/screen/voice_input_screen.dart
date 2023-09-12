@@ -14,11 +14,14 @@ class VoiceInputScreen extends StatefulWidget {
   final String currentTranscript;
   final int videoID;
   final int transcriptID;
+  final String accessToken;
+
   const VoiceInputScreen(
       {super.key,
       required this.currentTranscript,
       required this.videoID,
-      required this.transcriptID});
+      required this.transcriptID,
+      required this.accessToken});
 
   @override
   State<VoiceInputScreen> createState() => _VoiceInputScreenState();
@@ -27,6 +30,7 @@ class VoiceInputScreen extends StatefulWidget {
 class _VoiceInputScreenState extends State<VoiceInputScreen> {
   late Record audioRecord;
   late AudioPlayer audioPlayer;
+  String _accessToken = '';
   // var tst;
   bool isRecording = false;
   String audioPath = '';
@@ -45,8 +49,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     _transcript = widget.currentTranscript;
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
+    _accessToken = widget.accessToken;
     dio.options.baseUrl = baseURL;
-    // dio.options.headers = {"userID": 1};
+    dio.options.headers = {"Authorization": _accessToken};
     dio.interceptors.add(CustomInterceptors());
     super.initState();
   }
@@ -65,7 +70,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
 
       FormData formData = FormData.fromMap({
         "audio": MultipartFile.fromBytes(bytes, filename: "$_transcript.m4a"),
-        "userId": 1
+        "Authorization": _accessToken,
       });
 
       final response = await dio.post(
