@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/screen/sign_up_screen.dart';
 
-import '../class/login.dart';
+import '../class/token.dart';
 import '../const/key.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -68,7 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         final jsonBody = json.decode(response.data['user_id'].toString());
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        var val = jsonEncode(Login('$accountName', '$password', '$jsonBody'));
+        var val = jsonEncode(
+            Token(accessToken: 'accessToken', refreshToken: 'refreshoken'));
 
         await storage.write(
           key: 'login',

@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await dio.get('videos/popular');
 
     List<dynamic> responseBody = response.data['data']['popularVideo'];
-    print(responseBody);
+    // print(responseBody);
     _popularVideos =
         responseBody.map((e) => Video.fromJson(e)).toList(); // map을 오브젝트로 변환
 

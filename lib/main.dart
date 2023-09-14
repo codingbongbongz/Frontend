@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
@@ -6,28 +8,49 @@ import 'package:k_learning/screen/home_screen.dart';
 import 'package:k_learning/screen/link_screen.dart';
 import 'package:k_learning/screen/login_screen.dart';
 import 'package:k_learning/screen/my_page_screen.dart';
+import 'package:k_learning/screen/sign_up_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'class/token.dart';
 import 'layout/my_app_bar.dart';
 
 void main() async {
   // login 세션 관리
-  // final storage = FlutterSecureStorage();
-  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // final response = await dio.get('');
-  runApp(
-    const MaterialApp(
-      // home: LoginScreen(),
-      home: MainScreen(
-        accessToken:
-            "eyJ0eXBlIjoicmVmcmVzaFRva2VuIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJyZWZyZXNoVG9rZW4iLCJ1c2VySWQiOjExLCJpYXQiOjE2OTQ0OTcxNjUsImV4cCI6MTY5NTcwNjc2NX0.DZYW1qhnsyXhpAj-KbN_XVPDSODjGviq3jLRmXKdLz0",
+  final storage = FlutterSecureStorage();
+  dynamic userInfo;
+  String accessToken = '';
+  String refreshToken = '';
+
+  userInfo = await storage.read(key: 'login');
+
+  // await storage.delete(key: 'login');
+
+  if (userInfo != null) {
+    accessToken = jsonDecode(userInfo)['accessToken'];
+    print('accessToken : $accessToken');
+
+    refreshToken = jsonDecode(userInfo)['refreshToken'];
+    print('refreshToken : $refreshToken');
+  }
+
+  if (userInfo == null) {
+    // 여기에 토큰 validation 추가해야 함
+    runApp(
+      const MaterialApp(
+        // home: LoginScreen(),
+        home: SignUpScreen(),
       ),
-    ),
-    // Scaffold(
-    //   body: MainScreen(uid: 4567),
-    // ),
-  );
+    );
+  } else {
+    runApp(
+      MaterialApp(
+        // home: LoginScreen(),
+        home: MainScreen(accessToken: accessToken),
+      ),
+    );
+  }
 }
 
 class MainScreen extends StatefulWidget {
