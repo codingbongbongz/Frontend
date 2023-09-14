@@ -10,6 +10,7 @@ import 'package:k_learning/screen/login_screen.dart';
 import 'package:k_learning/screen/my_page_screen.dart';
 import 'package:k_learning/screen/sign_up_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'class/token.dart';
 import 'layout/my_app_bar.dart';
@@ -19,13 +20,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final storage = FlutterSecureStorage();
+  clearSecureStorageOnReinstall(storage);
+
   dynamic userInfo;
   String accessToken = '';
   String refreshToken = '';
 
+  await storage.delete(key: 'login');
   userInfo = await storage.read(key: 'login');
-
-  // await storage.delete(key: 'login');
 
   if (userInfo != null) {
     accessToken = jsonDecode(userInfo)['accessToken'];
@@ -46,10 +48,20 @@ void main() async {
   } else {
     runApp(
       MaterialApp(
-        // home: LoginScreen(),
+        // home: LoginScreen(),%
         home: MainScreen(accessToken: accessToken),
       ),
     );
+  }
+}
+
+clearSecureStorageOnReinstall(storage) async {
+  String key = 'hasRunbefore';
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  // print(pref.getBool(key));
+  if (pref.getBool(key) == null) {
+    await storage.deleteAll();
+    pref.setBool(key, true);
   }
 }
 

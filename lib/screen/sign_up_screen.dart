@@ -88,13 +88,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ElevatedButton(
               onPressed: () async {
                 var param = {
-                  'email': '$email',
-                  'name': '$name',
-                  'nickname': '$nickname',
-                  'introduce': '$introduce',
-                  'country': '$country',
-                  'password': '$password'
+                  'email': email.text,
+                  'name': name.text,
+                  'nickname': nickname.text,
+                  'introduce': introduce.text,
+                  'country': country.text,
+                  'password': password.text
                 };
+                // print(email.text);
+                // print(name.text);
+                // print(nickname.text);
+                // print(introduce.text);
+                // print(country.text);
+                // print(password.text);
 
                 // Codec<String, String> stringToBase64 = utf8.fuse(base64);
                 // String token = stringToBase64.encode(rawString);
