@@ -50,7 +50,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
   late StreamController<List<_ChartData>> _data;
 
-  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   late YoutubePlayerController _controller;
   late TextEditingController _idController;
@@ -80,6 +80,7 @@ class _LearningScreenState extends State<LearningScreen> {
   }
 
   Future<List<Transcript>> getTranscripts() async {
+    var dio = await authDio(context);
     final response = await dio.get('videos/$videoId/transcripts');
     List<dynamic> responseBody = response.data['data']['transcripts'];
 
@@ -88,6 +89,7 @@ class _LearningScreenState extends State<LearningScreen> {
   }
 
   void getEvaluation() async {
+    var dio = await authDio(context);
     FormData formData = FormData.fromMap({
       "Authorization": accessToken,
     });
@@ -129,9 +131,9 @@ class _LearningScreenState extends State<LearningScreen> {
     link = widget.link;
     videoId = widget.videoID;
 
-    dio.options.baseUrl = baseURL;
-    dio.options.headers = {"Authorization": accessToken};
-    dio.interceptors.add(CustomInterceptors());
+    // dio.options.baseUrl = baseURL;
+    // dio.options.headers = {"Authorization": accessToken};
+    // dio.interceptors.add(CustomInterceptors());
 
     getTranscripts();
     getEvaluation();

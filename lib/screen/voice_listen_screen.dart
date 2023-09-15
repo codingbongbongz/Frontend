@@ -31,7 +31,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   late int _videoID;
   String _transcript = '';
   String _accessToken = '';
-  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   @override
   void initState() {
@@ -40,10 +40,10 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
     _accessToken = widget.accessToken;
-    dio.options.baseUrl = baseURL;
-    dio.options.headers = {"Authorization": _accessToken};
+    // dio.options.baseUrl = baseURL;
+    // dio.options.headers = {"Authorization": _accessToken};
 
-    dio.interceptors.add(CustomInterceptors());
+    // dio.interceptors.add(CustomInterceptors());
 
     super.initState();
   }
@@ -57,6 +57,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
 
   Future<void> playRecording() async {
     try {
+      var dio = await authDio(context);
       // print('videos/$_videoID/transcripts/$_transcriptID/audio');
       final response = await dio.get(
         'videos/$_videoID/transcripts/$_transcriptID/audio',

@@ -39,7 +39,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
 
   late int _transcriptID;
   late int _videoID;
-  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   @override
   void initState() {
@@ -50,9 +50,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
     _accessToken = widget.accessToken;
-    dio.options.baseUrl = baseURL;
-    dio.options.headers = {"Authorization": _accessToken};
-    dio.interceptors.add(CustomInterceptors());
+    // dio.options.baseUrl = baseURL;
+    // dio.options.headers = {"Authorization": _accessToken};
+    // dio.interceptors.add(CustomInterceptors());
     super.initState();
   }
 
@@ -65,6 +65,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
 
   Future<void> readFile() async {
     try {
+      var dio = await authDio(context);
       final file = File.fromUri(Uri.parse(audioPath));
       final bytes = await file.readAsBytes();
 

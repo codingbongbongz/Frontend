@@ -20,9 +20,10 @@ class _LinkScreenState extends State<LinkScreen> {
   final _formKey = GlobalKey<FormState>();
   String _youtubeLink = '';
 
-  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   void uploadLink(context) async {
+    var dio = await authDio(context);
     // print(_youtubeLink);
     FormData formData = FormData.fromMap({
       "Authorization": accessToken,
@@ -55,10 +56,10 @@ class _LinkScreenState extends State<LinkScreen> {
   @override
   void initState() {
     super.initState();
-    dio.options.baseUrl = baseURL;
-    dio.interceptors.add(CustomInterceptors());
+    // dio.options.baseUrl = baseURL;
+    // dio.interceptors.add(CustomInterceptors());
     accessToken = widget.accessToken;
-    dio.options.headers = {"Authorization": accessToken};
+    // dio.options.headers = {"Authorization": accessToken};
   }
 
   @override

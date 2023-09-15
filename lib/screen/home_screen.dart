@@ -22,7 +22,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String accessToken = '';
-  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  // var dio = await authDio(context);
   late StreamController<List<Video>> _events;
 
   static final List<Categorie> _categories = [
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       .toList();
 
   Future<List<Video>> getPopularVideos() async {
+    var dio = await authDio(context);
     final response = await dio.get('videos/popular');
 
     List<dynamic> responseBody = response.data['data']['popularVideo'];
@@ -60,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void getCategorieVideos(results) async {
+    var dio = await authDio(context);
     if (results.isEmpty) {
       _categoryVideos.clear();
       _events.add([]);
@@ -93,10 +96,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _events.add([]);
 
     accessToken = widget.accessToken;
-    dio.options.baseUrl = baseURL;
-    dio.options.headers = {"Authorization": accessToken};
+    // dio.options.baseUrl = baseURL;
+    // dio.options.headers = {"Authorization": accessToken};
 
-    dio.interceptors.add(CustomInterceptors());
+    // dio.interceptors.add(CustomInterceptors());
 
     getPopularVideos();
   }

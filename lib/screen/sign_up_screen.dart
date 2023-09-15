@@ -18,7 +18,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
+  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
   var email = TextEditingController();
   var name = TextEditingController();
   var nickname = TextEditingController();
@@ -30,8 +30,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     super.initState();
 
-    dio.options.baseUrl = baseURL;
-    dio.interceptors.add(CustomInterceptors());
+    // dio.options.baseUrl = baseURL;
+    // dio.interceptors.add(CustomInterceptors());
   }
 
   @override
@@ -87,6 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           ElevatedButton(
               onPressed: () async {
+                var dio = await authDio(context);
                 var param = {
                   'email': email.text,
                   'name': name.text,
@@ -104,6 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 // Codec<String, String> stringToBase64 = utf8.fuse(base64);
                 // String token = stringToBase64.encode(rawString);
+
                 final response = await dio.post(
                   'auth/signup',
                   data: param,
