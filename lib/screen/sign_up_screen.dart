@@ -18,7 +18,6 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
   var email = TextEditingController();
   var name = TextEditingController();
   var nickname = TextEditingController();
@@ -29,9 +28,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-
-    // dio.options.baseUrl = baseURL;
-    // dio.interceptors.add(CustomInterceptors());
   }
 
   @override
@@ -96,25 +92,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   'country': country.text,
                   'password': password.text
                 };
-                // print(email.text);
-                // print(name.text);
-                // print(nickname.text);
-                // print(introduce.text);
-                // print(country.text);
-                // print(password.text);
-
-                // Codec<String, String> stringToBase64 = utf8.fuse(base64);
-                // String token = stringToBase64.encode(rawString);
 
                 final response = await dio.post(
                   'auth/signup',
                   data: param,
                 );
-                // print(response.data['data']);
-                // print(response.data['status']);
+
                 if (response.statusCode == 200) {
-                  // final jsonBody =
-                  //     json.decode(response.data['data'].toString());
                   var accessToken = response.data['data']['accessToken'];
                   var refreshToken = response.data['data']['refreshToken'];
                   print(accessToken);
@@ -131,9 +115,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => MainScreen(
-                            // accessToken: accessToken,
-                            ),
+                        builder: (BuildContext context) => MainScreen(),
                       ),
                       (route) => false);
                 }

@@ -7,7 +7,6 @@ import 'package:k_learning/screen/learning_screen.dart';
 import '../const/key.dart';
 
 class LinkScreen extends StatefulWidget {
-  // final String accessToken;
   const LinkScreen({super.key});
 
   @override
@@ -15,16 +14,12 @@ class LinkScreen extends StatefulWidget {
 }
 
 class _LinkScreenState extends State<LinkScreen> {
-  // String accessToken = '';
   int videoID = 1;
   final _formKey = GlobalKey<FormState>();
   String _youtubeLink = '';
 
-  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
-
   void uploadLink(context) async {
     var dio = await authDio(context);
-    // print(_youtubeLink);
     FormData formData = FormData.fromMap({
       // "Authorization": accessToken,
       "link": _youtubeLink,
@@ -45,7 +40,6 @@ class _LinkScreenState extends State<LinkScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) => LearningScreen(
-          // accessToken: accessToken,
           link: _youtubeLink,
           videoID: videoID,
         ),
@@ -56,10 +50,6 @@ class _LinkScreenState extends State<LinkScreen> {
   @override
   void initState() {
     super.initState();
-    // dio.options.baseUrl = baseURL;
-    // dio.interceptors.add(CustomInterceptors());
-    // accessToken = widget.accessToken;
-    // dio.options.headers = {"Authorization": accessToken};
   }
 
   @override

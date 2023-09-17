@@ -88,8 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _events = StreamController<List<Video>>();
     _events.add([]);
-
-    // getPopularVideos();
   }
 
   @override

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MyPageScreen extends StatefulWidget {
-  // final String accessToken;
-
   const MyPageScreen({super.key});
 
   @override
@@ -10,13 +8,9 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  // String accessToken = '';
-
   @override
   void initState() {
     super.initState();
-
-    // accessToken = widget.accessToken;
   }
 
   @override
@@ -27,9 +21,6 @@ class _MyPageScreenState extends State<MyPageScreen> {
         const Center(
           child: Text('My Page Screen'),
         ),
-        // Center(
-        //   child: Text('accessToken : $accessToken'),
-        // ),
       ],
     );
   }

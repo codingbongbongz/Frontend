@@ -18,9 +18,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
-  // String ID = '';
-  // String PW = '';
   var username = TextEditingController(); // id 입력 저장
   var password = TextEditingController(); // PW 저장
   static final storage = FlutterSecureStorage();
@@ -29,9 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-
-    // dio.options.baseUrl = baseURL;
-    // dio.interceptors.add(CustomInterceptors());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();

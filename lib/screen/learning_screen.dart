@@ -56,7 +56,6 @@ class _LearningScreenState extends State<LearningScreen> {
   bool _isPlayerReady = false;
 
   List<Transcript> _transcripts = [];
-  // late List<Transcript> _transcripts;
   List<Evaluation> _evaluations = [];
   late TooltipBehavior _tooltip;
 
@@ -76,10 +75,6 @@ class _LearningScreenState extends State<LearningScreen> {
     var dio = await authDio(context);
     final response = await dio.get('videos/$videoId/transcripts');
     List<dynamic> responseBody = response.data['data']['transcripts'];
-    // return
-    // setState(() {
-    //   _transcripts = responseBody.map((e) => Transcript.fromJson(e)).toList();
-    // });
     _transcripts = responseBody.map((e) => Transcript.fromJson(e)).toList();
   }
 
@@ -101,20 +96,32 @@ class _LearningScreenState extends State<LearningScreen> {
       _data.add([]);
     } else {
       List<dynamic> responseBody = response.data['data']['evaluations'];
-      // setState(() {
-      //   _evaluations = responseBody
-      //       .map((e) => Evaluation.fromJson(e))
-      //       .toList(); // map을 오브젝트로 변환
-      // });
       _evaluations = responseBody
           .map((e) => Evaluation.fromJson(e))
           .toList(); // map을 오브젝트로 변환
     }
   }
 
-  void setVariables() {
+  @override
+  void initState() {
+    isSelected = [isWholeCaption, isPartCaption];
+
+    _data = StreamController<List<_ChartData>>.broadcast();
+    _data.add([
+      _ChartData('overall', 0),
+      _ChartData('pronunciation', 0),
+      _ChartData('fluency', 0),
+      _ChartData('integrity', 0),
+      _ChartData('rhythm', 0),
+      _ChartData('speed', 0),
+    ]);
+
+    link = widget.link;
+    videoId = widget.videoID;
+
     getTranscripts();
     getEvaluation();
+
     _controller = YoutubePlayerController(
       initialVideoId: link,
       flags: const YoutubePlayerFlags(
@@ -132,48 +139,8 @@ class _LearningScreenState extends State<LearningScreen> {
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
     _tooltip = TooltipBehavior(enable: true);
-  }
-
-  @override
-  void initState() {
-    isSelected = [isWholeCaption, isPartCaption];
 
     super.initState();
-
-    _data = StreamController<List<_ChartData>>.broadcast();
-    _data.add([
-      _ChartData('overall', 0),
-      _ChartData('pronunciation', 0),
-      _ChartData('fluency', 0),
-      _ChartData('integrity', 0),
-      _ChartData('rhythm', 0),
-      _ChartData('speed', 0),
-    ]);
-
-    link = widget.link;
-    videoId = widget.videoID;
-
-    setVariables();
-    // getTranscripts();
-    // getEvaluation();
-    // print(_transcripts.isEmpty);
-    // _controller = YoutubePlayerController(
-    //   initialVideoId: link,
-    //   flags: const YoutubePlayerFlags(
-    //     mute: false,
-    //     autoPlay: true,
-    //     disableDragSeek: true,
-    //     loop: false,
-    //     isLive: false,
-    //     forceHD: false,
-    //     enableCaption: false,
-    //   ),
-    // )..addListener(listener);
-    // _idController = TextEditingController();
-    // _seekToController = TextEditingController();
-    // _videoMetaData = const YoutubeMetaData();
-    // _playerState = PlayerState.unknown;
-    // _tooltip = TooltipBehavior(enable: true);
   }
 
   void listener() {
@@ -225,8 +192,6 @@ class _LearningScreenState extends State<LearningScreen> {
         ],
         onReady: () {
           _isPlayerReady = true;
-          // getTranscripts();
-          // getEvaluation();
         },
         onEnded: ((data) {
           showDialog(
@@ -256,9 +221,7 @@ class _LearningScreenState extends State<LearningScreen> {
                       onPressed: () {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                              builder: (BuildContext context) => MainScreen(
-                                  // accessToken: accessToken,
-                                  ),
+                              builder: (BuildContext context) => MainScreen(),
                             ),
                             (route) => false);
                       },

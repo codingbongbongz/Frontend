@@ -13,13 +13,11 @@ class VoiceListenScreen extends StatefulWidget {
   final String currentTranscript;
   final int transcriptID;
   final int videoID;
-  // final String accessToken;
   const VoiceListenScreen({
     super.key,
     required this.currentTranscript,
     required this.transcriptID,
     required this.videoID,
-    // required this.accessToken
   });
 
   @override
@@ -31,8 +29,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   late int _transcriptID;
   late int _videoID;
   String _transcript = '';
-  // String _accessToken = '';
-  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   @override
   void initState() {
@@ -40,11 +36,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
     _transcript = widget.currentTranscript;
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
-    // _accessToken = widget.accessToken;
-    // dio.options.baseUrl = baseURL;
-    // dio.options.headers = {"Authorization": _accessToken};
-
-    // dio.interceptors.add(CustomInterceptors());
 
     super.initState();
   }
