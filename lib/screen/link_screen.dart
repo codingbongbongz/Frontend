@@ -7,15 +7,15 @@ import 'package:k_learning/screen/learning_screen.dart';
 import '../const/key.dart';
 
 class LinkScreen extends StatefulWidget {
-  final String accessToken;
-  const LinkScreen({super.key, required this.accessToken});
+  // final String accessToken;
+  const LinkScreen({super.key});
 
   @override
   State<LinkScreen> createState() => _LinkScreenState();
 }
 
 class _LinkScreenState extends State<LinkScreen> {
-  String accessToken = '';
+  // String accessToken = '';
   int videoID = 1;
   final _formKey = GlobalKey<FormState>();
   String _youtubeLink = '';
@@ -26,7 +26,7 @@ class _LinkScreenState extends State<LinkScreen> {
     var dio = await authDio(context);
     // print(_youtubeLink);
     FormData formData = FormData.fromMap({
-      "Authorization": accessToken,
+      // "Authorization": accessToken,
       "link": _youtubeLink,
     });
 
@@ -45,7 +45,7 @@ class _LinkScreenState extends State<LinkScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) => LearningScreen(
-          accessToken: accessToken,
+          // accessToken: accessToken,
           link: _youtubeLink,
           videoID: videoID,
         ),
@@ -58,7 +58,7 @@ class _LinkScreenState extends State<LinkScreen> {
     super.initState();
     // dio.options.baseUrl = baseURL;
     // dio.interceptors.add(CustomInterceptors());
-    accessToken = widget.accessToken;
+    // accessToken = widget.accessToken;
     // dio.options.headers = {"Authorization": accessToken};
   }
 

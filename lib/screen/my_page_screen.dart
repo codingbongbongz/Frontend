@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 class MyPageScreen extends StatefulWidget {
-  final String accessToken;
+  // final String accessToken;
 
-  const MyPageScreen({super.key, required this.accessToken});
+  const MyPageScreen({super.key});
 
   @override
   State<MyPageScreen> createState() => _MyPageScreenState();
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  String accessToken = '';
+  // String accessToken = '';
 
   @override
   void initState() {
     super.initState();
 
-    accessToken = widget.accessToken;
+    // accessToken = widget.accessToken;
   }
 
   @override
@@ -27,9 +27,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
         const Center(
           child: Text('My Page Screen'),
         ),
-        Center(
-          child: Text('accessToken : $accessToken'),
-        ),
+        // Center(
+        //   child: Text('accessToken : $accessToken'),
+        // ),
       ],
     );
   }

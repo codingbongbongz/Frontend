@@ -18,20 +18,22 @@ import 'layout/my_app_bar.dart';
 
 void main() async {
   // login 세션 관리
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
 
-  final storage = FlutterSecureStorage();
-  clearSecureStorageOnReinstall(storage);
+  // final storage = FlutterSecureStorage();
+  // clearSecureStorageOnReinstall(storage);
 
-  dynamic userInfo;
-  String accessToken = '';
+  // dynamic userInfo;
+  // String accessToken = '';
   // String refreshToken = '';
-  // bool validToken = true;
+  // // bool validToken = true;
 
-  // // await storage.delete(key: 'login');
-  userInfo = await storage.read(key: 'login');
-  accessToken = jsonDecode(userInfo)['accessToken'];
-
+  // // // await storage.delete(key: 'login');
+  // userInfo = await storage.read(key: 'login');
+  // accessToken = jsonDecode(userInfo)['accessToken'];
+  // refreshToken = jsonDecode(userInfo)['refreshToken'];
+  // print(accessToken);
+  // print(refreshToken);
   // if (userInfo != null) {
   //   accessToken = jsonDecode(userInfo)['accessToken'];
   //   // print('accessToken : $accessToken');
@@ -104,7 +106,7 @@ void main() async {
   runApp(
     MaterialApp(
       // home: LoginScreen(),%
-      home: MainScreen(accessToken: accessToken),
+      home: MainScreen(),
     ),
   );
 }
@@ -120,8 +122,8 @@ clearSecureStorageOnReinstall(storage) async {
 }
 
 class MainScreen extends StatefulWidget {
-  final String accessToken;
-  const MainScreen({super.key, required this.accessToken});
+  // final String accessToken;
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -129,25 +131,25 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  static String accessToken = '';
+  // static String accessToken = '';
   bool microPhonePermission = false;
 
   @override
   void initState() {
     super.initState();
-    accessToken = widget.accessToken;
+    // accessToken = widget.accessToken;
   }
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(
-      accessToken: accessToken,
-    ),
+        // accessToken: accessToken,
+        ),
     LinkScreen(
-      accessToken: accessToken,
-    ),
+        // accessToken: accessToken,
+        ),
     MyPageScreen(
-      accessToken: accessToken,
-    ),
+        // accessToken: accessToken,
+        ),
   ];
 
   @override

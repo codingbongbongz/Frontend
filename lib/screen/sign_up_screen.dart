@@ -125,11 +125,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       accessToken: accessToken, refreshToken: refreshToken));
                   await storage.write(key: 'login', value: val);
 
+                  // await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
+                  // await storage.write(
+                  //     key: 'REFRESH_TOKEN', value: refreshToken);
+
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                         builder: (BuildContext context) => MainScreen(
-                          accessToken: accessToken,
-                        ),
+                            // accessToken: accessToken,
+                            ),
                       ),
                       (route) => false);
                 }

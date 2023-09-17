@@ -16,14 +16,9 @@ import '../class/transcript.dart';
 import '../const/key.dart';
 
 class LearningScreen extends StatefulWidget {
-  final String accessToken;
   final String link;
   final int videoID;
-  const LearningScreen(
-      {super.key,
-      required this.accessToken,
-      required this.link,
-      required this.videoID});
+  const LearningScreen({super.key, required this.link, required this.videoID});
 
   @override
   State<LearningScreen> createState() => _LearningScreenState();
@@ -37,7 +32,6 @@ class _ChartData {
 }
 
 class _LearningScreenState extends State<LearningScreen> {
-  String accessToken = '';
   String link = '';
   int videoId = 1;
   int currentDuration = 0;
@@ -49,8 +43,6 @@ class _LearningScreenState extends State<LearningScreen> {
   late List<bool> isSelected;
 
   late StreamController<List<_ChartData>> _data;
-
-  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
 
   late YoutubePlayerController _controller;
   late TextEditingController _idController;
@@ -64,6 +56,7 @@ class _LearningScreenState extends State<LearningScreen> {
   bool _isPlayerReady = false;
 
   List<Transcript> _transcripts = [];
+  // late List<Transcript> _transcripts;
   List<Evaluation> _evaluations = [];
   late TooltipBehavior _tooltip;
 
@@ -79,62 +72,47 @@ class _LearningScreenState extends State<LearningScreen> {
     return true;
   }
 
-  Future<List<Transcript>> getTranscripts() async {
+  void getTranscripts() async {
     var dio = await authDio(context);
     final response = await dio.get('videos/$videoId/transcripts');
     List<dynamic> responseBody = response.data['data']['transcripts'];
-
-    return _transcripts =
-        responseBody.map((e) => Transcript.fromJson(e)).toList();
+    // return
+    // setState(() {
+    //   _transcripts = responseBody.map((e) => Transcript.fromJson(e)).toList();
+    // });
+    _transcripts = responseBody.map((e) => Transcript.fromJson(e)).toList();
   }
 
   void getEvaluation() async {
     var dio = await authDio(context);
-    FormData formData = FormData.fromMap({
-      "Authorization": accessToken,
-    });
+    // FormData formData = FormData.fromMap({
+    //   "Authorization": accessToken,
+    // });
     final response = await dio.get(
       'videos/$videoId/audio/previous',
-      data: formData,
-      options: Options(
-        headers: {"Content-Type": "multipart/form-data"},
-        // contentType: Headers.multipartFormDataContentType,
-      ),
+      // data: formData,
+      // options: Options(
+      //   headers: {"Content-Type": "multipart/form-data"},
+      //   // contentType: Headers.multipartFormDataContentType,
+      // ),
     );
 
     if (response.data['status'] == 404) {
       _data.add([]);
     } else {
       List<dynamic> responseBody = response.data['data']['evaluations'];
+      // setState(() {
+      //   _evaluations = responseBody
+      //       .map((e) => Evaluation.fromJson(e))
+      //       .toList(); // map을 오브젝트로 변환
+      // });
       _evaluations = responseBody
           .map((e) => Evaluation.fromJson(e))
           .toList(); // map을 오브젝트로 변환
     }
   }
 
-  @override
-  void initState() {
-    isSelected = [isWholeCaption, isPartCaption];
-
-    super.initState();
-
-    _data = StreamController<List<_ChartData>>.broadcast();
-    _data.add([
-      _ChartData('overall', 0),
-      _ChartData('pronunciation', 0),
-      _ChartData('fluency', 0),
-      _ChartData('integrity', 0),
-      _ChartData('rhythm', 0),
-      _ChartData('speed', 0),
-    ]);
-    accessToken = widget.accessToken;
-    link = widget.link;
-    videoId = widget.videoID;
-
-    // dio.options.baseUrl = baseURL;
-    // dio.options.headers = {"Authorization": accessToken};
-    // dio.interceptors.add(CustomInterceptors());
-
+  void setVariables() {
     getTranscripts();
     getEvaluation();
     _controller = YoutubePlayerController(
@@ -154,6 +132,48 @@ class _LearningScreenState extends State<LearningScreen> {
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
     _tooltip = TooltipBehavior(enable: true);
+  }
+
+  @override
+  void initState() {
+    isSelected = [isWholeCaption, isPartCaption];
+
+    super.initState();
+
+    _data = StreamController<List<_ChartData>>.broadcast();
+    _data.add([
+      _ChartData('overall', 0),
+      _ChartData('pronunciation', 0),
+      _ChartData('fluency', 0),
+      _ChartData('integrity', 0),
+      _ChartData('rhythm', 0),
+      _ChartData('speed', 0),
+    ]);
+
+    link = widget.link;
+    videoId = widget.videoID;
+
+    setVariables();
+    // getTranscripts();
+    // getEvaluation();
+    // print(_transcripts.isEmpty);
+    // _controller = YoutubePlayerController(
+    //   initialVideoId: link,
+    //   flags: const YoutubePlayerFlags(
+    //     mute: false,
+    //     autoPlay: true,
+    //     disableDragSeek: true,
+    //     loop: false,
+    //     isLive: false,
+    //     forceHD: false,
+    //     enableCaption: false,
+    //   ),
+    // )..addListener(listener);
+    // _idController = TextEditingController();
+    // _seekToController = TextEditingController();
+    // _videoMetaData = const YoutubeMetaData();
+    // _playerState = PlayerState.unknown;
+    // _tooltip = TooltipBehavior(enable: true);
   }
 
   void listener() {
@@ -205,6 +225,8 @@ class _LearningScreenState extends State<LearningScreen> {
         ],
         onReady: () {
           _isPlayerReady = true;
+          // getTranscripts();
+          // getEvaluation();
         },
         onEnded: ((data) {
           showDialog(
@@ -235,8 +257,8 @@ class _LearningScreenState extends State<LearningScreen> {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (BuildContext context) => MainScreen(
-                                accessToken: accessToken,
-                              ),
+                                  // accessToken: accessToken,
+                                  ),
                             ),
                             (route) => false);
                       },
@@ -275,7 +297,9 @@ class _LearningScreenState extends State<LearningScreen> {
                     ],
                   ),
                   _space,
-                  if (isWholeCaption)
+                  if (isWholeCaption &&
+                      _transcripts.isNotEmpty &&
+                      _evaluations.isNotEmpty)
                     SizedBox(
                       height: 500,
                       child: ListView.builder(
@@ -321,7 +345,9 @@ class _LearningScreenState extends State<LearningScreen> {
                         },
                       ),
                     ),
-                  if (isPartCaption)
+                  if (isPartCaption &&
+                      _transcripts.isNotEmpty &&
+                      _evaluations.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -357,6 +383,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                 currentIndex = index;
 
                                 // 현재 자막에 해당하는 학습 결과 출력
+                                // print(_evaluations[index].overall);
                                 _data.add([
                                   _ChartData(
                                       'overall', _evaluations[index].overall),
@@ -389,7 +416,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                         currentTranscript: currentTranscript,
                                         transcriptID: currentTrasncriptId,
                                         videoID: videoId,
-                                        accessToken: accessToken,
+                                        // accessToken: accessToken,
                                       ),
                                       insetPadding: const EdgeInsets.all(8.0),
                                       actions: [
@@ -422,7 +449,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                         currentTranscript: currentTranscript,
                                         transcriptID: currentTrasncriptId,
                                         videoID: videoId,
-                                        accessToken: accessToken,
+                                        // accessToken: accessToken,
                                       ),
                                       insetPadding: const EdgeInsets.all(8.0),
                                       actions: [

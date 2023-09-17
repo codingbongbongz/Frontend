@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -12,18 +11,13 @@ import '../class/video.dart';
 import '../const/key.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String accessToken;
-
-  const HomeScreen({super.key, required this.accessToken});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String accessToken = '';
-  // Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
-  // var dio = await authDio(context);
   late StreamController<List<Video>> _events;
 
   static final List<Categorie> _categories = [
@@ -95,13 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _events = StreamController<List<Video>>();
     _events.add([]);
 
-    accessToken = widget.accessToken;
-    // dio.options.baseUrl = baseURL;
-    // dio.options.headers = {"Authorization": accessToken};
-
-    // dio.interceptors.add(CustomInterceptors());
-
-    getPopularVideos();
+    // getPopularVideos();
   }
 
   @override
@@ -153,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     LearningScreen(
-                                  accessToken: accessToken,
+                                  // accessToken: accessToken,
                                   link: data[index].link,
                                   videoID: data[index].videoId,
                                 ),
@@ -266,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
                                                   LearningScreen(
-                                                accessToken: accessToken,
+                                                // accessToken: accessToken,
                                                 link: data[index].link,
                                                 videoID: data[index].videoId,
                                               ),
