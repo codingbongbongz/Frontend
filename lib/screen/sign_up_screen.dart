@@ -83,7 +83,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           ElevatedButton(
               onPressed: () async {
-                var dio = await authDio(context);
+                // var dio = await authDio(context);
+                var dio = Dio();
+                dio.options.baseUrl = baseURL;
                 var param = {
                   'email': email.text,
                   'name': name.text,

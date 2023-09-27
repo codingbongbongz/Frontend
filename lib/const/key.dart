@@ -30,7 +30,7 @@ Future<Dio> authDio(BuildContext context) async {
     // 매 요청마다 헤더에 AccessToken을 포함
     options.headers['Authorization'] = '$accessToken';
     // log(accessToken);
-    // options.headers = {"Authorization": '$accessToken'};
+    // options.headers 10= {"Authorization": '$accessToken'};
     return handler.next(options);
   }, onError: (error, handler) async {
     log('ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}');

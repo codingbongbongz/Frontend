@@ -23,11 +23,17 @@ void main() async {
   final storage = FlutterSecureStorage();
   clearSecureStorageOnReinstall(storage);
 
-  runApp(
-    MaterialApp(
-      home: MainScreen(),
-    ),
-  );
+  dynamic userInfo = await storage.read(key: 'login');
+  print(userInfo);
+  if (userInfo == null) {
+    runApp(MaterialApp(home: SignUpScreen()));
+  } else {
+    runApp(
+      MaterialApp(
+        home: MainScreen(),
+      ),
+    );
+  }
 }
 
 clearSecureStorageOnReinstall(storage) async {
@@ -53,7 +59,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    // accessToken = widget.accessToken;
   }
 
   static final List<Widget> _widgetOptions = <Widget>[
