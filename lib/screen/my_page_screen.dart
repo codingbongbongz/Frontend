@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:k_learning/class/user.dart';
 import 'package:k_learning/const/key.dart';
+import 'package:k_learning/screen/edit_userinfo_screen.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -10,7 +11,11 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
-  patchUserInfo() async {}
+  String nickname = '';
+  String introduce = '';
+
+  late Future myGetUserInfo;
+
   Future<dynamic> getUserInfo() async {
     var dio = await authDio(context);
     final response = await dio.get('user');
@@ -19,13 +24,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
     print(responseBody);
     print(responseBody.runtimeType);
+    nickname = responseBody['nickname'];
+    introduce = responseBody['introduce'];
     return responseBody;
   }
 
   @override
   void initState() {
     super.initState();
-
+    myGetUserInfo = getUserInfo();
     // getUserInfo();
   }
 
@@ -51,7 +58,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 ),
               ),
               FutureBuilder(
-                  future: getUserInfo(),
+                  future: myGetUserInfo,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
@@ -86,10 +93,36 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   }),
               // Icon(Icons.edit),
               IconButton(
-                onPressed: patchUserInfo,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: EditUserInfoScreen(
+                          nickname: nickname,
+                          introduce: introduce,
+                        ),
+                        insetPadding: const EdgeInsets.all(8.0),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              print("da");
+                              setState(() {
+                                myGetUserInfo = getUserInfo();
+                              });
+                              ();
+                            },
+                            child: const Text('확인'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 icon: Icon(Icons.edit),
                 iconSize: 15,
-              ),
+              )
             ],
           ),
         ),
