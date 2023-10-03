@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:k_learning/class/user.dart';
 import 'package:k_learning/const/key.dart';
+import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/edit_userinfo_screen.dart';
+import 'package:k_learning/screen/sign_up_screen.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -15,6 +18,21 @@ class _MyPageScreenState extends State<MyPageScreen> {
   String introduce = '';
 
   late Future myGetUserInfo;
+  withdrawal() async {
+    var dio = await authDio(context);
+    final response = await dio.delete('mypage');
+
+    final storage = FlutterSecureStorage();
+    await storage.deleteAll();
+    dynamic responseBody = response.data;
+    print(responseBody);
+    // main();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (BuildContext context) => SignUpScreen(),
+        ),
+        (route) => false);
+  }
 
   Future<dynamic> getUserInfo() async {
     var dio = await authDio(context);
@@ -23,7 +41,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     // var _userInfo = responseBody.map((e) => User.fromJson(e));
 
     print(responseBody);
-    print(responseBody.runtimeType);
+    // print(responseBody.runtimeType);
     nickname = responseBody['nickname'];
     introduce = responseBody['introduce'];
     return responseBody;
@@ -107,11 +125,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              print("da");
                               setState(() {
                                 myGetUserInfo = getUserInfo();
                               });
-                              ();
                             },
                             child: const Text('확인'),
                           ),
@@ -159,7 +175,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 color: Colors.grey,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: withdrawal,
                 child: Text('서비스 탈퇴하기', style: TextStyle(color: Colors.black)),
               ),
               Container(

@@ -21,6 +21,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final storage = FlutterSecureStorage();
+  // await storage.deleteAll();
   clearSecureStorageOnReinstall(storage);
 
   dynamic userInfo = await storage.read(key: 'login');
