@@ -195,7 +195,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
               children: [
                 TextButton(
                   // onPressed: () {},
-                  onPressed: (takePhoto(ImageSource.camera)),
+                  onPressed: () => takePhoto(ImageSource.camera),
                   child: Icon(
                     Icons.camera,
                     size: 50,
@@ -203,7 +203,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 ),
                 TextButton(
                   // onPressed: () {},
-                  onPressed: takePhoto(ImageSource.gallery),
+                  onPressed: () => takePhoto(ImageSource.gallery),
                   child: Icon(
                     Icons.photo_library,
                     size: 50,
@@ -221,6 +221,16 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
       setState(() {
         _imageFile = pickedFile;
       });
+    } else {
+      print('이미지 선택안함');
     }
   }
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _pickedFile = pickedFile;
+  //     });
+  //   } else {
+  //     print('이미지 선택안함');
+  //   }
+  // }
 }
