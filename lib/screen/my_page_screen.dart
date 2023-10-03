@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:k_learning/class/user.dart';
+import 'package:k_learning/const/key.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -8,9 +10,23 @@ class MyPageScreen extends StatefulWidget {
 }
 
 class _MyPageScreenState extends State<MyPageScreen> {
+  patchUserInfo() async {}
+  Future<dynamic> getUserInfo() async {
+    var dio = await authDio(context);
+    final response = await dio.get('user');
+    dynamic responseBody = response.data['data'];
+    // var _userInfo = responseBody.map((e) => User.fromJson(e));
+
+    print(responseBody);
+    print(responseBody.runtimeType);
+    return responseBody;
+  }
+
   @override
   void initState() {
     super.initState();
+
+    // getUserInfo();
   }
 
   @override
@@ -34,28 +50,43 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   width: 50,
                 ),
               ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '김태오',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                      Text('안녕하새요, 저는 한줄소개 입니다! ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ'),
-                    ],
-                  ),
-                ),
-              ),
+              FutureBuilder(
+                  future: getUserInfo(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      final data = snapshot.data;
+                      // print(data);
+                      return Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                // 'nickname',
+                                data['nickname'],
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              Text(
+                                data['introduce'],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                  }),
               // Icon(Icons.edit),
               IconButton(
-                onPressed: () {},
+                onPressed: patchUserInfo,
                 icon: Icon(Icons.edit),
                 iconSize: 15,
               ),
