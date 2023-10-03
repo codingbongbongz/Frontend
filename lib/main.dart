@@ -123,12 +123,17 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<bool> init() async {
     final resp = await [Permission.microphone].request();
+    final resp2 = await [Permission.camera].request();
+
     final microphonePermission = resp[Permission.microphone];
+    final cameraPermission = resp2[Permission.camera];
 
     if (microphonePermission != PermissionStatus.granted) {
       throw '마이크 권한이 없습니다.';
     }
-
+    if (cameraPermission != PermissionStatus.granted) {
+      throw '카메라 권한이 없습니다.';
+    }
     // print(microphonePermission);
     return true;
   }

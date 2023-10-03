@@ -63,9 +63,10 @@
 		</dict>
 	<!-- <key>NSCachesDirectory</key>
 	<string>test</string> -->
-	<!-- <key>NSPhotoLibraryUsageDescription</key>
-	<string>${PRODUCT_NAME} Libaray Usage</string> -->
-
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>${PRODUCT_NAME} Libaray Usage</string>
+	<key>NSCameraUsageDescription</key>
+	<string>${PRODUCT_NAME} Camera Usage</string>
 	<!-- <key>LSSupportsOpeningDocumentsInPlace</key>
     <true/>
     <key>UIFileSharingEnabled</key>

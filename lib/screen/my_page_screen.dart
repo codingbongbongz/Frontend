@@ -16,6 +16,7 @@ class MyPageScreen extends StatefulWidget {
 class _MyPageScreenState extends State<MyPageScreen> {
   String nickname = '';
   String introduce = '';
+  String profileImageUrl = '';
 
   late Future myGetUserInfo;
   withdrawal() async {
@@ -42,8 +43,10 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
     print(responseBody);
     // print(responseBody.runtimeType);
+    profileImageUrl ??= responseBody['profileImageUrl'];
     nickname = responseBody['nickname'];
     introduce = responseBody['introduce'];
+
     return responseBody;
   }
 
@@ -65,27 +68,23 @@ class _MyPageScreenState extends State<MyPageScreen> {
         ),
         Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  color: Colors.amber,
-                  height: 50,
-                  width: 50,
-                ),
-              ),
-              FutureBuilder(
-                  future: myGetUserInfo,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      final data = snapshot.data;
-                      // print(data);
-                      return Expanded(
+          child: FutureBuilder(
+              future: myGetUserInfo,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final data = snapshot.data;
+                  return Row(
+                    children: [
+                      Expanded(
+                          flex: 1,
+                          child: data['profileImageUrl'] != null
+                              ? Image.network(data['profileImageUrl'])
+                              : Icon(Icons.person)),
+                      Expanded(
                         flex: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -106,41 +105,43 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             ],
                           ),
                         ),
-                      );
-                    }
-                  }),
-              // Icon(Icons.edit),
-              IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: EditUserInfoScreen(
-                          nickname: nickname,
-                          introduce: introduce,
-                        ),
-                        insetPadding: const EdgeInsets.all(8.0),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              setState(() {
-                                myGetUserInfo = getUserInfo();
-                              });
+                      ),
+
+                      // Icon(Icons.edit),
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: EditUserInfoScreen(
+                                  profileImageUrl: profileImageUrl,
+                                  nickname: nickname,
+                                  introduce: introduce,
+                                ),
+                                insetPadding: const EdgeInsets.all(8.0),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        myGetUserInfo = getUserInfo();
+                                      });
+                                    },
+                                    child: const Text('확인'),
+                                  ),
+                                ],
+                              );
                             },
-                            child: const Text('확인'),
-                          ),
-                        ],
-                      );
-                    },
+                          );
+                        },
+                        icon: Icon(Icons.edit),
+                        iconSize: 15,
+                      )
+                    ],
                   );
-                },
-                icon: Icon(Icons.edit),
-                iconSize: 15,
-              )
-            ],
-          ),
+                }
+              }),
         ),
         SizedBox(
           height: 30,
