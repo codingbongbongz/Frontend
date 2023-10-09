@@ -47,6 +47,17 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
     super.dispose();
   }
 
+  Future<dynamic> getTranslation() async {
+    var dio = await authDio(context);
+
+    final response = await dio.get('translations/$_transcriptID');
+
+    dynamic responseBody = response.data['data'];
+    print(responseBody);
+    // 임시요
+    return responseBody[0]['text'];
+  }
+
   Future<dynamic> getNouns() async {
     var dio = await authDio(context);
 
@@ -66,11 +77,11 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
       ),
     );
     var tmp = response.data['data'];
-    print(tmp);
+    // print(tmp);
 
     dynamic responseBody = response.data['data']['nounsAndExamples'];
-    print(responseBody);
-    print(responseBody.runtimeType);
+    // print(responseBody);
+    // print(responseBody.runtimeType);
 
     List<dynamic> resultList = [];
     // List<Map<String, List<String>>>
@@ -142,6 +153,26 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
               style: const TextStyle(
                 fontSize: 15,
               ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            FutureBuilder(
+              future: getTranslation(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final data = snapshot.data;
+
+                  return Text(data,
+                      style: const TextStyle(
+                        fontSize: 15,
+                      ));
+                }
+              },
             ),
             ElevatedButton(
               onPressed: playRecording,
