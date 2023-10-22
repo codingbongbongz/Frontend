@@ -27,13 +27,15 @@ void main() async {
   dynamic userInfo = await storage.read(key: 'login');
   // print(userInfo['accessToken']);
   if (userInfo == null) {
-    runApp(MaterialApp(home: SignUpScreen()));
+    runApp(MaterialApp(home: LoginScreen()));
+    // runApp(MaterialApp(home: SignUpScreen()));
   } else {
     final accessToken = jsonDecode(userInfo)['accessToken'];
     print(accessToken);
     runApp(
       MaterialApp(
         home: MainScreen(),
+        // home: LoginScreen(),
       ),
     );
   }

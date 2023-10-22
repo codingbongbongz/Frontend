@@ -1,11 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:k_learning/class/login_platform.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
+import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/sign_up_screen.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../class/token.dart';
 import '../const/key.dart';
@@ -21,7 +26,77 @@ class _LoginScreenState extends State<LoginScreen> {
   var username = TextEditingController(); // id 입력 저장
   var password = TextEditingController(); // PW 저장
   static final storage = FlutterSecureStorage();
+
+  LoginPlatform _loginPlatform = LoginPlatform.none;
   dynamic userInfo = '';
+
+  void signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser != null) {
+      print('name = ${googleUser.displayName}');
+      print('email = ${googleUser.email}');
+      print('id = ${googleUser.id}');
+
+      setState(() {
+        _loginPlatform = LoginPlatform.google;
+      });
+    }
+  }
+
+  void signInWithApple() async {
+    try {
+      final AuthorizationCredentialAppleID credential =
+          await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: "Klearning.example.com",
+          redirectUri: Uri.parse(
+            "https://magnificent-east-turnip/glitch.me/callbacks/sign_in_with_apple",
+          ),
+        ),
+      );
+
+      print('credential.state = $credential');
+      print('credential.state = ${credential.email}');
+      print('credential.state = ${credential.userIdentifier}');
+      print('credential.state = ${credential.authorizationCode}');
+
+      List<String> jwt = credential.identityToken?.split('.') ?? [];
+      String payload = jwt[1];
+      payload = base64.normalize(payload);
+
+      final List<int> jsonData = base64.decode(payload);
+      final userInfo = jsonDecode(utf8.decode(jsonData));
+      print(userInfo);
+      String email = userInfo['email'];
+
+      setState(() {
+        _loginPlatform = LoginPlatform.apple;
+      });
+    } catch (error) {
+      print('error = $error');
+    }
+  }
+
+  Widget _loginButton(String path, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50.0),
+          child: Image.asset(
+            'assets/images/$path.jpg',
+            height: 80,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -45,10 +120,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  loginAction(accountName, password) async {
+  loginAction(username, password) async {
     try {
       var dio = Dio();
-      var param = {'account_name': '$accountName', 'password': '$password'};
+      dio.options.baseUrl = baseURL;
+      var param = {'account_name': '$username', 'password': '$password'};
       // final rawString = '$username:$password';
 
       // Codec<String, String> stringToBase64 = utf8.fuse(base64);
@@ -141,30 +217,74 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => SignUpScreen(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () async {
+                  if (await loginAction(username.text, password.text) == true) {
+                    print('로그인 성공');
+                    // Navigator.pop(context, '/service'); // 로그인 이후 서비스 화면으로 이동
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => MainScreen(),
+                        ),
+                        (route) => false);
+                  } else {
+                    print('로그인 실패');
+                  }
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'LOGIN',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-              );
-            },
-            child: Text('SIGN UP'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => SignUpScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'SIGN IN',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 50,
-          ),
-          ElevatedButton(
-              onPressed: () async {
-                if (await loginAction(username.text, password.text) == true) {
-                  print('로그인 성공');
-                  // Navigator.pop(context, '/service'); // 로그인 이후 서비스 화면으로 이동
-                  Navigator.pop(context);
-                } else {
-                  print('로그인 실패');
-                }
-              },
-              child: Text('LOGIN')),
+
+          if (Platform.isIOS)
+            _loginButton('sign_in_with_Apple', signInWithApple),
+          if (Platform.isAndroid)
+            _loginButton('sign_in_with_Google', signInWithGoogle),
+          // SizedBox(
+          //   height: 50,
+          // ),
         ],
       ),
     );
