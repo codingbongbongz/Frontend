@@ -185,7 +185,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 color: Colors.grey,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final storage = FlutterSecureStorage();
+                  await storage.deleteAll();
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => SignUpScreen(),
+                      ),
+                      (route) => false);
+                },
                 child: Text('로그 아웃', style: TextStyle(color: Colors.black)),
               ),
               Container(

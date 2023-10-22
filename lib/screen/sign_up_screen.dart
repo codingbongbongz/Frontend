@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:k_learning/class/categorie.dart';
 import 'package:k_learning/class/login_platform.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
@@ -40,6 +42,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     Categorie(id: 4, name: "Japanese"),
     Categorie(id: 5, name: "Chinese"),
   ];
+  void signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    if (googleUser != null) {
+      print('name = ${googleUser.displayName}');
+      print('email = ${googleUser.email}');
+      print('id = ${googleUser.id}');
+
+      setState(() {
+        _loginPlatform = LoginPlatform.google;
+      });
+    }
+  }
 
   void signInWithApple() async {
     try {
@@ -224,7 +239,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 }
               },
               child: Text('SIGN UP')),
-          _loginButton('/apple_logo', signInWithApple)
+          if (Platform.isIOS) _loginButton('apple_logo', signInWithApple),
+          if (Platform.isAndroid) _loginButton('google_logo', signInWithGoogle),
         ],
       ),
     );
