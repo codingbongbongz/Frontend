@@ -9,7 +9,7 @@ import 'package:k_learning/screen/sign_up_screen.dart';
 
 import '../class/token.dart';
 
-const String baseURL = "http://43.200.72.190/";
+const String baseURL = "https://www.klearning.o-r.kr/";
 
 Future<Dio> authDio(BuildContext context) async {
   Dio dio = Dio()..httpClientAdapter = IOHttpClientAdapter();
