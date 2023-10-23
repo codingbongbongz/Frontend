@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:k_learning/class/categorie.dart';
 import 'package:k_learning/class/login_platform.dart';
+import 'package:k_learning/const/color.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -29,7 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var introduce = TextEditingController();
   var country = TextEditingController();
   var password = TextEditingController();
-
+  bool _passwordVisible = false;
   final _countryList = ["English", "Vitenamese", "Korean"];
   String _selectCountry = "English";
 
@@ -56,74 +57,74 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  void signInWithApple() async {
-    try {
-      final AuthorizationCredentialAppleID credential =
-          await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: "Klearning.example.com",
-          redirectUri: Uri.parse(
-            "https://magnificent-east-turnip/glitch.me/callbacks/sign_in_with_apple",
-          ),
-        ),
-      );
+  // void signInWithApple() async {
+  //   try {
+  //     final AuthorizationCredentialAppleID credential =
+  //         await SignInWithApple.getAppleIDCredential(
+  //       scopes: [
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //       webAuthenticationOptions: WebAuthenticationOptions(
+  //         clientId: "Klearning.example.com",
+  //         redirectUri: Uri.parse(
+  //           "https://magnificent-east-turnip/glitch.me/callbacks/sign_in_with_apple",
+  //         ),
+  //       ),
+  //     );
 
-      print('credential.state = $credential');
-      print('credential.state = ${credential.email}');
-      print('credential.state = ${credential.userIdentifier}');
-      print('credential.state = ${credential.authorizationCode}');
+  //     print('credential.state = $credential');
+  //     print('credential.state = ${credential.email}');
+  //     print('credential.state = ${credential.userIdentifier}');
+  //     print('credential.state = ${credential.authorizationCode}');
 
-      List<String> jwt = credential.identityToken?.split('.') ?? [];
-      String payload = jwt[1];
-      payload = base64.normalize(payload);
+  //     List<String> jwt = credential.identityToken?.split('.') ?? [];
+  //     String payload = jwt[1];
+  //     payload = base64.normalize(payload);
 
-      final List<int> jsonData = base64.decode(payload);
-      final userInfo = jsonDecode(utf8.decode(jsonData));
-      print(userInfo);
-      String email = userInfo['email'];
+  //     final List<int> jsonData = base64.decode(payload);
+  //     final userInfo = jsonDecode(utf8.decode(jsonData));
+  //     print(userInfo);
+  //     String email = userInfo['email'];
 
-      setState(() {
-        _loginPlatform = LoginPlatform.apple;
-      });
-    } catch (error) {
-      print('error = $error');
-    }
-  }
+  //     setState(() {
+  //       _loginPlatform = LoginPlatform.apple;
+  //     });
+  //   } catch (error) {
+  //     print('error = $error');
+  //   }
+  // }
 
-  void signOut() async {
-    switch (_loginPlatform) {
-      case LoginPlatform.google:
-        break;
-      default:
-        break;
-    }
-    setState(() {
-      _loginPlatform = LoginPlatform.none;
-    });
-  }
+  // void signOut() async {
+  //   switch (_loginPlatform) {
+  //     case LoginPlatform.google:
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   setState(() {
+  //     _loginPlatform = LoginPlatform.none;
+  //   });
+  // }
 
-  Widget _loginButton(String path, VoidCallback onTap) {
-    return Card(
-      elevation: 5.0,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: Ink.image(
-        image: AssetImage('assets/images/$path.png'),
-        width: 60,
-        height: 60,
-        child: InkWell(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(35.0),
-          ),
-          onTap: onTap,
-        ),
-      ),
-    );
-  }
+  // Widget _loginButton(String path, VoidCallback onTap) {
+  //   return Card(
+  //     elevation: 5.0,
+  //     shape: const CircleBorder(),
+  //     clipBehavior: Clip.antiAlias,
+  //     child: Ink.image(
+  //       image: AssetImage('assets/images/$path.png'),
+  //       width: 60,
+  //       height: 60,
+  //       child: InkWell(
+  //         borderRadius: const BorderRadius.all(
+  //           Radius.circular(35.0),
+  //         ),
+  //         onTap: onTap,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   void initState() {
@@ -162,15 +163,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Input('introduce', introduce),
+            child: Input('password', password),
           ),
           const SizedBox(
             height: 20,
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Input('introduce', introduce),
+          ),
+
           // Padding(
           //   padding: EdgeInsets.symmetric(horizontal: 20.0),
           //   child: Input('country', country),
           // ),
+
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: DropdownButton<String>(
@@ -189,10 +196,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(
             height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Input('password', password),
           ),
           // const SizedBox(
           //   height: 50,
@@ -239,8 +242,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 }
               },
               child: Text('SIGN UP')),
-          if (Platform.isIOS) _loginButton('apple_logo', signInWithApple),
-          if (Platform.isAndroid) _loginButton('google_logo', signInWithGoogle),
+          // if (Platform.isIOS) _loginButton('apple_logo', signInWithApple),
+          // if (Platform.isAndroid) _loginButton('google_logo', signInWithGoogle),
         ],
       ),
     );
@@ -248,14 +251,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   TextField Input(text, TextEditingController controller) {
     return TextField(
+      obscureText: text == 'password' && _passwordVisible,
       controller: controller,
+      maxLength: text == 'nickname' ? 8 : (text == 'introduce' ? 30 : null),
+      maxLines: text == 'introduce' ? null : 1,
       decoration: InputDecoration(
-        // prefixIcon: Icon(Icons.link),,
+        // prefixIcon: Icon(Icons.link),
+        // contentPadding:
+        //     text == 'introduce' ? EdgeInsets.symmetric(vertical: 40.0) : null,
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.blue),
+          borderSide: BorderSide(color: blueColor),
         ),
-        labelText: text,
+        hintText: text,
+        hintStyle: TextStyle(
+          fontSize: 16.0,
+          textBaseline:
+              TextBaseline.alphabetic, // 텍스트 베이스라인을 변경하여 텍스트를 좌측 상단에 배치
+        ),
+        suffixIcon: (text == 'password')
+            ? IconButton(
+                icon: Icon(
+                  // Based on passwordVisible state choose the icon
+                  _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: Theme.of(context).primaryColorDark,
+                ),
+                onPressed: () {
+                  // Update the state i.e. toogle the state of passwordVisible variable
+                  setState(() {
+                    _passwordVisible = !_passwordVisible;
+                  });
+                },
+              )
+            : null,
       ),
     );
   }

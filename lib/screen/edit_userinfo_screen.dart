@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:k_learning/const/color.dart';
 
 import '../const/key.dart';
 
@@ -102,7 +103,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                   // prefixIcon: Icon(Icons.link),,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: BorderSide(color: blueColor),
                   ),
                   labelText: 'introduce',
                   // contentPadding: EdgeInsets.symmetric(vertical: 30.0),

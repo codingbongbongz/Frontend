@@ -81,7 +81,7 @@ flutter:
   # assets:
   assets:
     - assets/images/defaultProfile.png
-    - assets/images/defaultProfile.svg
+    # - assets/images/defaultProfile.svg
     - assets/images/
       # - assets/audios/
   #   - images/a_dot_burr.jpeg
