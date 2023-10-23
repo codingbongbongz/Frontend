@@ -4,6 +4,7 @@ import 'package:k_learning/class/user.dart';
 import 'package:k_learning/const/key.dart';
 import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/edit_userinfo_screen.dart';
+import 'package:k_learning/screen/login_screen.dart';
 import 'package:k_learning/screen/sign_up_screen.dart';
 
 class MyPageScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     // main();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (BuildContext context) => SignUpScreen(),
+          builder: (BuildContext context) => LoginScreen(),
         ),
         (route) => false);
   }

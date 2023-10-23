@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:k_learning/class/login_platform.dart';
+import 'package:k_learning/const/color.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/sign_up_screen.dart';
@@ -85,15 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _loginButton(String path, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50.0),
-          child: Image.asset(
-            'assets/images/$path.jpg',
-            height: 80,
-          ),
-        ),
+      child: Image.asset(
+        'assets/images/$path.png',
+        // height: 60,
       ),
     );
   }
@@ -160,132 +155,153 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 50,
-          ),
-          Container(
-            color: Colors.blue.shade100,
-            width: 100,
-            height: 100,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[350]),
-              'K-learning'),
-          SizedBox(
-            height: 10,
-          ),
-          Text('K-컨텐츠를 통해 쉽고 재밌게 한국어를 학습해보세요!'),
-          SizedBox(
-            height: 40,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TextField(
-              controller: username,
-              decoration: const InputDecoration(
-                // prefixIcon: Icon(Icons.link),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide: BorderSide(color: Colors.blue),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: 50,
                 ),
-                labelText: 'username',
-              ),
+                Image.asset(
+                  'assets/images/k-learning_logo.png',
+                  // width: 140,
+                  // height: 140,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                    'K-learning'),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  """K-컨텐츠를 통해 쉽고 재밌게\n 한국어를 학습해보세요!""",
+                  style: TextStyle(color: greyColor, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 100,
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                //   child: TextField(
+                //     controller: username,
+                //     decoration: const InputDecoration(
+                //       // prefixIcon: Icon(Icons.link),
+                //       border: OutlineInputBorder(
+                //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                //         borderSide: BorderSide(color: Colors.blue),
+                //       ),
+                //       labelText: 'username',
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                //   child: TextField(
+                //     controller: password,
+                //     decoration: const InputDecoration(
+                //       // prefixIcon: Icon(Icons.link),
+                //       border: OutlineInputBorder(
+                //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                //         borderSide: BorderSide(color: Colors.blue),
+                //       ),
+                //       labelText: 'password',
+                //     ),
+                //   ),
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     TextButton(
+                //       onPressed: () async {
+                //         if (await loginAction(username.text, password.text) == true) {
+                //           print('로그인 성공');
+                //           // Navigator.pop(context, '/service'); // 로그인 이후 서비스 화면으로 이동
+                //           Navigator.of(context).pushAndRemoveUntil(
+                //               MaterialPageRoute(
+                //                 builder: (BuildContext context) => MainScreen(),
+                //               ),
+                //               (route) => false);
+                //         } else {
+                //           print('로그인 실패');
+                //         }
+                //       },
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //           color: Colors.blueAccent,
+                //           borderRadius: BorderRadius.circular(10.0),
+                //         ),
+                //         child: Padding(
+                //           padding: const EdgeInsets.all(8.0),
+                //           child: Text(
+                //             'LOGIN',
+                //             style: TextStyle(
+                //               fontSize: 30,
+                //               color: Colors.white,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     TextButton(
+                //       onPressed: () {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (BuildContext context) => SignUpScreen(),
+                //           ),
+                //         );
+                //       },
+                //       child: Container(
+                //         decoration: BoxDecoration(
+                //             color: Colors.blueAccent,
+                //             borderRadius: BorderRadius.circular(10.0)),
+                //         child: Padding(
+                //           padding: const EdgeInsets.all(8.0),
+                //           child: Text(
+                //             'SIGN IN',
+                //             style: TextStyle(
+                //               fontSize: 30,
+                //               color: Colors.white,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                Column(
+                  children: [
+                    if (Platform.isIOS)
+                      _loginButton('sign_in_with_Apple', signInWithApple),
+                    if (Platform.isAndroid)
+                      _loginButton('sign_in_with_Google', signInWithGoogle),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _loginButton('sign_in_with_ID', () {}),
+                  ],
+                ),
+                // )SizedBox(
+                //   height: 50,
+                // ),
+              ],
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TextField(
-              controller: password,
-              decoration: const InputDecoration(
-                // prefixIcon: Icon(Icons.link),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide: BorderSide(color: Colors.blue),
-                ),
-                labelText: 'password',
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () async {
-                  if (await loginAction(username.text, password.text) == true) {
-                    print('로그인 성공');
-                    // Navigator.pop(context, '/service'); // 로그인 이후 서비스 화면으로 이동
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => MainScreen(),
-                        ),
-                        (route) => false);
-                  } else {
-                    print('로그인 실패');
-                  }
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => SignUpScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'SIGN IN',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-
-          if (Platform.isIOS)
-            _loginButton('sign_in_with_Apple', signInWithApple),
-          if (Platform.isAndroid)
-            _loginButton('sign_in_with_Google', signInWithGoogle),
-          // SizedBox(
-          //   height: 50,
-          // ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -30,8 +30,8 @@ void main() async {
     runApp(MaterialApp(home: LoginScreen()));
     // runApp(MaterialApp(home: SignUpScreen()));
   } else {
-    final accessToken = jsonDecode(userInfo)['accessToken'];
-    print(accessToken);
+    // final accessToken = jsonDecode(userInfo)['accessToken'];
+    // print(accessToken);
     runApp(
       MaterialApp(
         home: MainScreen(),
@@ -98,18 +98,18 @@ class _MainScreenState extends State<MainScreen> {
   BottomNavigationBar btmNavBar() {
     return BottomNavigationBar(
       onTap: onTap,
-      backgroundColor: Colors.blue.shade100,
+      backgroundColor: Colors.white,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.video_library),
-          label: 'link',
+          icon: Icon(Icons.add_circle),
+          label: 'add Video',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_circle),
+          icon: Icon(Icons.person),
           label: 'my page',
         ),
       ],

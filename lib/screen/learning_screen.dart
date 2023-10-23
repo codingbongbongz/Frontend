@@ -5,6 +5,7 @@ import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/class/evaluation.dart';
+import 'package:k_learning/const/color.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/voice_input_screen.dart';
@@ -481,7 +482,7 @@ class _LearningScreenState extends State<LearningScreen> {
     return SfCartesianChart(
         primaryXAxis: CategoryAxis(
             labelStyle: const TextStyle(
-          fontSize: 11,
+          fontSize: 10,
         )),
         primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
         tooltipBehavior: _tooltip,
@@ -491,7 +492,8 @@ class _LearningScreenState extends State<LearningScreen> {
             xValueMapper: (_ChartData data, _) => data.x,
             yValueMapper: (_ChartData data, _) => data.y,
             name: 'evaulation',
-            color: const Color.fromRGBO(8, 142, 255, 1),
+            // color: const Color.fromRGBO(8, 142, 255, 1),
+            color: blueColor,
             width: 0.5,
           )
         ]);
