@@ -31,6 +31,16 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginPlatform _loginPlatform = LoginPlatform.none;
   dynamic userInfo = '';
 
+  void signInWithID() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => SignUpScreen(
+          isSocial: false,
+        ),
+      ),
+    );
+  }
+
   void signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -42,6 +52,16 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _loginPlatform = LoginPlatform.google;
       });
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) => SignUpScreen(
+            isSocial: true,
+            email: googleUser.email,
+            name: googleUser.displayName!,
+          ),
+        ),
+      );
     }
   }
 
@@ -78,6 +98,15 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _loginPlatform = LoginPlatform.apple;
       });
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) => SignUpScreen(
+            isSocial: true,
+            email: credential.email ?? "",
+            name: (credential.familyName ?? "") + (credential.givenName ?? ""),
+          ),
+        ),
+      );
     } catch (error) {
       print('error = $error');
     }
@@ -154,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: null,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -292,7 +321,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    _loginButton('sign_in_with_ID', () {}),
+                    _loginButton('sign_in_with_ID', signInWithID),
                   ],
                 ),
                 // )SizedBox(

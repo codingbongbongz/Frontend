@@ -58,7 +58,9 @@ Future<Dio> authDio(BuildContext context) async {
           await storage.deleteAll();
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (BuildContext context) => SignUpScreen(),
+                builder: (BuildContext context) => SignUpScreen(
+                  isSocial: false,
+                ),
               ),
               (route) => false);
           // . . .

@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:k_learning/screen/home_screen.dart';
@@ -12,8 +10,6 @@ import 'package:k_learning/screen/sign_up_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'class/token.dart';
-import 'const/key.dart';
 import 'layout/my_app_bar.dart';
 
 void main() async {
@@ -27,13 +23,19 @@ void main() async {
   dynamic userInfo = await storage.read(key: 'login');
   // print(userInfo['accessToken']);
   if (userInfo == null) {
-    // runApp(MaterialApp(home: LoginScreen()));
-    runApp(MaterialApp(home: SignUpScreen()));
+    runApp(MaterialApp(
+        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+        home: LoginScreen()));
+    // runApp(MaterialApp(
+    //     home: SignUpScreen(
+    //   isSocial: false,
+    // )));
   } else {
     // final accessToken = jsonDecode(userInfo)['accessToken'];
     // print(accessToken);
     runApp(
       MaterialApp(
+        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
         home: MainScreen(),
         // home: LoginScreen(),
       ),

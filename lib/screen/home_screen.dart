@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:k_learning/const/color.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:youtube/youtube_thumbnail.dart';
@@ -103,20 +104,20 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         const SizedBox(
           height: 50,
-          child: Center(
-            widthFactor: 2.0,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
-              '인기순',
+              '인기 영상',
               textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
         SizedBox(
-          height: 180,
+          height: 250,
           child: FutureBuilder(
               future: getPopularVideos(),
               builder: (context, snapshot) {
@@ -147,37 +148,73 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
                         },
-                        child: Image.network(
-                          YoutubeThumbnail(
-                            youtubeId: _popularVideos[index].link,
-                          ).small(),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: Image.network(
+                            YoutubeThumbnail(
+                              youtubeId: _popularVideos[index].link,
+                            ).hd(),
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            // height: 150,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       );
-                      return Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width / 3,
-                        ),
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: [
-                            inkWell,
-                            Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Text(
-                                _popularVideos[index].videoTitle,
-                                style: const TextStyle(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.bold,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 1.5,
+                          ),
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              inkWell,
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Text(
+                                  _popularVideos[index].videoTitle,
+                                  style: const TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Text(
+                                  _popularVideos[index].creator,
+                                  style: const TextStyle(
+                                    fontSize: 13.0,
+                                    color: Colors.grey,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
                   );
                 }
               }),
+        ),
+        const SizedBox(
+          height: 50,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              '카테고리',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
         Expanded(
           child: Column(
@@ -194,24 +231,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: const Text(
                             "Select Categories",
                           ),
-                          selectedColor: Colors.blue,
+                          selectedColor: blueColor,
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
+                            color: blueColor.withOpacity(0.1),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(20)),
                             border: Border.all(
-                              color: Colors.blue,
+                              color: blueColor,
                               width: 2,
                             ),
                           ),
                           buttonIcon: const Icon(
                             Icons.arrow_downward,
-                            color: Colors.blue,
+                            color: blueColor,
                           ),
                           buttonText: Text(
                             "Favorite Categories",
                             style: TextStyle(
-                              color: Colors.blue[800],
+                              color: blueColor,
                               fontSize: 15,
                             ),
                           ),
@@ -260,9 +297,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           );
                                         }
                                       },
-                                      child: Image.network(YoutubeThumbnail(
-                                        youtubeId: data[index].link,
-                                      ).small()),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: Image.network(YoutubeThumbnail(
+                                          youtubeId: data[index].link,
+                                        ).small()),
+                                      ),
                                     ),
                                   ),
                                   Column(

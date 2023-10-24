@@ -17,7 +17,16 @@ import '../const/key.dart';
 import '../main.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final bool isSocial;
+  String email; // 선택적으로 email을 받음
+  String name; // 선택적으로 name을 받음
+
+  SignUpScreen({
+    Key? key,
+    required this.isSocial,
+    this.email = "",
+    this.name = "",
+  }) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -31,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var country = TextEditingController();
   var password = TextEditingController();
   bool _passwordVisible = false;
+  bool _isSocial = false;
   final _countryList = ["English", "Vitenamese", "Korean"];
   String _selectCountry = "English";
 
@@ -129,12 +139,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
+
+    _isSocial = widget.isSocial;
+    if (_isSocial) {
+      email.text = widget.email;
+      name.text = widget.name;
+      // 입력 불가 기능 추가
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: blueColor, //색변경
+        ),
+        title: Text(
+          'Sign In',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: Column(
         children: [
           const SizedBox(
@@ -251,6 +278,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   TextField Input(text, TextEditingController controller) {
     return TextField(
+      readOnly: _isSocial && (text == 'email' || text == 'name'),
       obscureText: text == 'password' && _passwordVisible,
       controller: controller,
       maxLength: text == 'nickname' ? 8 : (text == 'introduce' ? 30 : null),

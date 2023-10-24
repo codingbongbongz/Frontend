@@ -191,7 +191,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   await storage.deleteAll();
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => SignUpScreen(),
+                        builder: (BuildContext context) => SignUpScreen(
+                          isSocial: false,
+                        ),
                       ),
                       (route) => false);
                 },

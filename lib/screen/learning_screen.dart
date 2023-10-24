@@ -176,7 +176,7 @@ class _LearningScreenState extends State<LearningScreen> {
       player: YoutubePlayer(
         controller: _controller,
         showVideoProgressIndicator: false,
-        progressIndicatorColor: Colors.blueAccent,
+        progressIndicatorColor: blueColor,
         topActions: <Widget>[
           const SizedBox(width: 8.0),
           Expanded(
