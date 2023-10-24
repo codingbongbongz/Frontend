@@ -20,6 +20,51 @@ class _MyPageScreenState extends State<MyPageScreen> {
   String profileImageUrl = '';
 
   late Future myGetUserInfo;
+  patchUserInfo() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Text('사용자 정보 수정',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
+          content: EditUserInfoScreen(
+            profileImageUrl: profileImageUrl,
+            nickname: nickname,
+            introduce: introduce,
+          ),
+          insetPadding: const EdgeInsets.all(8.0),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  myGetUserInfo = getUserInfo();
+                });
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  logout() async {
+    final storage = FlutterSecureStorage();
+    await storage.deleteAll();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (BuildContext context) => SignUpScreen(
+            isSocial: false,
+          ),
+        ),
+        (route) => false);
+  }
+
   withdrawal() async {
     var dio = await authDio(context);
     final response = await dio.delete('mypage');
@@ -64,9 +109,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 20,
-        ),
+        // SizedBox(
+        //   height: 10,
+        // ),
         Padding(
           padding: const EdgeInsets.all(15.0),
           child: FutureBuilder(
@@ -78,18 +123,14 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   return Text('Error: ${snapshot.error}');
                 } else {
                   final data = snapshot.data;
-                  return Row(
-                    children: [
-                      Expanded(
-                          flex: 1,
-                          child: data['profileImageUrl'] != null
-                              ? Image.network(data['profileImageUrl'])
-                              : Icon(Icons.person)),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
+                  return GestureDetector(
+                    onTap: patchUserInfo,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
                             // mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -98,54 +139,32 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 data['nickname'],
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
                               ),
-                              Text(
-                                data['introduce'],
+                              SizedBox(
+                                height: 5,
                               ),
+                              Text(data['introduce'],
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                  )),
                             ],
                           ),
-                        ),
+                          data['profileImageUrl'] != null
+                              ? Image.network(data['profileImageUrl'])
+                              : Icon(Icons.person),
+                        ],
                       ),
-
-                      // Icon(Icons.edit),
-                      IconButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: EditUserInfoScreen(
-                                  profileImageUrl: profileImageUrl,
-                                  nickname: nickname,
-                                  introduce: introduce,
-                                ),
-                                insetPadding: const EdgeInsets.all(8.0),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        myGetUserInfo = getUserInfo();
-                                      });
-                                    },
-                                    child: const Text('확인'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        icon: Icon(Icons.edit),
-                        iconSize: 15,
-                      )
-                    ],
+                    ),
                   );
                 }
               }),
         ),
         SizedBox(
-          height: 30,
+          height: 10,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -159,8 +178,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ),
               TextButton(
                 onPressed: () {},
-                child:
-                    Text('학습했던 동영상 확인', style: TextStyle(color: Colors.black)),
+                child: Text('학습한 동영상', style: TextStyle(color: Colors.black)),
               ),
               Container(
                 height: 1.0,
@@ -168,7 +186,12 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 color: Colors.grey,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // MyPageScreen.themeNotifier.value =
+                  //     MyApp.themeNotifier.value == ThemeMode.light
+                  //         ? ThemeMode.dark
+                  //         : ThemeMode.light;
+                },
                 child: Text('다크모드', style: TextStyle(color: Colors.black)),
               ),
               Container(
@@ -177,8 +200,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 color: Colors.grey,
               ),
               TextButton(
-                onPressed: withdrawal,
-                child: Text('서비스 탈퇴하기', style: TextStyle(color: Colors.black)),
+                onPressed: logout,
+                child: Text('로그아웃', style: TextStyle(color: Colors.black)),
               ),
               Container(
                 height: 1.0,
@@ -186,18 +209,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 color: Colors.grey,
               ),
               TextButton(
-                onPressed: () async {
-                  final storage = FlutterSecureStorage();
-                  await storage.deleteAll();
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => SignUpScreen(
-                          isSocial: false,
-                        ),
-                      ),
-                      (route) => false);
-                },
-                child: Text('로그 아웃', style: TextStyle(color: Colors.black)),
+                onPressed: withdrawal,
+                child: Text('탈퇴하기', style: TextStyle(color: Colors.red)),
               ),
               Container(
                 height: 1.0,

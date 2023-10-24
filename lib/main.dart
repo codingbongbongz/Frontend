@@ -15,7 +15,7 @@ import 'layout/my_app_bar.dart';
 void main() async {
   // login 세션 관리
   WidgetsFlutterBinding.ensureInitialized();
-
+  print(ThemeMode.system);
   final storage = FlutterSecureStorage();
   // await storage.deleteAll();
   clearSecureStorageOnReinstall(storage);
@@ -24,7 +24,11 @@ void main() async {
   // print(userInfo['accessToken']);
   if (userInfo == null) {
     runApp(MaterialApp(
-        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          primaryColor: Colors.white,
+        ),
+        darkTheme: ThemeData.dark(),
         home: LoginScreen()));
     // runApp(MaterialApp(
     //     home: SignUpScreen(
@@ -35,7 +39,16 @@ void main() async {
     // print(accessToken);
     runApp(
       MaterialApp(
-        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          primaryColor: Colors.white,
+          brightness: Brightness.light,
+          // primarySwatch: Colors.blue,
+        ),
+        // theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
+        // themeMode: mode,
         home: MainScreen(),
         // home: LoginScreen(),
       ),
@@ -100,7 +113,8 @@ class _MainScreenState extends State<MainScreen> {
   BottomNavigationBar btmNavBar() {
     return BottomNavigationBar(
       onTap: onTap,
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
+      // backgroundColor:
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
