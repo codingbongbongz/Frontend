@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/const/color.dart';
+import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:youtube/youtube_thumbnail.dart';
@@ -117,260 +118,267 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 50,
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              '인기 영상',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: const MyAppBar(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 50,
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                '인기 영상',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 200,
-          child: FutureBuilder(
-              future: getPopularVideos(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final data = snapshot.data;
-                  // print(data![0].link);
-                  // var length = _popularVideos.length;
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: data!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var inkWell = InkWell(
-                        onTap: () {
-                          {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    LearningScreen(
-                                  // accessToken: accessToken,
-                                  link: data[index].link,
-                                  videoID: data[index].videoId,
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15.0),
-                          child: Image.network(
-                            YoutubeThumbnail(
-                              youtubeId: _popularVideos[index].link,
-                            ).hd(),
-                            // width: MediaQuery.of(context).size.width / 1.5,
-                            // scale: 10.0,
-                            // height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Container(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width / 2.0,
-                          ),
-                          alignment: Alignment.bottomLeft,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              inkWell,
-                              Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Text(
-                                  _popularVideos[index].videoTitle,
-                                  style: const TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.bold,
+          SizedBox(
+            height: 200,
+            child: FutureBuilder(
+                future: getPopularVideos(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final data = snapshot.data;
+                    // print(data![0].link);
+                    // var length = _popularVideos.length;
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var inkWell = InkWell(
+                          onTap: () {
+                            {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      LearningScreen(
+                                    // accessToken: accessToken,
+                                    link: data[index].link,
+                                    videoID: data[index].videoId,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Text(
-                                  _popularVideos[index].creator,
-                                  style: const TextStyle(
-                                    fontSize: 13.0,
-                                    color: Colors.grey,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                }
-              }),
-        ),
-        // const SizedBox(
-        //   height: 50,
-        //   child: Padding(
-        //     padding: EdgeInsets.all(8.0),
-        //     child: Text(
-        //       '카테고리',
-        //       textAlign: TextAlign.left,
-        //       style: TextStyle(
-        //         fontSize: 24,
-        //         fontWeight: FontWeight.bold,
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        Expanded(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 100,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: MultiSelectDialogField(
-                          items: _items,
-                          title: const Text(
-                            "Select Categories",
-                          ),
-                          selectedColor: blueColor,
-                          decoration: BoxDecoration(
-                            color: blueColor.withOpacity(0.1),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(
-                              color: blueColor,
-                              width: 2,
-                            ),
-                          ),
-                          buttonIcon: const Icon(
-                            Icons.arrow_downward,
-                            color: blueColor,
-                          ),
-                          buttonText: Text(
-                            "Favorite Categories",
-                            style: TextStyle(
-                              color: blueColor,
-                              fontSize: 15,
-                            ),
-                          ),
-                          onConfirm: (results) {
-                            getCategorieVideos(results);
+                              );
+                            }
                           },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15.0),
+                            child: Image.network(
+                              YoutubeThumbnail(
+                                youtubeId: _popularVideos[index].link,
+                              ).hd(),
+                              // width: MediaQuery.of(context).size.width / 1.5,
+                              // scale: 10.0,
+                              // height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width / 2.0,
+                            ),
+                            alignment: Alignment.bottomLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                inkWell,
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    _popularVideos[index].videoTitle,
+                                    style: const TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    _popularVideos[index].creator,
+                                    style: const TextStyle(
+                                      fontSize: 13.0,
+                                      color: Colors.grey,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                }),
+          ),
+          // const SizedBox(
+          //   height: 50,
+          //   child: Padding(
+          //     padding: EdgeInsets.all(8.0),
+          //     child: Text(
+          //       '카테고리',
+          //       textAlign: TextAlign.left,
+          //       style: TextStyle(
+          //         fontSize: 24,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          Expanded(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 100,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: MultiSelectDialogField(
+                            items: _items,
+                            title: const Text(
+                              "Select Categories",
+                            ),
+                            selectedColor: blueColor,
+                            decoration: BoxDecoration(
+                              color: blueColor.withOpacity(0.1),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                              border: Border.all(
+                                color: blueColor,
+                                width: 2,
+                              ),
+                            ),
+                            buttonIcon: const Icon(
+                              Icons.arrow_downward,
+                              color: blueColor,
+                            ),
+                            buttonText: Text(
+                              "Favorite Categories",
+                              style: TextStyle(
+                                color: blueColor,
+                                fontSize: 15,
+                              ),
+                            ),
+                            onConfirm: (results) {
+                              getCategorieVideos(results);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: StreamBuilder(
-                    stream: _events.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const LinearProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        final data = snapshot.data!;
-                        return ListView.separated(
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                          itemCount: data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              // constraints: BoxConstraints(
-                              //   maxWidth:
-                              //       MediaQuery.of(context).size.width / 1.0,
-                              // ),
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  // mainAxisAlignment: MainAxisAlignment.,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  LearningScreen(
-                                                // accessToken: accessToken,
-                                                link: data[index].link,
-                                                videoID: data[index].videoId,
+                Expanded(
+                  child: StreamBuilder(
+                      stream: _events.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const LinearProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          final data = snapshot.data!;
+                          return ListView.separated(
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
+                            itemCount: data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                // constraints: BoxConstraints(
+                                //   maxWidth:
+                                //       MediaQuery.of(context).size.width / 1.0,
+                                // ),
+                                alignment: Alignment.bottomLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    // mainAxisAlignment: MainAxisAlignment.,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        LearningScreen(
+                                                  // accessToken: accessToken,
+                                                  link: data[index].link,
+                                                  videoID: data[index].videoId,
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                        child: Image.network(
-                                          YoutubeThumbnail(
-                                            youtubeId: data[index].link,
-                                          ).hq(),
-                                          // width: MediaQuery.of(context)
-                                          //         .size
-                                          //         .width /
-                                          //     1.5,
+                                            );
+                                          }
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
+                                          child: Image.network(
+                                            YoutubeThumbnail(
+                                              youtubeId: data[index].link,
+                                            ).hq(),
+                                            // width: MediaQuery.of(context)
+                                            //         .size
+                                            //         .width /
+                                            //     1.5,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Text(
-                                        _categoryVideos[index].videoTitle,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                      Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: Text(
+                                          _categoryVideos[index].videoTitle,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Text(
-                                        _categoryVideos[index].creator,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey,
+                                      Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: Text(
+                                          _categoryVideos[index].creator,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      }
-                    }),
-              ),
-            ],
+                              );
+                            },
+                          );
+                        }
+                      }),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

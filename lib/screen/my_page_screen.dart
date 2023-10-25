@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:k_learning/class/user.dart';
+import 'package:k_learning/const/color.dart';
 import 'package:k_learning/const/key.dart';
 import 'package:k_learning/main.dart';
 import 'package:k_learning/screen/edit_userinfo_screen.dart';
@@ -105,27 +106,37 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // SizedBox(
-        //   height: 10,
-        // ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: FutureBuilder(
-              future: myGetUserInfo,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final data = snapshot.data;
-                  return GestureDetector(
-                    onTap: patchUserInfo,
-                    child: Padding(
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(30.0),
+        child: AppBar(
+          backgroundColor:
+              MediaQuery.of(context).platformBrightness == Brightness.light
+                  ? Colors.white
+                  : Colors.grey[850],
+          elevation: 0,
+          // bottom: 50,
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // SizedBox(
+          //   height: 10,
+          // ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FutureBuilder(
+                future: myGetUserInfo,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final data = snapshot.data;
+                    return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,56 +169,95 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               : Icon(Icons.person),
                         ],
                       ),
+                    );
+                  }
+                }),
+          ),
+          // SizedBox(
+          //   height: 10,
+          // ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: Container(
+                color: MediaQuery.of(context).platformBrightness ==
+                        Brightness.light
+                    ? mediumGreyColor
+                    : Colors.grey[800],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Container(
+                    //   height: 1.0,
+                    //   color: lightGreyColor,
+                    // ),
+                    TextButton(
+                      onPressed: patchUserInfo,
+                      child: Text(
+                        '학습한 동영상',
+                        style: TextStyle(
+                          color: MediaQuery.of(context).platformBrightness ==
+                                  Brightness.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
                     ),
-                  );
-                }
-              }),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 1.0,
-                // width: 300.0,
-                color: Colors.grey,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  '학습한 동영상',
+                    Container(
+                      height: 1.0,
+                      // width: 300.0,
+                      color: lightGreyColor,
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        '사용자 정보 수정',
+                        style: TextStyle(
+                          color: MediaQuery.of(context).platformBrightness ==
+                                  Brightness.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1.0,
+                      // width: 300.0,
+                      color: lightGreyColor,
+                    ),
+                    TextButton(
+                      onPressed: logout,
+                      child: Text(
+                        '로그아웃',
+                        style: TextStyle(
+                          color: MediaQuery.of(context).platformBrightness ==
+                                  Brightness.light
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1.0,
+                      color: lightGreyColor,
+                    ),
+                    TextButton(
+                      onPressed: withdrawal,
+                      child: Text('탈퇴하기', style: TextStyle(color: Colors.red)),
+                    ),
+                    // Container(
+                    //   height: 1.0,
+                    //   // width: 300.0,
+                    //   color: Colors.grey,
+                    // ),
+                  ],
                 ),
               ),
-              Container(
-                height: 1.0,
-                // width: 300.0,
-                color: Colors.grey,
-              ),
-              TextButton(
-                onPressed: logout,
-                child: Text('로그아웃', style: TextStyle()),
-              ),
-              Container(
-                height: 1.0,
-                color: Colors.grey,
-              ),
-              TextButton(
-                onPressed: withdrawal,
-                child: Text('탈퇴하기', style: TextStyle(color: Colors.red)),
-              ),
-              Container(
-                height: 1.0,
-                // width: 300.0,
-                color: Colors.grey,
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

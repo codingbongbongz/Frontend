@@ -90,7 +90,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: null,
       body: FutureBuilder<bool>(
           future: init(),
           builder: (context, snapshot) {
