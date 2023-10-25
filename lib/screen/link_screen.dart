@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:k_learning/const/color.dart';
 // import 'package:flutter/services.dart';
 import 'package:k_learning/screen/learning_screen.dart';
 
@@ -17,6 +18,8 @@ class _LinkScreenState extends State<LinkScreen> {
   int videoID = 1;
   final _formKey = GlobalKey<FormState>();
   String _youtubeLink = '';
+  TextEditingController _textController = TextEditingController();
+  bool isTextEmpty = true;
 
   void uploadLink(context) async {
     var dio = await authDio(context);
@@ -50,11 +53,18 @@ class _LinkScreenState extends State<LinkScreen> {
   @override
   void initState() {
     super.initState();
+    _textController.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      isTextEmpty = _textController.text.isEmpty;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final linkController = TextEditingController();
+    // final linkController = TextEditingController();
 
     void onPressed() {
       final formKeyState = _formKey.currentState;
@@ -84,38 +94,58 @@ class _LinkScreenState extends State<LinkScreen> {
     void onSaved(String? value) {
       _youtubeLink = value!.substring(value.indexOf('=') + 1);
     }
+    // showModalBottomSheet(context: context, builder: (BuildContext context) {
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Form(
+    // });
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Form(
             key: _formKey,
-            child: TextFormField(
-              validator: validator,
-              onSaved: onSaved,
-              controller: linkController,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.link),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide: BorderSide(color: Colors.blue),
+            child: Container(
+              width: MediaQuery.of(context).size.width / 1,
+              child: TextFormField(
+                validator: validator,
+                onSaved: onSaved,
+                controller: _textController,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.link),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  labelText: 'Input Youtube Link',
                 ),
-                labelText: 'Input Youtube Link',
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (String value) {
+                  onPressed();
+                },
               ),
-              textInputAction: TextInputAction.done,
-              onFieldSubmitted: (String value) {
-                onPressed();
-              },
             ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: onPressed,
-          child: const Text('Start Learning'),
-        ),
-      ],
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width / 1,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                // padding: EdgeInsets.symmetric(
+                //   horizontal: MediaQuery.of(context).size.width / 3,
+                // ),
+                backgroundColor: isTextEmpty ? Colors.grey : blueColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              onPressed: onPressed,
+              child: const Text('Start Learning'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

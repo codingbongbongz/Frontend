@@ -135,7 +135,35 @@ class _MainScreenState extends State<MainScreen> {
   void onTap(int index) {
     if (_selectedIndex == index) return;
     setState(() {
-      _selectedIndex = index;
+      if (index == 1) {
+        // "add Video" 아이템을 클릭했을 때 linkScreen을 아래에서 올리기
+        showModalBottomSheet(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              // color: Colors.white,
+              // decoration: BoxDecoration(
+              //     // borderRadius: BorderRadius.only(
+              //     //   topLeft: Radius.circular(30),
+              //     //   topRight: Radius.circular(30),
+              //     // ),
+              //     // border: Border.all(
+              //     //   color: Colors.grey, // 원하는 border 색상을 지정
+              //     //   width: 2.0, // border의 두께를 조절
+              //     // ),
+              //     ),
+              height:
+                  MediaQuery.of(context).size.height / 3.0, // 원하는 height로 조절
+              child: LinkScreen(),
+            ); // LinkScreen이 아래에서 올라옴
+          },
+        );
+      } else {
+        _selectedIndex = index;
+      }
     });
   }
 
