@@ -178,21 +178,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ),
               TextButton(
                 onPressed: () {},
-                child: Text('학습한 동영상', style: TextStyle(color: Colors.black)),
-              ),
-              Container(
-                height: 1.0,
-                // width: 300.0,
-                color: Colors.grey,
-              ),
-              TextButton(
-                onPressed: () {
-                  // MyPageScreen.themeNotifier.value =
-                  //     MyApp.themeNotifier.value == ThemeMode.light
-                  //         ? ThemeMode.dark
-                  //         : ThemeMode.light;
-                },
-                child: Text('다크모드', style: TextStyle(color: Colors.black)),
+                child: Text(
+                  '학습한 동영상',
+                ),
               ),
               Container(
                 height: 1.0,
@@ -201,11 +189,10 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ),
               TextButton(
                 onPressed: logout,
-                child: Text('로그아웃', style: TextStyle(color: Colors.black)),
+                child: Text('로그아웃', style: TextStyle()),
               ),
               Container(
                 height: 1.0,
-                // width: 300.0,
                 color: Colors.grey,
               ),
               TextButton(

@@ -22,20 +22,38 @@ class _HomeScreenState extends State<HomeScreen> {
   late StreamController<List<Video>> _events;
 
   static final List<Categorie> _categories = [
-    Categorie(id: 1, name: "BTS"),
-    Categorie(id: 2, name: "BlackPink"),
-    Categorie(id: 3, name: "LifeStyle"),
-    Categorie(id: 4, name: "Music"),
-    Categorie(id: 5, name: "Dance"),
-    Categorie(id: 6, name: "Beauty"),
-    Categorie(id: 7, name: "Fashion"),
-    Categorie(id: 8, name: "Movie"),
-    Categorie(id: 9, name: "Animation"),
-    Categorie(id: 10, name: "Kids"),
-    Categorie(id: 11, name: "Travel"),
-    Categorie(id: 12, name: "Sports"),
-    Categorie(id: 13, name: "Health"),
-    Categorie(id: 14, name: "Politics"),
+    Categorie(id: 1, name: "Film & Animation"),
+    Categorie(id: 2, name: "Autos & Vehicles"),
+    Categorie(id: 10, name: "Music"),
+    Categorie(id: 15, name: "Pets & Animals"),
+    Categorie(id: 17, name: "Sports"),
+    Categorie(id: 18, name: "Short Movies"),
+    Categorie(id: 19, name: "Travel & Events"),
+    Categorie(id: 20, name: "Gaming"),
+    Categorie(id: 21, name: "Videoblogging"),
+    Categorie(id: 22, name: "People"),
+    Categorie(id: 23, name: "Comedy"),
+    Categorie(id: 24, name: "Entertainment"),
+    Categorie(id: 25, name: "News & Politics"),
+    Categorie(id: 26, name: "Howto & style"),
+    Categorie(id: 27, name: "Education"),
+    Categorie(id: 28, name: "Science & Technology"),
+    Categorie(id: 29, name: "Nonprofits & Activism"),
+    Categorie(id: 30, name: "Movies"),
+    Categorie(id: 31, name: "Anime/Animation"),
+    Categorie(id: 31, name: "Action/Adventure"),
+    Categorie(id: 33, name: "Classics"),
+    Categorie(id: 34, name: "Comedy"),
+    Categorie(id: 35, name: "Documentary"),
+    Categorie(id: 36, name: "Drama"),
+    Categorie(id: 37, name: "Family"),
+    Categorie(id: 38, name: "Foreign"),
+    Categorie(id: 39, name: "Horror"),
+    Categorie(id: 40, name: "Sci-Fi/Fantasy"),
+    Categorie(id: 41, name: "Thriller"),
+    Categorie(id: 42, name: "Shorts"),
+    Categorie(id: 43, name: "Shows"),
+    Categorie(id: 44, name: "Trailers"),
   ];
   late List<Video> _popularVideos = [];
   List<Video> _categoryVideos = [];
@@ -117,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         SizedBox(
-          height: 250,
+          height: 200,
           child: FutureBuilder(
               future: getPopularVideos(),
               builder: (context, snapshot) {
@@ -154,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             YoutubeThumbnail(
                               youtubeId: _popularVideos[index].link,
                             ).hd(),
-                            width: MediaQuery.of(context).size.width / 1.5,
+                            // width: MediaQuery.of(context).size.width / 1.5,
+                            // scale: 10.0,
                             // height: 150,
                             fit: BoxFit.cover,
                           ),
@@ -164,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Container(
                           constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width / 1.5,
+                            maxWidth: MediaQuery.of(context).size.width / 2.0,
                           ),
                           alignment: Alignment.bottomLeft,
                           child: Column(
@@ -202,20 +221,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               }),
         ),
-        const SizedBox(
-          height: 50,
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              '카테고리',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+        // const SizedBox(
+        //   height: 50,
+        //   child: Padding(
+        //     padding: EdgeInsets.all(8.0),
+        //     child: Text(
+        //       '카테고리',
+        //       textAlign: TextAlign.left,
+        //       style: TextStyle(
+        //         fontSize: 24,
+        //         fontWeight: FontWeight.bold,
+        //       ),
+        //     ),
+        //   ),
+        // ),
         Expanded(
           child: Column(
             children: [
@@ -277,12 +296,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: data.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
-                              alignment: Alignment.centerLeft,
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
+                              // constraints: BoxConstraints(
+                              //   maxWidth:
+                              //       MediaQuery.of(context).size.width / 1.0,
+                              // ),
+                              alignment: Alignment.bottomLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // mainAxisAlignment: MainAxisAlignment.,
+                                  children: [
+                                    InkWell(
                                       onTap: () {
                                         {
                                           Navigator.of(context).push(
@@ -300,31 +325,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(15.0),
-                                        child: Image.network(YoutubeThumbnail(
-                                          youtubeId: data[index].link,
-                                        ).small()),
+                                        child: Image.network(
+                                          YoutubeThumbnail(
+                                            youtubeId: data[index].link,
+                                          ).hq(),
+                                          // width: MediaQuery.of(context)
+                                          //         .size
+                                          //         .width /
+                                          //     1.5,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'videoTitle : ${_categoryVideos[index].videoTitle}',
+                                    Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Text(
+                                        _categoryVideos[index].videoTitle,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                      Text(
-                                        'creator : ${_categoryVideos[index].creator!}',
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Text(
+                                        _categoryVideos[index].creator,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                      Text(
-                                        'duration : ${_categoryVideos[index].duration!}',
-                                      ),
-                                      Text(
-                                        'views : ${_categoryVideos[index].views!}',
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
