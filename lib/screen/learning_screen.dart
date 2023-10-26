@@ -196,9 +196,104 @@ class _LearningScreenState extends State<LearningScreen> {
           _isPlayerReady = true;
         },
         onEnded: ((data) {
-          showDialog(
+          showModalBottomSheet(
               context: context,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               builder: (BuildContext context) {
+                return Container(
+                  height: MediaQuery.of(context).size.height *
+                      0.3, // 원하는 height로 조절
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('학습을 종료하시겠습니까?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '진행중인 학습 내용은 저장되지 않습니다',
+                          style: TextStyle(
+                            color: greyColor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                padding: EdgeInsets.symmetric(
+                                  // horizontal:
+                                  //     MediaQuery.of(context).size.width / 6,
+                                  vertical:
+                                      MediaQuery.of(context).size.width / 15,
+                                ),
+                                backgroundColor: Color(0xFFE0E0E0),
+                                // MediaQuery.of(context).platformBrightness ==
+                                //         Brightness.light
+                                //     ? greyColor
+                                //     : Colors.grey[850],
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('취소',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  )),
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                padding: EdgeInsets.symmetric(
+                                  // horizontal:
+                                  //     MediaQuery.of(context).size.width / 6,
+                                  vertical:
+                                      MediaQuery.of(context).size.width / 15,
+                                ),
+                                backgroundColor: blueColor,
+                                //     isTextEmpty ? Colors.grey : blueColor,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          MainScreen(),
+                                    ),
+                                    (route) => false);
+                              },
+                              child: const Text('학습 종료',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+
                 return AlertDialog(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
