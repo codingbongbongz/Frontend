@@ -554,35 +554,41 @@ class _LearningScreenState extends State<LearningScreen> {
   Widget get _space => const SizedBox(height: 10);
 
   Widget barChart(data) {
-    return SfCartesianChart(
-        primaryXAxis: CategoryAxis(
-          labelStyle: const TextStyle(
-            fontSize: 10,
-          ),
-          majorGridLines: MajorGridLines(width: 0),
-        ),
-        primaryYAxis: NumericAxis(
-          minimum: 0,
-          maximum: 100,
-          interval: 25,
-          // isVisible: false,
-        ),
-        // primaryYAxis: CategoryAxis(),
-        tooltipBehavior: _tooltip,
-        margin: EdgeInsets.all(10),
-        // plotAreaBorderWidth: 0,
-        series: <ChartSeries<_ChartData, String>>[
-          ColumnSeries<_ChartData, String>(
-            dataSource: data!,
-            xValueMapper: (_ChartData data, _) => data.x,
-            yValueMapper: (_ChartData data, _) => data.y,
-            name: 'evaulation',
-            color: blueColor,
-            width: 0.5,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-          )
-        ]);
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 1.5,
+        child: SfCartesianChart(
+            primaryXAxis: CategoryAxis(
+              labelStyle: const TextStyle(
+                fontSize: 16,
+              ),
+              majorGridLines: MajorGridLines(width: 0),
+            ),
+            primaryYAxis: NumericAxis(
+              minimum: 0,
+              maximum: 100,
+              interval: 25,
+              // isVisible: false,
+            ),
+            // primaryYAxis: CategoryAxis(),
+            tooltipBehavior: _tooltip,
+            margin: EdgeInsets.all(10),
+            // plotAreaBorderWidth: 0,
+            series: <ChartSeries<_ChartData, String>>[
+              ColumnSeries<_ChartData, String>(
+                dataSource: data!,
+                xValueMapper: (_ChartData data, _) => data.x,
+                yValueMapper: (_ChartData data, _) => data.y,
+                name: 'evaulation',
+                color: blueColor,
+                width: 0.5,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(6), topRight: Radius.circular(6)),
+              )
+            ]),
+      ),
+    );
   }
 
   void toggleSelect(value) {
