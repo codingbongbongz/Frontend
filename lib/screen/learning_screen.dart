@@ -485,7 +485,7 @@ class _LearningScreenState extends State<LearningScreen> {
                     padding: EdgeInsets.symmetric(
                       horizontal: 10,
                     ),
-                    height: 40,
+                    height: 50,
                     width: MediaQuery.of(context).size.width / 1,
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
@@ -538,6 +538,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         '발음 연습하기',
                         style: TextStyle(
                           color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -554,39 +555,52 @@ class _LearningScreenState extends State<LearningScreen> {
   Widget get _space => const SizedBox(height: 10);
 
   Widget barChart(data) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        width: MediaQuery.of(context).size.width * 1.5,
-        child: SfCartesianChart(
-            primaryXAxis: CategoryAxis(
-              labelStyle: const TextStyle(
-                fontSize: 16,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          margin: EdgeInsets.only(bottom: 10),
+          width: MediaQuery.of(context).size.width * 1.5,
+          height: MediaQuery.of(context).size.height * 0.25,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: lightGreyColor,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: SfCartesianChart(
+              // borderColor: lightGreyColor,
+              primaryXAxis: CategoryAxis(
+                labelStyle: const TextStyle(
+                  fontSize: 16,
+                ),
+                majorGridLines: MajorGridLines(width: 0),
               ),
-              majorGridLines: MajorGridLines(width: 0),
-            ),
-            primaryYAxis: NumericAxis(
-              minimum: 0,
-              maximum: 100,
-              interval: 25,
-              // isVisible: false,
-            ),
-            // primaryYAxis: CategoryAxis(),
-            tooltipBehavior: _tooltip,
-            margin: EdgeInsets.all(10),
-            // plotAreaBorderWidth: 0,
-            series: <ChartSeries<_ChartData, String>>[
-              ColumnSeries<_ChartData, String>(
-                dataSource: data!,
-                xValueMapper: (_ChartData data, _) => data.x,
-                yValueMapper: (_ChartData data, _) => data.y,
-                name: 'evaulation',
-                color: blueColor,
-                width: 0.5,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(6), topRight: Radius.circular(6)),
-              )
-            ]),
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                maximum: 100,
+                interval: 25,
+                // isVisible: false,
+              ),
+              // primaryYAxis: CategoryAxis(),
+              tooltipBehavior: _tooltip,
+              margin: EdgeInsets.all(10),
+              // plotAreaBorderWidth: 0,
+              series: <ChartSeries<_ChartData, String>>[
+                ColumnSeries<_ChartData, String>(
+                  dataSource: data!,
+                  xValueMapper: (_ChartData data, _) => data.x,
+                  yValueMapper: (_ChartData data, _) => data.y,
+                  name: 'evaulation',
+                  color: blueColor,
+                  width: 0.5,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(6),
+                      topRight: Radius.circular(6)),
+                )
+              ]),
+        ),
       ),
     );
   }
