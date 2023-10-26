@@ -556,20 +556,31 @@ class _LearningScreenState extends State<LearningScreen> {
   Widget barChart(data) {
     return SfCartesianChart(
         primaryXAxis: CategoryAxis(
-            labelStyle: const TextStyle(
-          fontSize: 10,
-        )),
-        primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
+          labelStyle: const TextStyle(
+            fontSize: 10,
+          ),
+          majorGridLines: MajorGridLines(width: 0),
+        ),
+        primaryYAxis: NumericAxis(
+          minimum: 0,
+          maximum: 100,
+          interval: 25,
+          // isVisible: false,
+        ),
+        // primaryYAxis: CategoryAxis(),
         tooltipBehavior: _tooltip,
+        margin: EdgeInsets.all(10),
+        // plotAreaBorderWidth: 0,
         series: <ChartSeries<_ChartData, String>>[
           ColumnSeries<_ChartData, String>(
             dataSource: data!,
             xValueMapper: (_ChartData data, _) => data.x,
             yValueMapper: (_ChartData data, _) => data.y,
             name: 'evaulation',
-            // color: const Color.fromRGBO(8, 142, 255, 1),
             color: blueColor,
             width: 0.5,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(6), topRight: Radius.circular(6)),
           )
         ]);
   }
