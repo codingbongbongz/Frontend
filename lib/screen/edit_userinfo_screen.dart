@@ -31,6 +31,16 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
   String _nickname = '';
   String _introduce = '';
   String _profileImageUrl = '';
+  // Map my_map = {};
+
+  // 수정된 nickname과 introduce를 반환하는 메서드
+  // Future<Map<String, dynamic>> getEditedUserInfo() async {
+  //   // 수정된 nickname과 introduce를 Map에 담아서 반환합니다.
+  //   return {
+  //     'nickname': nickname.text,
+  //     'introduce': introduce.text,
+  //   };
+  // }
 
   patchUserInfo() async {
     var dio = await authDio(context);
@@ -59,10 +69,14 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
     _profileImageUrl = widget.profileImageUrl;
     nickname.text = _nickname;
     introduce.text = _introduce;
+
+    // my_map['nickname'] = nickname.text;
+    // my_map['introduce'] = introduce.text;
   }
 
   @override
   void dispose() {
+    // patchUserInfo();
     super.dispose();
   }
 
@@ -86,7 +100,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                   // prefixIcon: Icon(Icons.link),,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.blue),
+                    borderSide: BorderSide(color: blueColor),
                   ),
                   labelText: 'nickname',
                   // hintText: _nickname,
@@ -94,7 +108,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: TextField(
                 controller: introduce,
                 maxLength: 30,
@@ -110,9 +124,25 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 ),
               ),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: patchUserInfo,
-              child: const Text('edit UserInfo'),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      MediaQuery.of(context).platformBrightness ==
+                              Brightness.light
+                          ? Color(0xFFF7F7F7)
+                          // ? Colors.grey
+                          : Colors.grey)),
+              child: Text(
+                'edit UserInfo',
+                style: TextStyle(
+                  // color: Colors.white,
+                  color: MediaQuery.of(context).platformBrightness ==
+                          Brightness.light
+                      ? Colors.black
+                      : Colors.white,
+                ),
+              ),
             )
           ],
         ),
@@ -124,7 +154,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
     final _imageSize = MediaQuery.of(context).size.width / 4;
 
     return Center(
-        child: Stack(
+        child: Column(
       children: [
         // if (_imageFile == null)
         //   Container(
@@ -159,21 +189,43 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
             radius: 80,
             backgroundImage: FileImage(File(_imageFile!.path)),
           ),
-        Positioned(
-          bottom: 20,
-          right: 20,
-          child: InkWell(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (builder) => bottomSheet(),
-                );
-              },
-              child: Icon(
-                Icons.camera_alt,
-                size: 40,
-              )),
-        )
+        // Positioned(
+        //   bottom: 10,
+        //   right: 10,
+        //   child: InkWell(
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           context: context,
+        //           builder: (builder) => bottomSheet(),
+        //         );
+        //       },
+        //       child: Icon(
+        //         Icons.camera_alt,
+        //         size: 40,
+        //       )),
+        // ),
+        TextButton(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (builder) => bottomSheet(),
+            );
+          },
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                  MediaQuery.of(context).platformBrightness == Brightness.light
+                      ? Color(0xFFF7F7F7)
+                      : Colors.grey)),
+          child: Text(
+            '프로필 사진 변경',
+            style: TextStyle(
+              color:
+                  MediaQuery.of(context).platformBrightness == Brightness.light
+                      ? Colors.black
+                      : Colors.white,
+            ),
+          ),
+        ),
       ],
     ));
   }

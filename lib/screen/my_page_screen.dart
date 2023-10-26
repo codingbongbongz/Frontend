@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:k_learning/class/user.dart';
@@ -12,17 +13,37 @@ class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
 
   @override
-  State<MyPageScreen> createState() => _MyPageScreenState();
+  State<MyPageScreen> createState() => MyPageScreenState();
 }
 
-class _MyPageScreenState extends State<MyPageScreen> {
+class MyPageScreenState extends State<MyPageScreen> {
   String nickname = '';
   String introduce = '';
   String profileImageUrl = '';
 
   late Future myGetUserInfo;
+
+  // patchUserInfo2(String nickname, String introduce) async {
+  //   var dio = await authDio(context);
+  //   FormData formData = FormData.fromMap({
+  //     // "Authorization": accessToken,
+  //     "nickname": nickname,
+  //     "introduce": introduce,
+  //   });
+  //   final response = await dio.patch(
+  //     'mypage',
+  //     data: formData,
+  //     options: Options(
+  //       headers: {"Content-Type": "multipart/form-data"},
+  //     ),
+  //   );
+
+  //   dynamic responseBody = response.data['data'];
+  //   // print(responseBody);
+  // }
+
   patchUserInfo() async {
-    showDialog(
+    var updatedInroduce = showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -40,8 +61,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
           insetPadding: const EdgeInsets.all(8.0),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                // Navigator.of(context).pop();
+                Navigator.pop(context);
                 setState(() {
                   myGetUserInfo = getUserInfo();
                 });
@@ -52,6 +74,10 @@ class _MyPageScreenState extends State<MyPageScreen> {
         );
       },
     );
+    if (updatedInroduce != null) {
+      print(updatedInroduce);
+    }
+    // print(editedUserInfo);
   }
 
   logout() async {
@@ -59,9 +85,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     await storage.deleteAll();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (BuildContext context) => SignUpScreen(
-            isSocial: false,
-          ),
+          builder: (BuildContext context) => LoginScreen(),
         ),
         (route) => false);
   }
@@ -69,17 +93,17 @@ class _MyPageScreenState extends State<MyPageScreen> {
   withdrawal() async {
     var dio = await authDio(context);
     final response = await dio.delete('mypage');
-
-    final storage = FlutterSecureStorage();
-    await storage.deleteAll();
-    dynamic responseBody = response.data;
-    print(responseBody);
-    // main();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (BuildContext context) => LoginScreen(),
-        ),
-        (route) => false);
+    logout();
+    // final storage = FlutterSecureStorage();
+    // await storage.deleteAll();
+    // dynamic responseBody = response.data;
+    // print(responseBody);
+    // // main();
+    // Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(
+    //       builder: (BuildContext context) => LoginScreen(),
+    //     ),
+    // (route) => false);
   }
 
   Future<dynamic> getUserInfo() async {
@@ -88,7 +112,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     dynamic responseBody = response.data['data'];
     // var _userInfo = responseBody.map((e) => User.fromJson(e));
 
-    print(responseBody);
+    // print(responseBody);
     // print(responseBody.runtimeType);
     profileImageUrl ??= responseBody['profileImageUrl'];
     nickname = responseBody['nickname'];
@@ -193,7 +217,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     //   color: lightGreyColor,
                     // ),
                     TextButton(
-                      onPressed: patchUserInfo,
+                      onPressed: () {},
                       child: Text(
                         '학습한 동영상',
                         style: TextStyle(
@@ -210,7 +234,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       color: lightGreyColor,
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: patchUserInfo,
                       child: Text(
                         '사용자 정보 수정',
                         style: TextStyle(

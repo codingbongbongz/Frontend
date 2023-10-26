@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:fk_toggle/fk_toggle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/class/evaluation.dart';
@@ -233,14 +234,23 @@ class _LearningScreenState extends State<LearningScreen> {
         }),
       ),
       builder: (context, player) => Scaffold(
-        appBar: const MyAppBar(),
+        appBar: AppBar(
+          backgroundColor:
+              MediaQuery.of(context).platformBrightness == Brightness.light
+                  ? Colors.white
+                  : Colors.grey[850],
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: blueColor, //색변경
+          ),
+        ),
         body: ListView(
           children: [
             player,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ToggleButtons(
                     isSelected: isSelected,
@@ -248,19 +258,21 @@ class _LearningScreenState extends State<LearningScreen> {
                     constraints: const BoxConstraints(
                       minHeight: 30,
                     ),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    children: const [
+                    borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    fillColor: Colors.black,
+                    selectedColor: Colors.white,
+                    children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: EdgeInsets.symmetric(horizontal: 18.0),
                         child: Text('전체 자막'),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: EdgeInsets.symmetric(horizontal: 18.0),
                         child: Text('실시간 자막'),
                       ),
                     ],
                   ),
-                  _space,
+                  // _space,
                   if (isWholeCaption &&
                       _transcripts.isNotEmpty &&
                       _evaluations.isNotEmpty)
@@ -282,24 +294,54 @@ class _LearningScreenState extends State<LearningScreen> {
                             },
                             child: (isCurrentCaption(context, index))
                                 ? (learnedPreviously(_evaluations[index])
-                                    ? Text(
-                                        _transcripts[index].sentence,
-                                        style: const TextStyle(
+                                    ? SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        child: Text(
+                                          _transcripts[index].sentence,
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.green),
+                                            color: Colors.green,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
                                       )
-                                    : Text(
-                                        _transcripts[index].sentence,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                    : SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        child: Text(
+                                          _transcripts[index].sentence,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
                                       ))
                                 : ((learnedPreviously(_evaluations[index])
-                                    ? Text(
-                                        _transcripts[index].sentence,
-                                        style: const TextStyle(
-                                            color: Colors.green),
+                                    ? SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        child: Text(
+                                          _transcripts[index].sentence,
+                                          style: const TextStyle(
+                                            color: Colors.green,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
                                       )
-                                    : Text(_transcripts[index].sentence))),
+                                    : SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        child: Text(
+                                            _transcripts[index].sentence,
+                                            style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                            )),
+                                      ))),
                           );
                           return Row(
                             children: [
@@ -316,7 +358,7 @@ class _LearningScreenState extends State<LearningScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 70,
+                          height: 50,
                           child: ListView.builder(
                             itemCount: _transcripts.length,
                             itemBuilder: (BuildContext context, int index) {
@@ -367,89 +409,61 @@ class _LearningScreenState extends State<LearningScreen> {
                             },
                           ),
                         ),
-                        Row(
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                _controller.pause();
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: VoiceListenScreen(
-                                        currentTranscript: currentTranscript,
-                                        transcriptID: currentTrasncriptId,
-                                        videoID: videoId,
-                                        // accessToken: accessToken,
-                                      ),
-                                      insetPadding: const EdgeInsets.all(8.0),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text('확인'),
-                                        ),
-                                      ],
-                                    );
-                                  },
+                        OutlinedButton.icon(
+                          icon: Icon(Icons.volume_up_outlined,
+                              color:
+                                  MediaQuery.of(context).platformBrightness ==
+                                          Brightness.light
+                                      ? Colors.black
+                                      : Colors.white),
+                          style: OutlinedButton.styleFrom(
+                            // padding: EdgeInsets.symmetric(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            //   horizontal: MediaQuery.of(context).size.width / 3,
+                            // ),
+                            // backgroundColor:
+                            //     isTextEmpty ? Colors.grey : blueColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          onPressed: () {
+                            _controller.pause();
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: VoiceListenScreen(
+                                    currentTranscript: currentTranscript,
+                                    transcriptID: currentTrasncriptId,
+                                    videoID: videoId,
+                                    // accessToken: accessToken,
+                                  ),
+                                  insetPadding: const EdgeInsets.all(8.0),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('확인'),
+                                    ),
+                                  ],
                                 );
                               },
-                              child: const Text(
-                                '정확한 발음 듣기',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
+                            );
+                          },
+                          label: Text(
+                            '정확한 발음 듣기',
+                            style: TextStyle(
+                              color:
+                                  (MediaQuery.of(context).platformBrightness ==
+                                          Brightness.light
+                                      ? Colors.black
+                                      : Colors.white),
                             ),
-                            TextButton(
-                              onPressed: () {
-                                _controller.pause();
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: VoiceInputScreen(
-                                        currentTranscript: currentTranscript,
-                                        transcriptID: currentTrasncriptId,
-                                        videoID: videoId,
-                                        // accessToken: accessToken,
-                                      ),
-                                      insetPadding: const EdgeInsets.all(8.0),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            getEvaluation();
-                                            int sec = _transcripts[currentIndex]
-                                                .startTime
-                                                .floor();
-                                            int milliSec =
-                                                ((_transcripts[currentIndex]
-                                                                .startTime -
-                                                            sec) *
-                                                        1000)
-                                                    .toInt();
-
-                                            _controller.seekTo(Duration(
-                                                seconds: sec,
-                                                milliseconds: milliSec));
-                                          },
-                                          child: const Text('확인'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: const Text(
-                                '발음 연습하기',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
@@ -467,6 +481,67 @@ class _LearningScreenState extends State<LearningScreen> {
                             return barChart(data);
                           }
                         }),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
+                    height: 40,
+                    width: MediaQuery.of(context).size.width / 1,
+                    child: TextButton.icon(
+                      style: TextButton.styleFrom(
+                        // padding: EdgeInsets.symmetric(
+                        //   horizontal: MediaQuery.of(context).size.width / 3,
+                        // ),
+                        backgroundColor: blueColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () {
+                        _controller.pause();
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: VoiceInputScreen(
+                                currentTranscript: currentTranscript,
+                                transcriptID: currentTrasncriptId,
+                                videoID: videoId,
+                                // accessToken: accessToken,
+                              ),
+                              insetPadding: const EdgeInsets.all(8.0),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    getEvaluation();
+                                    int sec = _transcripts[currentIndex]
+                                        .startTime
+                                        .floor();
+                                    int milliSec =
+                                        ((_transcripts[currentIndex].startTime -
+                                                    sec) *
+                                                1000)
+                                            .toInt();
+
+                                    _controller.seekTo(Duration(
+                                        seconds: sec, milliseconds: milliSec));
+                                  },
+                                  child: const Text('확인'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(Icons.mic, color: Colors.white),
+                      label: const Text(
+                        '발음 연습하기',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
