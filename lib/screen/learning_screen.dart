@@ -294,37 +294,37 @@ class _LearningScreenState extends State<LearningScreen> {
                   ),
                 );
 
-                return AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  content: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Finish Learning?",
-                      ),
-                    ],
-                  ),
-                  actions: <Widget>[
-                    ElevatedButton(
-                      child: const Text("No"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text("Yes"),
-                      onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => MainScreen(),
-                            ),
-                            (route) => false);
-                      },
-                    ),
-                  ],
-                );
+                // return AlertDialog(
+                //   shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(10.0)),
+                //   content: const Column(
+                //     mainAxisSize: MainAxisSize.min,
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: <Widget>[
+                //       Text(
+                //         "Finish Learning?",
+                //       ),
+                //     ],
+                //   ),
+                //   actions: <Widget>[
+                //     ElevatedButton(
+                //       child: const Text("No"),
+                //       onPressed: () {
+                //         Navigator.pop(context);
+                //       },
+                //     ),
+                //     ElevatedButton(
+                //       child: const Text("Yes"),
+                //       onPressed: () {
+                //         Navigator.of(context).pushAndRemoveUntil(
+                //             MaterialPageRoute(
+                //               builder: (BuildContext context) => MainScreen(),
+                //             ),
+                //             (route) => false);
+                //       },
+                //     ),
+                //   ],
+                // );
               });
         }),
       ),
@@ -526,25 +526,37 @@ class _LearningScreenState extends State<LearningScreen> {
                           ),
                           onPressed: () {
                             _controller.pause();
-                            showDialog(
+                            showModalBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              isScrollControlled: true,
                               context: context,
                               builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: VoiceListenScreen(
-                                    currentTranscript: currentTranscript,
-                                    transcriptID: currentTrasncriptId,
-                                    videoID: videoId,
-                                    // accessToken: accessToken,
-                                  ),
-                                  insetPadding: const EdgeInsets.all(8.0),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('확인'),
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(36.0),
+                                      topRight: Radius.circular(36.0)),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.94,
+                                    child: VoiceListenScreen(
+                                      currentTranscript: currentTranscript,
+                                      transcriptID: currentTrasncriptId,
+                                      videoID: videoId,
+                                      // accessToken: accessToken,
                                     ),
-                                  ],
+
+                                    // insetPadding: const EdgeInsets.all(8.0),
+                                    // actions: [
+                                    //   TextButton(
+                                    //     onPressed: () {
+                                    //       Navigator.of(context).pop();
+                                    //     },
+                                    //     child: const Text('확인'),
+                                    //   ),
+                                    // ],
+                                  ),
                                 );
                               },
                             );
@@ -576,68 +588,71 @@ class _LearningScreenState extends State<LearningScreen> {
                             return barChart(data);
                           }
                         }),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    height: 50,
-                    width: MediaQuery.of(context).size.width / 1,
-                    child: TextButton.icon(
-                      style: TextButton.styleFrom(
-                        // padding: EdgeInsets.symmetric(
-                        //   horizontal: MediaQuery.of(context).size.width / 3,
-                        // ),
-                        backgroundColor: blueColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                  if (isPartCaption)
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
                       ),
-                      onPressed: () {
-                        _controller.pause();
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: VoiceInputScreen(
-                                currentTranscript: currentTranscript,
-                                transcriptID: currentTrasncriptId,
-                                videoID: videoId,
-                                // accessToken: accessToken,
-                              ),
-                              insetPadding: const EdgeInsets.all(8.0),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    getEvaluation();
-                                    int sec = _transcripts[currentIndex]
-                                        .startTime
-                                        .floor();
-                                    int milliSec =
-                                        ((_transcripts[currentIndex].startTime -
-                                                    sec) *
-                                                1000)
-                                            .toInt();
-
-                                    _controller.seekTo(Duration(
-                                        seconds: sec, milliseconds: milliSec));
-                                  },
-                                  child: const Text('확인'),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width / 1,
+                      child: TextButton.icon(
+                        style: TextButton.styleFrom(
+                          // padding: EdgeInsets.symmetric(
+                          //   horizontal: MediaQuery.of(context).size.width / 3,
+                          // ),
+                          backgroundColor: blueColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        onPressed: () {
+                          _controller.pause();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: VoiceInputScreen(
+                                  currentTranscript: currentTranscript,
+                                  transcriptID: currentTrasncriptId,
+                                  videoID: videoId,
+                                  // accessToken: accessToken,
                                 ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      icon: Icon(Icons.mic, color: Colors.white),
-                      label: const Text(
-                        '발음 연습하기',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                                insetPadding: const EdgeInsets.all(8.0),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      getEvaluation();
+                                      int sec = _transcripts[currentIndex]
+                                          .startTime
+                                          .floor();
+                                      int milliSec =
+                                          ((_transcripts[currentIndex]
+                                                          .startTime -
+                                                      sec) *
+                                                  1000)
+                                              .toInt();
+
+                                      _controller.seekTo(Duration(
+                                          seconds: sec,
+                                          milliseconds: milliSec));
+                                    },
+                                    child: const Text('확인'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(Icons.mic, color: Colors.white),
+                        label: const Text(
+                          '발음 연습하기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

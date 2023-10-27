@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:k_learning/const/color.dart';
 
 import '../const/key.dart';
 
@@ -140,92 +141,196 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 10,
+    // return Scaffold(
+    //   // appBar: AppBar(),
+    //   body:
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(children: [
+          Container(
+            width: double.infinity,
+            height: 56.0,
+            child: Center(
+                child: Text(
+              "정확한 발음 듣기",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ) // Your desired title
+                ),
+          ),
+          Positioned(
+              left: 0.0,
+              top: 0.0,
+              child: IconButton(
+                  icon: Icon(Icons.close), // Your desired icon
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }))
+        ]),
+        // SizedBox(
+        //   height: 10,
+        // ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            top: 20.0,
+            bottom: 5.0,
+          ),
+          child: Text(
+            _transcript,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              _transcript,
-              style: const TextStyle(
-                fontSize: 15,
+          ),
+        ),
+        // SizedBox(
+        //   height: 10,
+        // ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            bottom: 0.0,
+          ),
+          child: FutureBuilder(
+            future: getTranslation(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                final data = snapshot.data;
+
+                return Text(data,
+                    style: const TextStyle(
+                      fontSize: 15,
+                    ));
+              }
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 1.0,
+            // height: 40,
+            child: ElevatedButton.icon(
+              onPressed: playRecording,
+              icon: Icon(
+                Icons.volume_up,
+                color: Colors.white,
+              ),
+              label: const Text(
+                '정확한 발음 듣기',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                backgroundColor: blueColor,
+                // padding: EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
+                  vertical: 18,
+                  horizontal: 20,
+                ),
+                //   horizontal: MediaQuery.of(context).size.width / 3,
+                // ),
+                // backgroundColor:
+                //     isTextEmpty ? Colors.grey : blueColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            FutureBuilder(
-              future: getTranslation(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final data = snapshot.data;
-
-                  return Text(data,
-                      style: const TextStyle(
-                        fontSize: 15,
-                      ));
-                }
-              },
-            ),
-            ElevatedButton(
-              onPressed: playRecording,
-              child: const Text('Play Recording'),
-            ),
-            // ElevatedButton(
-            //   onPressed: getNouns,
-            //   child: const Text('용례 생성'),
-            // ),
-            FutureBuilder(
-              future: getNouns(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  final data = snapshot.data;
-
-                  return Expanded(
-                    flex: 1,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
-                      itemCount: data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var nouns = data[index].keys.first;
-                        List<String> sentences = (data[index][nouns] as List)
-                            .map((item) => item as String)
-                            .toList();
-
-                        return ListTile(
-                          title: Text(nouns),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: sentences
-                                .map((item) => Text(item,
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                    )))
-                                .toList(),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }
-              },
-            )
-          ],
+          ),
         ),
-      ),
+        // ElevatedButton(
+        //   onPressed: getNouns,
+        //   child: const Text('용례 생성'),
+        // ),
+        FutureBuilder(
+          future: getNouns(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const LinearProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final data = snapshot.data;
+
+              return Expanded(
+                flex: 1,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  // separatorBuilder: (BuildContext context, int index) =>
+                  //     const Divider(
+                  //   thickness: 0.0,
+                  // ),
+                  itemCount: data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    var nouns = data[index].keys.first;
+                    List<String> sentences = (data[index][nouns] as List)
+                        .map((item) => item as String)
+                        .toList();
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              12.0), // 원하는 BorderRadius 값 설정
+                          color: MediaQuery.of(context).platformBrightness ==
+                                  Brightness.light
+                              ? lightGreyColor
+                              : Colors.grey[800], // ListTile의 배경색 설정
+                        ),
+                        // margin: EdgeInsets.all(8.0),
+                        // width: MediaQuery.of(context).size.width * 0.1,
+                        child: Container(
+                          margin: EdgeInsets.all(10.0),
+                          child: ListTile(
+                            title: Text(
+                              nouns,
+                              style: TextStyle(
+                                color: blueColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: sentences
+                                  .map((item) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0),
+                                        child: Text(item,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            )),
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+          },
+        )
+      ],
     );
   }
 }
