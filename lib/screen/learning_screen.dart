@@ -72,6 +72,17 @@ class _LearningScreenState extends State<LearningScreen> {
     return true;
   }
 
+  Future<dynamic> getTranslation(transcriptID) async {
+    var dio = await authDio(context);
+
+    final response = await dio.get('translations/$transcriptID');
+
+    dynamic responseBody = response.data['data'];
+    print(responseBody);
+    // 임시요
+    return responseBody[0]['text'];
+  }
+
   void getTranscripts() async {
     var dio = await authDio(context);
     final response = await dio.get('videos/$videoId/transcripts');
@@ -523,8 +534,11 @@ class _LearningScreenState extends State<LearningScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             _controller.pause();
+                            var translation =
+                                await getTranslation(currentTrasncriptId);
+                            print(translation);
                             showModalBottomSheet(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -603,13 +617,17 @@ class _LearningScreenState extends State<LearningScreen> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           _controller.pause();
+                          // var translation =
+                          //     await getTranslation(currentTrasncriptId);
+                          // print(translation);
                           showModalBottomSheet(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(36.0),
                             ),
                             isScrollControlled: true,
+                            isDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
                               return Container(
@@ -641,21 +659,25 @@ class _LearningScreenState extends State<LearningScreen> {
                                                   .close), // Your desired icon
                                               onPressed: () {
                                                 Navigator.of(context).pop();
-                                                getEvaluation();
-                                                int sec =
-                                                    _transcripts[currentIndex]
-                                                        .startTime
-                                                        .floor();
-                                                int milliSec =
-                                                    ((_transcripts[currentIndex]
-                                                                    .startTime -
-                                                                sec) *
-                                                            1000)
-                                                        .toInt();
+                                                // setState(() {
+                                                //   getEvaluation();
+                                                // });
+                                                // _controller.play();
+                                                // getEvaluation();
+                                                // int sec =
+                                                //     _transcripts[currentIndex]
+                                                //         .startTime
+                                                //         .floor();
+                                                // int milliSec =
+                                                //     ((_transcripts[currentIndex]
+                                                //                     .startTime -
+                                                //                 sec) *
+                                                //             1000)
+                                                //         .toInt();
 
-                                                _controller.seekTo(Duration(
-                                                    seconds: sec,
-                                                    milliseconds: milliSec));
+                                                // _controller.seekTo(Duration(
+                                                //     seconds: sec,
+                                                //     milliseconds: milliSec));
                                               }))
                                     ]),
                                     VoiceInputScreen(
@@ -692,7 +714,12 @@ class _LearningScreenState extends State<LearningScreen> {
                                 // ],
                               );
                             },
-                          );
+                          ).whenComplete(() {
+                            setState(() {
+                              getEvaluation();
+                            });
+                            _controller.play();
+                          });
                         },
                         icon: Icon(Icons.mic, color: Colors.white),
                         label: const Text(

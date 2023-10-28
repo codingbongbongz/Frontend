@@ -90,6 +90,8 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       if (kDebugMode) {
         print(response);
       }
+
+      Navigator.of(context).pop();
     } catch (e) {
       if (kDebugMode) {
         print("readFile Error : $e");
@@ -294,8 +296,10 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
               child: recordingButton(
                   stopRecording,
                   Icon(
-                    Icons.stop, color: Colors.white, // 아이콘 색상
-                    size: 40.0,
+                    Icons.stop,
+                    //  아이콘 색상
+                    color: Colors.white,
+                    size: 60.0,
                   ))),
         if (!neverRecorded && !isRecording)
           Center(
