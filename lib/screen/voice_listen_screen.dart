@@ -211,6 +211,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
                 return Text(data,
                     style: const TextStyle(
                       fontSize: 15,
+                      color: greyColor,
                     ));
               }
             },

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:fk_toggle/fk_toggle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/class/evaluation.dart';
@@ -453,7 +452,7 @@ class _LearningScreenState extends State<LearningScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 50,
+                          height: 60,
                           child: ListView.builder(
                             itemCount: _transcripts.length,
                             itemBuilder: (BuildContext context, int index) {
@@ -606,39 +605,91 @@ class _LearningScreenState extends State<LearningScreen> {
                         ),
                         onPressed: () {
                           _controller.pause();
-                          showDialog(
+                          showModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(36.0),
+                            ),
+                            isScrollControlled: true,
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: VoiceInputScreen(
-                                  currentTranscript: currentTranscript,
-                                  transcriptID: currentTrasncriptId,
-                                  videoID: videoId,
-                                  // accessToken: accessToken,
-                                ),
-                                insetPadding: const EdgeInsets.all(8.0),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      getEvaluation();
-                                      int sec = _transcripts[currentIndex]
-                                          .startTime
-                                          .floor();
-                                      int milliSec =
-                                          ((_transcripts[currentIndex]
-                                                          .startTime -
-                                                      sec) *
-                                                  1000)
-                                              .toInt();
+                              return Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.50,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Stack(children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 56.0,
+                                        child: Center(
+                                            child: Text(
+                                          "발음 연습하기",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ) // Your desired title
+                                            ),
+                                      ),
+                                      Positioned(
+                                          left: 0.0,
+                                          top: 0.0,
+                                          child: IconButton(
+                                              icon: Icon(Icons
+                                                  .close), // Your desired icon
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                                getEvaluation();
+                                                int sec =
+                                                    _transcripts[currentIndex]
+                                                        .startTime
+                                                        .floor();
+                                                int milliSec =
+                                                    ((_transcripts[currentIndex]
+                                                                    .startTime -
+                                                                sec) *
+                                                            1000)
+                                                        .toInt();
 
-                                      _controller.seekTo(Duration(
-                                          seconds: sec,
-                                          milliseconds: milliSec));
-                                    },
-                                    child: const Text('확인'),
-                                  ),
-                                ],
+                                                _controller.seekTo(Duration(
+                                                    seconds: sec,
+                                                    milliseconds: milliSec));
+                                              }))
+                                    ]),
+                                    VoiceInputScreen(
+                                      currentTranscript: currentTranscript,
+                                      transcriptID: currentTrasncriptId,
+                                      videoID: videoId,
+                                      // accessToken: accessToken,
+                                    ),
+                                  ],
+                                ),
+
+                                // insetPadding: const EdgeInsets.all(8.0),
+                                // actions: [
+                                //   TextButton(
+                                //     onPressed: () {
+                                //       Navigator.of(context).pop();
+                                //       getEvaluation();
+                                //       int sec = _transcripts[currentIndex]
+                                //           .startTime
+                                //           .floor();
+                                //       int milliSec =
+                                //           ((_transcripts[currentIndex]
+                                //                           .startTime -
+                                //                       sec) *
+                                //                   1000)
+                                //               .toInt();
+
+                                //       _controller.seekTo(Duration(
+                                //           seconds: sec,
+                                //           milliseconds: milliSec));
+                                //     },
+                                //     child: const Text('확인'),
+                                //   ),
+                                // ],
                               );
                             },
                           );
@@ -666,7 +717,7 @@ class _LearningScreenState extends State<LearningScreen> {
 
   Widget barChart(data) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Container(

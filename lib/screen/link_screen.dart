@@ -98,12 +98,35 @@ class _LinkScreenState extends State<LinkScreen> {
 
     // });
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Form(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Stack(children: [
+          Container(
+            width: double.infinity,
+            height: 56.0,
+            child: Center(
+                child: Text(
+              "영상 링크 추가",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ) // Your desired title
+                ),
+          ),
+          Positioned(
+              left: 0.0,
+              top: 0.0,
+              child: IconButton(
+                  icon: Icon(Icons.close), // Your desired icon
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }))
+        ]),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
             key: _formKey,
             child: Container(
               width: MediaQuery.of(context).size.width / 1,
@@ -126,10 +149,10 @@ class _LinkScreenState extends State<LinkScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
             width: MediaQuery.of(context).size.width / 1,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -144,8 +167,8 @@ class _LinkScreenState extends State<LinkScreen> {
               child: const Text('Start Learning'),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
