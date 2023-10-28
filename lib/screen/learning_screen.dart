@@ -536,9 +536,9 @@ class _LearningScreenState extends State<LearningScreen> {
                           ),
                           onPressed: () async {
                             _controller.pause();
-                            var translation =
-                                await getTranslation(currentTrasncriptId);
-                            print(translation);
+                            // var translation =
+                            //     await getTranslation(currentTrasncriptId);
+                            // print(translation);
                             showModalBottomSheet(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -627,9 +627,20 @@ class _LearningScreenState extends State<LearningScreen> {
                               borderRadius: BorderRadius.circular(36.0),
                             ),
                             isScrollControlled: true,
-                            isDismissible: false,
+                            // isDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(36.0),
+                                    topRight: Radius.circular(36.0)),
+                                child: VoiceInputScreen(
+                                  currentTranscript: currentTranscript,
+                                  transcriptID: currentTrasncriptId,
+                                  videoID: videoId,
+                                  // accessToken: accessToken,
+                                ),
+                              );
                               return Container(
                                 height:
                                     MediaQuery.of(context).size.height * 0.50,

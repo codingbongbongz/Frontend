@@ -148,6 +148,12 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     }
   }
 
+  defaultColor() {
+    return MediaQuery.of(context).platformBrightness == Brightness.light
+        ? Colors.white
+        : Colors.grey[850];
+  }
+
   Widget recordingButton(func, icon) {
     return Padding(
       padding: const EdgeInsets.all(50.0),
@@ -162,7 +168,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
           height: 100, // 원형 버튼의 높이
           decoration: BoxDecoration(
             shape: BoxShape.circle, // 원형 모양 설정
-            color: blueColor, // 버튼 배경색
+            color: isRecording ? Colors.white : blueColor, // 버튼 배경색
           ),
           child: Center(
             child: icon,
@@ -220,144 +226,187 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 20.0,
-            bottom: 5.0,
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.50,
+      color: isRecording ? blueColor : defaultColor(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 56.0,
+                child: Center(
+                    child: Text(
+                  "발음 연습하기",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ) // Your desired title
+                    ),
+              ),
+              Positioned(
+                left: 0.0,
+                top: 0.0,
+                child: IconButton(
+                  icon: Icon(Icons.close), // Your desired icon
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ],
           ),
-          child: Text(
-            _transcript,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              top: 20.0,
+              bottom: 5.0,
+            ),
+            child: Text(
+              _transcript,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: isRecording
+                    ? Colors.white
+                    : MediaQuery.of(context).platformBrightness ==
+                            Brightness.light
+                        ? Colors.black
+                        : Colors.white,
+              ),
             ),
           ),
-        ),
-        // SizedBox(
-        //   height: 10,
-        // ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            bottom: 0.0,
-          ),
-          child: FutureBuilder(
-            future: getTranslation(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                final data = snapshot.data;
+          // SizedBox(
+          //   height: 10,
+          // ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              bottom: 0.0,
+            ),
+            child: FutureBuilder(
+              future: getTranslation(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final data = snapshot.data;
 
-                return Text(data,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: greyColor,
-                    ));
-              }
-            },
+                  return Text(data,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: isRecording
+                            ? Colors.white
+                            : MediaQuery.of(context).platformBrightness ==
+                                    Brightness.light
+                                ? Color(0xFF999999)
+                                // ? Colors.red
+                                : Colors.white,
+                      ));
+                }
+              },
+            ),
           ),
-        ),
-        // if (isRecording)
-        // const Column(
-        //   children: [
-        //     CircularProgressIndicator(),
-        //     Text(
-        //       "Recording in Progress",
-        //       style: TextStyle(
-        //         fontSize: 20,
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        // Center
-        //(child: CircularProgressIndicator()),
-        if (neverRecorded)
-          Center(
-            child: recordingButton(
-                startRecording,
-                Icon(
-                  Icons.mic,
-                  color: Colors.white, // 아이콘 색상
-                  size: 40.0, // ),
-                )),
-          ),
-        if (!neverRecorded && isRecording)
-          Center(
+          // if (isRecording)
+          // const Column(
+          //   children: [
+          //     CircularProgressIndicator(),
+          //     Text(
+          //       "Recording in Progress",
+          //       style: TextStyle(
+          //         fontSize: 20,
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // Center
+          //(child: CircularProgressIndicator()),
+          if (neverRecorded)
+            Center(
               child: recordingButton(
-                  stopRecording,
-                  Icon(
-                    Icons.stop,
-                    //  아이콘 색상
-                    color: Colors.white,
-                    size: 60.0,
-                  ))),
-        if (!neverRecorded && !isRecording)
-          Center(
-            child: Column(
-              children: [
-                button(
-                  '녹음 내용 듣기',
-                  playRecording,
-                  Icon(Icons.replay, color: Colors.white),
-                  blueColor,
-                  Colors.white,
-                ),
-                button(
-                  '결과 확인하기',
-                  readFile,
-                  Icon(Icons.check, color: Colors.white),
-                  blueColor,
-                  Colors.white,
-                ),
-                button(
-                  '다시 연습하기',
                   startRecording,
-                  Icon(Icons.mic, color: blueColor),
-                  blueColor.withOpacity(0.1),
-                  blueColor,
-                ),
-              ],
+                  Icon(
+                    Icons.mic,
+                    color: Colors.white, // 아이콘 색상
+                    size: 40.0, // ),
+                  )),
             ),
-          ),
+          if (!neverRecorded && isRecording)
+            Center(
+                child: recordingButton(
+                    stopRecording,
+                    Icon(
+                      Icons.stop,
+                      //  아이콘 색상
+                      color: blueColor,
+                      size: 60.0,
+                    ))),
+          if (!neverRecorded && !isRecording)
+            Center(
+              child: Column(
+                children: [
+                  button(
+                    '녹음 내용 듣기',
+                    playRecording,
+                    Icon(Icons.replay, color: Colors.white),
+                    blueColor,
+                    Colors.white,
+                  ),
+                  button(
+                    '결과 확인하기',
+                    readFile,
+                    Icon(Icons.check, color: Colors.white),
+                    blueColor,
+                    Colors.white,
+                  ),
+                  button(
+                    '다시 연습하기',
+                    startRecording,
+                    Icon(Icons.mic, color: blueColor),
+                    blueColor.withOpacity(0.1),
+                    blueColor,
+                  ),
+                ],
+              ),
+            ),
 
-        // ElevatedButton(
-        //   onPressed: isRecording ? stopRecording : startRecording,
-        //   child: isRecording
-        //       ? const Text('Stop Recording')
-        //       : const Icon(Icons.mic),
-        //   style: ElevatedButton.styleFrom(
-        //       shape: RoundedRectangleBorder(
-        //     borderRadius: BorderRadius.circular(100),
-        //   )),
-        // ),
-        // const SizedBox(
-        //   height: 25,
-        // ),
-        // if (!isRecording && audioPath != '')
-        //   Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       ElevatedButton(
-        //         onPressed: readFile,
-        //         child: const Text('Submit'),
-        //       ),
-        //       ElevatedButton(
-        //         onPressed: playRecording,
-        //         child: const Text('Play Recording'),
-        //       )
-        //     ],
-        //   ),
-      ],
+          // ElevatedButton(
+          //   onPressed: isRecording ? stopRecording : startRecording,
+          //   child: isRecording
+          //       ? const Text('Stop Recording')
+          //       : const Icon(Icons.mic),
+          //   style: ElevatedButton.styleFrom(
+          //       shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(100),
+          //   )),
+          // ),
+          // const SizedBox(
+          //   height: 25,
+          // ),
+          // if (!isRecording && audioPath != '')
+          //   Column(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       ElevatedButton(
+          //         onPressed: readFile,
+          //         child: const Text('Submit'),
+          //       ),
+          //       ElevatedButton(
+          //         onPressed: playRecording,
+          //         child: const Text('Play Recording'),
+          //       )
+          //     ],
+          //   ),
+        ],
+      ),
     );
   }
 }
