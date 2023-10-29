@@ -152,14 +152,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:
+            MediaQuery.of(context).platformBrightness == Brightness.light
+                ? Colors.white
+                : Colors.grey[850],
         elevation: 0,
         iconTheme: IconThemeData(
           color: blueColor, //색변경
         ),
         title: Text(
           'Sign In',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: blueColor),
         ),
       ),
       body: Column(
@@ -227,7 +230,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
           // const SizedBox(
           //   height: 50,
           // ),
-          ElevatedButton(
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+            height: 50,
+            width: MediaQuery.of(context).size.width / 1,
+            child: ElevatedButton(
+              style: TextButton.styleFrom(
+                // padding: EdgeInsets.symmetric(
+                //   horizontal: MediaQuery.of(context).size.width / 3,
+                // ),
+                backgroundColor: blueColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
               onPressed: () async {
                 // var dio = await authDio(context);
                 var dio = Dio();
@@ -268,7 +285,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       (route) => false);
                 }
               },
-              child: Text('SIGN UP')),
+              child: Text(
+                'SIGN IN',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           // if (Platform.isIOS) _loginButton('apple_logo', signInWithApple),
           // if (Platform.isAndroid) _loginButton('google_logo', signInWithGoogle),
         ],
