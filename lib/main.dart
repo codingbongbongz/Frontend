@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:k_learning/screen/home_screen.dart';
 import 'package:k_learning/screen/link_screen.dart';
@@ -15,6 +16,10 @@ import 'layout/my_app_bar.dart';
 void main() async {
   // login 세션 관리
   WidgetsFlutterBinding.ensureInitialized();
+
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   print(ThemeMode.system);
   final storage = FlutterSecureStorage();
   // await storage.deleteAll();
