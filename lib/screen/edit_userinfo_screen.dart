@@ -127,20 +127,17 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
             TextButton(
               onPressed: patchUserInfo,
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      MediaQuery.of(context).platformBrightness ==
-                              Brightness.light
-                          ? Color(0xFFF7F7F7)
-                          // ? Colors.grey
-                          : Colors.grey)),
+                backgroundColor: MaterialStateProperty.all(
+                  getPlatformDependentColor(
+                      context, Color(0xFFF7F7F7), Colors.grey),
+                ),
+              ),
               child: Text(
                 'edit UserInfo',
                 style: TextStyle(
                   // color: Colors.white,
-                  color: MediaQuery.of(context).platformBrightness ==
-                          Brightness.light
-                      ? Colors.black
-                      : Colors.white,
+                  color: getPlatformDependentColor(
+                      context, Colors.black, Colors.white),
                 ),
               ),
             )
@@ -212,17 +209,16 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
             );
           },
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                  MediaQuery.of(context).platformBrightness == Brightness.light
-                      ? Color(0xFFF7F7F7)
-                      : Colors.grey)),
+            backgroundColor: MaterialStateProperty.all(
+              getPlatformDependentColor(
+                  context, Color(0xFFF7F7F7), Colors.grey),
+            ),
+          ),
           child: Text(
             '프로필 사진 변경',
             style: TextStyle(
-              color:
-                  MediaQuery.of(context).platformBrightness == Brightness.light
-                      ? Colors.black
-                      : Colors.white,
+              color: getPlatformDependentColor(
+                  context, Colors.black, Colors.white),
             ),
           ),
         ),

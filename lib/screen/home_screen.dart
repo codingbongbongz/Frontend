@@ -253,34 +253,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: MultiSelectDialogField(
-                            // backgroundColor:
-                            //     MediaQuery.of(context).platformBrightness ==
-                            //             Brightness.light
-                            //         ? Colors.white
-                            //         : Colors.grey[600],
                             items: _items,
                             itemsTextStyle: TextStyle(
-                              color:
-                                  MediaQuery.of(context).platformBrightness ==
-                                          Brightness.light
-                                      ? Colors.black
-                                      : Colors.white,
+                              color: getPlatformDependentColor(
+                                  context, Colors.black, Colors.white),
                             ),
-                            unselectedColor:
-                                MediaQuery.of(context).platformBrightness ==
-                                        Brightness.light
-                                    ? Colors.black
-                                    : Colors.white,
+                            unselectedColor: getPlatformDependentColor(
+                                context, Colors.white, Colors.white),
                             selectedItemsTextStyle: TextStyle(color: blueColor),
                             title: Text(
                               "Select Categories",
-                              style: TextStyle(
-                                  // color:
-                                  //     MediaQuery.of(context).platformBrightness ==
-                                  //             Brightness.light
-                                  //         ? Colors.black
-                                  //         : Colors.white,
-                                  ),
+                              style: TextStyle(),
                             ),
                             selectedColor: blueColor,
                             decoration: BoxDecoration(

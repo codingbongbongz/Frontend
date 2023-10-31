@@ -148,12 +148,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
     }
   }
 
-  defaultColor() {
-    return MediaQuery.of(context).platformBrightness == Brightness.light
-        ? Colors.white
-        : Colors.grey[850];
-  }
-
   Widget recordingButton(func, icon) {
     return Padding(
       padding: const EdgeInsets.all(50.0),
@@ -228,7 +222,9 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.50,
-      color: isRecording ? blueColor : defaultColor(),
+      color: isRecording
+          ? blueColor
+          : getPlatformDependentColor(context, Colors.white, Colors.grey[850]),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,10 +270,8 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
                 fontWeight: FontWeight.bold,
                 color: isRecording
                     ? Colors.white
-                    : MediaQuery.of(context).platformBrightness ==
-                            Brightness.light
-                        ? Colors.black
-                        : Colors.white,
+                    : getPlatformDependentColor(
+                        context, Colors.black, Colors.white),
               ),
             ),
           ),
@@ -305,11 +299,8 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
                         fontSize: 15,
                         color: isRecording
                             ? Colors.white
-                            : MediaQuery.of(context).platformBrightness ==
-                                    Brightness.light
-                                ? Color(0xFF999999)
-                                // ? Colors.red
-                                : Colors.white,
+                            : getPlatformDependentColor(
+                                context, Color(0xFF999999), Colors.white),
                       ));
                 }
               },

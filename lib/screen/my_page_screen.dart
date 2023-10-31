@@ -134,10 +134,8 @@ class MyPageScreenState extends State<MyPageScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(30.0),
         child: AppBar(
-          backgroundColor:
-              MediaQuery.of(context).platformBrightness == Brightness.light
-                  ? Colors.white
-                  : Colors.grey[850],
+          backgroundColor: getPlatformDependentColor(
+              context, Colors.white, Colors.grey[850]),
           elevation: 0,
           // bottom: 50,
         ),
@@ -205,10 +203,8 @@ class MyPageScreenState extends State<MyPageScreen> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Container(
-                color: MediaQuery.of(context).platformBrightness ==
-                        Brightness.light
-                    ? mediumGreyColor
-                    : Colors.grey[800],
+                color: getPlatformDependentColor(
+                    context, mediumGreyColor, Colors.grey[800]),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -221,10 +217,8 @@ class MyPageScreenState extends State<MyPageScreen> {
                       child: Text(
                         '학습한 동영상',
                         style: TextStyle(
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.light
-                              ? Colors.black
-                              : Colors.white,
+                          color: getPlatformDependentColor(
+                              context, Colors.black, Colors.white),
                         ),
                       ),
                     ),
@@ -238,10 +232,8 @@ class MyPageScreenState extends State<MyPageScreen> {
                       child: Text(
                         '사용자 정보 수정',
                         style: TextStyle(
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.light
-                              ? Colors.black
-                              : Colors.white,
+                          color: getPlatformDependentColor(
+                              context, Colors.black, Colors.white),
                         ),
                       ),
                     ),
@@ -255,10 +247,8 @@ class MyPageScreenState extends State<MyPageScreen> {
                       child: Text(
                         '로그아웃',
                         style: TextStyle(
-                          color: MediaQuery.of(context).platformBrightness ==
-                                  Brightness.light
-                              ? Colors.black
-                              : Colors.white,
+                          color: getPlatformDependentColor(
+                              context, Colors.black, Colors.white),
                         ),
                       ),
                     ),

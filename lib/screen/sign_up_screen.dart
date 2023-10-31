@@ -44,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _countryList = ["English", "Vitenamese", "Korean"];
   String _selectCountry = "English";
 
-  LoginPlatform _loginPlatform = LoginPlatform.none;
+  // LoginPlatform _loginPlatform = LoginPlatform.none;
 
   static final List<Categorie> _countries = [
     Categorie(id: 1, name: "English"),
@@ -53,19 +53,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     Categorie(id: 4, name: "Japanese"),
     Categorie(id: 5, name: "Chinese"),
   ];
-  void signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    if (googleUser != null) {
-      print('name = ${googleUser.displayName}');
-      print('email = ${googleUser.email}');
-      print('id = ${googleUser.id}');
+  // void signInWithGoogle() async {
+  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      setState(() {
-        _loginPlatform = LoginPlatform.google;
-      });
-    }
-  }
+  //   if (googleUser != null) {
+  //     print('name = ${googleUser.displayName}');
+  //     print('email = ${googleUser.email}');
+  //     print('id = ${googleUser.id}');
+
+  //     setState(() {
+  //       _loginPlatform = LoginPlatform.google;
+  //     });
+  //   }
+  // }
 
   // void signInWithApple() async {
   //   try {
@@ -152,17 +153,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            MediaQuery.of(context).platformBrightness == Brightness.light
-                ? Colors.white
-                : Colors.grey[850],
+        backgroundColor: getPlatformDependentColor(
+          context,
+          Colors.white,
+          Colors.grey[850],
+        ),
         elevation: 0,
         iconTheme: IconThemeData(
-          color: blueColor, //색변경
-        ),
+            color: getPlatformDependentColor(
+          context,
+          Colors.black,
+          Colors.white,
+        )),
         title: Text(
           'Sign In',
-          style: TextStyle(color: blueColor),
+          style: TextStyle(
+              color: getPlatformDependentColor(
+                  context, Colors.black, Colors.white)),
         ),
       ),
       body: Column(

@@ -248,10 +248,6 @@ class _LearningScreenState extends State<LearningScreen> {
                                       MediaQuery.of(context).size.width / 15,
                                 ),
                                 backgroundColor: Color(0xFFE0E0E0),
-                                // MediaQuery.of(context).platformBrightness ==
-                                //         Brightness.light
-                                //     ? greyColor
-                                //     : Colors.grey[850],
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
                               ),
@@ -340,10 +336,8 @@ class _LearningScreenState extends State<LearningScreen> {
       ),
       builder: (context, player) => Scaffold(
         appBar: AppBar(
-          backgroundColor:
-              MediaQuery.of(context).platformBrightness == Brightness.light
-                  ? Colors.white
-                  : Colors.grey[850],
+          backgroundColor: getPlatformDependentColor(
+              context, Colors.white, Colors.grey[850]),
           elevation: 0,
           iconTheme: IconThemeData(
             color: blueColor, //색변경
@@ -515,12 +509,11 @@ class _LearningScreenState extends State<LearningScreen> {
                           ),
                         ),
                         OutlinedButton.icon(
-                          icon: Icon(Icons.volume_up_outlined,
-                              color:
-                                  MediaQuery.of(context).platformBrightness ==
-                                          Brightness.light
-                                      ? Colors.black
-                                      : Colors.white),
+                          icon: Icon(
+                            Icons.volume_up_outlined,
+                            color: getPlatformDependentColor(
+                                context, Colors.black, Colors.white),
+                          ),
                           style: OutlinedButton.styleFrom(
                             // padding: EdgeInsets.symmetric(
                             padding: EdgeInsets.symmetric(
@@ -577,11 +570,8 @@ class _LearningScreenState extends State<LearningScreen> {
                           label: Text(
                             '정확한 발음 듣기',
                             style: TextStyle(
-                              color:
-                                  (MediaQuery.of(context).platformBrightness ==
-                                          Brightness.light
-                                      ? Colors.black
-                                      : Colors.white),
+                              color: getPlatformDependentColor(
+                                  context, Colors.black, Colors.white),
                             ),
                           ),
                         ),

@@ -94,10 +94,12 @@ class _LoginScreenState extends State<LoginScreen> {
       final userInfo = jsonDecode(utf8.decode(jsonData));
       print(userInfo);
       String email = userInfo['email'];
+      print(email);
 
-      setState(() {
-        _loginPlatform = LoginPlatform.apple;
-      });
+      // setState(() {
+      //   _loginPlatform = LoginPlatform.apple;
+      // });
+
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext context) => SignUpScreen(
@@ -206,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      // color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                     'K-learning'),
