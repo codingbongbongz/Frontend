@@ -22,6 +22,26 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
   bool _passwordVisible = false;
   bool isTextEmpty = true;
 
+  void showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Login Failed'),
+          content: Text('로그인에 실패했습니다. 올바른 정보를 입력하세요.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // AlertDialog 닫기
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   loginWithID() async {
     var dio = Dio();
     dio.options.baseUrl = baseURL;
@@ -30,29 +50,36 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
 
     var param = {'email': email.text, 'password': password.text};
 
-    final response = await dio.post(
-      'auth/signin',
-      data: param,
-    );
-    print(response.data);
-    if (response.statusCode == 200) {
-      var accessToken = response.data['data']['accessToken'];
-      var refreshToken = response.data['data']['refreshToken'];
-      print(accessToken);
-      print(refreshToken);
-      final storage = FlutterSecureStorage();
+    try {
+      final response = await dio.post(
+        'auth/signin',
+        data: param,
+      );
+      print(response);
 
-      var val = jsonEncode(
-          Token(accessToken: accessToken, refreshToken: refreshToken));
-      await storage.write(key: 'login', value: val);
+      if (response.statusCode == 200) {
+        var accessToken = response.data['data']['accessToken'];
+        var refreshToken = response.data['data']['refreshToken'];
+        print(accessToken);
+        print(refreshToken);
+        final storage = FlutterSecureStorage();
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (BuildContext context) => MainScreen(),
-          ),
-          (route) => false);
-    } else {
-      print('Login Fail');
+        var val = jsonEncode(
+            Token(accessToken: accessToken, refreshToken: refreshToken));
+        await storage.write(key: 'login', value: val);
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (BuildContext context) => MainScreen(),
+            ),
+            (route) => false);
+      } else {
+        print('Login Fail');
+        showAlertDialog(context);
+      }
+    } on DioException catch (e) {
+      print('404');
+      showAlertDialog(context);
     }
   }
 
