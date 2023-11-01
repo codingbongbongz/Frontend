@@ -177,9 +177,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Column(
             children: [
-              const SizedBox(
-                height: 50,
-              ),
+              // const SizedBox(
+              //   height: 50,
+              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Input('email', email),
