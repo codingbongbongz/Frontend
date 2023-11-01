@@ -10,6 +10,7 @@ import 'package:k_learning/class/login_platform.dart';
 import 'package:k_learning/const/color.dart';
 import 'package:k_learning/layout/my_app_bar.dart';
 import 'package:k_learning/main.dart';
+import 'package:k_learning/screen/login_with_id_screen.dart';
 import 'package:k_learning/screen/sign_up_screen.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -34,9 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void signInWithID() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => SignUpScreen(
-          isSocial: false,
-        ),
+        builder: (BuildContext context) => LoginWithIDScreen(
+            // isSocial: false,
+            ),
       ),
     );
   }
@@ -45,14 +46,29 @@ class _LoginScreenState extends State<LoginScreen> {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     if (googleUser != null) {
-      print('name = ${googleUser.displayName}');
-      print('email = ${googleUser.email}');
-      print('id = ${googleUser.id}');
+      print(googleUser.toString());
+      // print('name = ${googleUser.displayName}');
+      // print('email = ${googleUser.email}');
+      // print('id = ${googleUser.id}');
+      // print('serverAuthCode : ${googleUser.serverAuthCode}');
+
+      // print('_idToken = ${googleUser.idToken}');
 
       setState(() {
         _loginPlatform = LoginPlatform.google;
       });
+      // var dio = Dio();
+      // dio.options.baseUrl = baseURL;
+      // var param = {
+      //   'email': email.text,
+      //   'password': password.text
+      // };
 
+      // final response = await dio.post(
+      //   'auth/signup',
+      //   data: param,
+      // );
+      // if()
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext context) => SignUpScreen(
@@ -85,7 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
       print('credential.state = ${credential.email}');
       print('credential.state = ${credential.userIdentifier}');
       print('credential.state = ${credential.authorizationCode}');
-
       List<String> jwt = credential.identityToken?.split('.') ?? [];
       String payload = jwt[1];
       payload = base64.normalize(payload);

@@ -166,143 +166,158 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Colors.white,
         )),
         title: Text(
-          'Sign In',
+          'SIGN UP',
           style: TextStyle(
               color: getPlatformDependentColor(
                   context, Colors.black, Colors.white)),
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Input('email', email),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Input('name', name),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Input('nickname', nickname),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Input('password', password),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Input('introduce', introduce),
-          ),
-
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 20.0),
-          //   child: Input('country', country),
-          // ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: DropdownButton<String>(
-                value: _selectCountry,
-                items: _countryList
-                    .map((value) => DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectCountry = value!;
-                  });
-                }),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          // const SizedBox(
-          //   height: 50,
-          // ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10,
-            ),
-            height: 50,
-            width: MediaQuery.of(context).size.width / 1,
-            child: ElevatedButton(
-              style: TextButton.styleFrom(
-                // padding: EdgeInsets.symmetric(
-                //   horizontal: MediaQuery.of(context).size.width / 3,
-                // ),
-                backgroundColor: blueColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+          Column(
+            children: [
+              const SizedBox(
+                height: 50,
               ),
-              onPressed: () async {
-                // var dio = await authDio(context);
-                var dio = Dio();
-                dio.options.baseUrl = baseURL;
-                var param = {
-                  'email': email.text,
-                  'name': name.text,
-                  'nickname': nickname.text,
-                  'introduce': introduce.text,
-                  'country': _selectCountry,
-                  'password': password.text
-                };
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Input('email', email),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Input('name', name),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Input('password', password),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Input('nickname', nickname),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
 
-                final response = await dio.post(
-                  'auth/signup',
-                  data: param,
-                );
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Input('introduce', introduce),
+              ),
 
-                if (response.statusCode == 200) {
-                  var accessToken = response.data['data']['accessToken'];
-                  var refreshToken = response.data['data']['refreshToken'];
-                  print(accessToken);
-                  print(refreshToken);
-                  final storage = FlutterSecureStorage();
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 20.0),
+              //   child: Input('country', country),
+              // ),
 
-                  var val = jsonEncode(Token(
-                      accessToken: accessToken, refreshToken: refreshToken));
-                  await storage.write(key: 'login', value: val);
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: DropdownButton<String>(
+                    value: _selectCountry,
+                    items: _countryList
+                        .map((value) => DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectCountry = value!;
+                      });
+                    }),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              // const SizedBox(
+              //   height: 50,
+              // ),
 
-                  // await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
-                  // await storage.write(
-                  //     key: 'REFRESH_TOKEN', value: refreshToken);
+              // if (Platform.isIOS) _loginButton('apple_logo', signInWithApple),
+              // if (Platform.isAndroid) _loginButton('google_logo', signInWithGoogle),
+            ],
+          ),
+          Column(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                height: 50,
+                width: MediaQuery.of(context).size.width / 1,
+                child: ElevatedButton(
+                  style: TextButton.styleFrom(
+                    // padding: EdgeInsets.symmetric(
+                    //   horizontal: MediaQuery.of(context).size.width / 3,
+                    // ),
+                    backgroundColor: blueColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                  onPressed: () async {
+                    // var dio = await authDio(context);
+                    var dio = Dio();
+                    dio.options.baseUrl = baseURL;
+                    var param = {
+                      'email': email.text,
+                      'name': name.text,
+                      'nickname': nickname.text,
+                      'introduce': introduce.text,
+                      'country': _selectCountry,
+                      'password': password.text
+                    };
 
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => MainScreen(),
-                      ),
-                      (route) => false);
-                }
-              },
-              child: Text(
-                'SIGN IN',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                    final response = await dio.post(
+                      'auth/signup',
+                      data: param,
+                    );
+
+                    if (response.statusCode == 200) {
+                      var accessToken = response.data['data']['accessToken'];
+                      var refreshToken = response.data['data']['refreshToken'];
+                      print(accessToken);
+                      print(refreshToken);
+                      final storage = FlutterSecureStorage();
+
+                      var val = jsonEncode(Token(
+                          accessToken: accessToken,
+                          refreshToken: refreshToken));
+                      await storage.write(key: 'login', value: val);
+
+                      // await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
+                      // await storage.write(
+                      //     key: 'REFRESH_TOKEN', value: refreshToken);
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => MainScreen(),
+                          ),
+                          (route) => false);
+                    }
+                  },
+                  child: Text(
+                    'SIGN UP',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(
+                height: 50,
+              ),
+            ],
           ),
-          // if (Platform.isIOS) _loginButton('apple_logo', signInWithApple),
-          // if (Platform.isAndroid) _loginButton('google_logo', signInWithGoogle),
         ],
       ),
     );
@@ -335,7 +350,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 icon: Icon(
                   // Based on passwordVisible state choose the icon
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Theme.of(context).primaryColorDark,
+                  // color: Theme.of(context).primaryColorDark,
                 ),
                 onPressed: () {
                   // Update the state i.e. toogle the state of passwordVisible variable
