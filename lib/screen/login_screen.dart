@@ -45,8 +45,21 @@ class _LoginScreenState extends State<LoginScreen> {
   void signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    // final credential = GoogleAuthProvider.credential(
+    //   accessToken: googleAuth?.accessToken,
+    //   idToken: googleAuth?.idToken,
+    // );
+
     if (googleUser != null) {
       print(googleUser.toString());
+      print('accessToken : ${googleAuth?.accessToken}');
+      print(googleAuth?.idToken);
+
+      // print(get(googleUser.idToken));
       // print('name = ${googleUser.displayName}');
       // print('email = ${googleUser.email}');
       // print('id = ${googleUser.id}');
@@ -91,16 +104,22 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
         webAuthenticationOptions: WebAuthenticationOptions(
           clientId: "Klearning.example.com",
+          // clientId: "k_learning.example.com",
           redirectUri: Uri.parse(
-            "https://magnificent-east-turnip/glitch.me/callbacks/sign_in_with_apple",
+            "https://immense-granite-fernleaf.glitch.me/callbacks/sign_in_with_apple",
           ),
+          // redirectUri: Uri.parse(
+          //   "https://www.klearning.o-r.kr/apple/callback",
+          // ),
         ),
       );
 
-      print('credential.state = $credential');
+      print('credential.state = ${credential.toString()}');
       print('credential.state = ${credential.email}');
       print('credential.state = ${credential.userIdentifier}');
       print('credential.state = ${credential.authorizationCode}');
+      print('credential.state = ${credential.identityToken}');
+
       List<String> jwt = credential.identityToken?.split('.') ?? [];
       String payload = jwt[1];
       payload = base64.normalize(payload);
@@ -115,15 +134,15 @@ class _LoginScreenState extends State<LoginScreen> {
       //   _loginPlatform = LoginPlatform.apple;
       // });
 
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) => SignUpScreen(
-            isSocial: true,
-            email: credential.email ?? "",
-            name: (credential.familyName ?? "") + (credential.givenName ?? ""),
-          ),
-        ),
-      );
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (BuildContext context) => SignUpScreen(
+      //       isSocial: true,
+      //       email: credential.email ?? "",
+      //       name: (credential.familyName ?? "") + (credential.givenName ?? ""),
+      //     ),
+      //   ),
+      // );
     } catch (error) {
       print('error = $error');
     }

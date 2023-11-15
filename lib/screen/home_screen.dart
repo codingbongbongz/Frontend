@@ -82,24 +82,26 @@ class _HomeScreenState extends State<HomeScreen> {
       _events.add([]);
       return;
     }
-    FormData formData = FormData.fromMap({
-      "categoryId": results[0].id,
-    });
+
+    String param = "";
+    for (Categorie result in results) {
+      param += "categoryIds=${result.id}&";
+    }
 
     final response = await dio.get(
-      'videos/category',
-      data: formData,
-      options: Options(
-        headers: {"Content-Type": "multipart/form-data"},
-        // contentType: Headers.multipartFormDataContentType,
-      ),
+      'videos/categories?$param',
     );
 
-    // if (kDebugMode) {
-    //   print("response : $response");
-    // }
-    List<dynamic> responseBody = response.data['data']['categoryVideo'];
-    _categoryVideos = responseBody.map((e) => Video.fromJson(e)).toList();
+    List<dynamic> responseBody = response.data['data'];
+    _categoryVideos.clear();
+
+    for (Map<String, dynamic> categories in responseBody) {
+      List<dynamic> categoryVideoList = categories['categoryVideo'];
+      for (var videoData in categoryVideoList) {
+        _categoryVideos.add(Video.fromJson(videoData));
+      }
+    }
+
     _events.add(_categoryVideos);
   }
 
