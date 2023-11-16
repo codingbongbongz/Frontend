@@ -20,6 +20,7 @@ class _LinkScreenState extends State<LinkScreen> {
   String _youtubeLink = '';
   TextEditingController _textController = TextEditingController();
   bool isTextEmpty = true;
+  bool canPush = true;
 
   void uploadLink(context) async {
     var dio = await authDio(context);
@@ -67,6 +68,9 @@ class _LinkScreenState extends State<LinkScreen> {
     // final linkController = TextEditingController();
 
     void onPressed() {
+      setState(() {
+        canPush = false;
+      });
       final formKeyState = _formKey.currentState;
       if (formKeyState!.validate()) {
         formKeyState.save();
@@ -76,7 +80,7 @@ class _LinkScreenState extends State<LinkScreen> {
 
     String? validator(String? value) {
       if (value == null || value.isEmpty) {
-        return '유튜브 링크를 입력해주세요.';
+        return 'Please enter the YouTube link.';
       }
 
       // 유튜브 링크 검증
@@ -85,7 +89,7 @@ class _LinkScreenState extends State<LinkScreen> {
               value.startsWith("https://youtu.be/");
 
       if (!isYoutubeLink) {
-        return '유효한 유튜브 링크가 아닙니다.';
+        return 'This is not a valid YouTube link.';
       }
 
       return null;
@@ -107,7 +111,7 @@ class _LinkScreenState extends State<LinkScreen> {
             height: 56.0,
             child: Center(
                 child: Text(
-              "영상 링크 추가",
+              "Add Video Link",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -163,7 +167,7 @@ class _LinkScreenState extends State<LinkScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
               ),
-              onPressed: onPressed,
+              onPressed: canPush ? onPressed : () {},
               child: const Text('Start Learning'),
             ),
           ),

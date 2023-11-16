@@ -218,7 +218,7 @@ class _LearningScreenState extends State<LearningScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('학습을 종료하시겠습니까?',
+                      Text('Are you sure you want to end the learning?',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
@@ -226,7 +226,7 @@ class _LearningScreenState extends State<LearningScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          '진행중인 학습 내용은 저장되지 않습니다',
+                          'Your learning will not be saved.',
                           style: TextStyle(
                             color: greyColor,
                           ),
@@ -254,7 +254,7 @@ class _LearningScreenState extends State<LearningScreen> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text('취소',
+                              child: const Text('Cancel',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -286,7 +286,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                     ),
                                     (route) => false);
                               },
-                              child: const Text('학습 종료',
+                              child: const Text('Finish Learning',
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.white,
@@ -363,11 +363,11 @@ class _LearningScreenState extends State<LearningScreen> {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 18.0),
-                        child: Text('전체 자막'),
+                        child: Text('Full Caption'),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 18.0),
-                        child: Text('실시간 자막'),
+                        child: Text('Real-time Caption'),
                       ),
                     ],
                   ),
@@ -568,7 +568,7 @@ class _LearningScreenState extends State<LearningScreen> {
                             );
                           },
                           label: Text(
-                            '정확한 발음 듣기',
+                            'Listen The Exact Pronunciation',
                             style: TextStyle(
                               color: getPlatformDependentColor(
                                   context, Colors.black, Colors.white),
@@ -631,89 +631,6 @@ class _LearningScreenState extends State<LearningScreen> {
                                   // accessToken: accessToken,
                                 ),
                               );
-                              return Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.50,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Stack(children: [
-                                      Container(
-                                        width: double.infinity,
-                                        height: 56.0,
-                                        child: Center(
-                                            child: Text(
-                                          "발음 연습하기",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ) // Your desired title
-                                            ),
-                                      ),
-                                      Positioned(
-                                          left: 0.0,
-                                          top: 0.0,
-                                          child: IconButton(
-                                              icon: Icon(Icons
-                                                  .close), // Your desired icon
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                // setState(() {
-                                                //   getEvaluation();
-                                                // });
-                                                // _controller.play();
-                                                // getEvaluation();
-                                                // int sec =
-                                                //     _transcripts[currentIndex]
-                                                //         .startTime
-                                                //         .floor();
-                                                // int milliSec =
-                                                //     ((_transcripts[currentIndex]
-                                                //                     .startTime -
-                                                //                 sec) *
-                                                //             1000)
-                                                //         .toInt();
-
-                                                // _controller.seekTo(Duration(
-                                                //     seconds: sec,
-                                                //     milliseconds: milliSec));
-                                              }))
-                                    ]),
-                                    VoiceInputScreen(
-                                      currentTranscript: currentTranscript,
-                                      transcriptID: currentTrasncriptId,
-                                      videoID: videoId,
-                                      // accessToken: accessToken,
-                                    ),
-                                  ],
-                                ),
-
-                                // insetPadding: const EdgeInsets.all(8.0),
-                                // actions: [
-                                //   TextButton(
-                                //     onPressed: () {
-                                //       Navigator.of(context).pop();
-                                //       getEvaluation();
-                                //       int sec = _transcripts[currentIndex]
-                                //           .startTime
-                                //           .floor();
-                                //       int milliSec =
-                                //           ((_transcripts[currentIndex]
-                                //                           .startTime -
-                                //                       sec) *
-                                //                   1000)
-                                //               .toInt();
-
-                                //       _controller.seekTo(Duration(
-                                //           seconds: sec,
-                                //           milliseconds: milliSec));
-                                //     },
-                                //     child: const Text('확인'),
-                                //   ),
-                                // ],
-                              );
                             },
                           ).whenComplete(() {
                             setState(() {
@@ -724,7 +641,7 @@ class _LearningScreenState extends State<LearningScreen> {
                         },
                         icon: Icon(Icons.mic, color: Colors.white),
                         label: const Text(
-                          '발음 연습하기',
+                          'Practice Pronunciation',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

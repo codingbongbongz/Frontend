@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                '인기 영상',
+                'Popular Videos',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 24,

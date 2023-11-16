@@ -54,7 +54,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
     final response = await dio.get('translations/$_transcriptID');
 
     dynamic responseBody = response.data['data'];
-    print(responseBody);
+    // print(responseBody);
     // 임시요
     return responseBody[0]['text'];
   }
@@ -77,7 +77,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
         headers: {"Content-Type": "multipart/form-data"},
       ),
     );
-    var tmp = response.data['data'];
+    // var tmp = response.data['data'];
     // print(tmp);
 
     dynamic responseBody = response.data['data']['nounsAndExamples'];
@@ -154,7 +154,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
             height: 56.0,
             child: Center(
                 child: Text(
-              "정확한 발음 듣기",
+              "Listen the exact pronunciation",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -229,7 +229,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
                 color: Colors.white,
               ),
               label: const Text(
-                '정확한 발음 듣기',
+                'Listen the exact pronunciation',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,

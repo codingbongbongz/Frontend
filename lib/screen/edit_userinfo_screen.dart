@@ -133,7 +133,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 ),
               ),
               child: Text(
-                'edit UserInfo',
+                'Edit User Info',
                 style: TextStyle(
                   // color: Colors.white,
                   color: getPlatformDependentColor(
@@ -215,7 +215,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
             ),
           ),
           child: Text(
-            '프로필 사진 변경',
+            'Edit Profile Picture',
             style: TextStyle(
               color: getPlatformDependentColor(
                   context, Colors.black, Colors.white),

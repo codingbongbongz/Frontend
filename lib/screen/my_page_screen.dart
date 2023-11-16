@@ -48,7 +48,7 @@ class MyPageScreenState extends State<MyPageScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(
-            child: Text('사용자 정보 수정',
+            child: Text('Edit user Info',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 )),
@@ -68,7 +68,7 @@ class MyPageScreenState extends State<MyPageScreen> {
                   myGetUserInfo = getUserInfo();
                 });
               },
-              child: const Text('확인'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -215,7 +215,7 @@ class MyPageScreenState extends State<MyPageScreen> {
                     TextButton(
                       onPressed: () {},
                       child: Text(
-                        '학습한 동영상',
+                        'Learned Videos',
                         style: TextStyle(
                           color: getPlatformDependentColor(
                               context, Colors.black, Colors.white),
@@ -230,7 +230,7 @@ class MyPageScreenState extends State<MyPageScreen> {
                     TextButton(
                       onPressed: patchUserInfo,
                       child: Text(
-                        '사용자 정보 수정',
+                        'Edit User Info',
                         style: TextStyle(
                           color: getPlatformDependentColor(
                               context, Colors.black, Colors.white),
@@ -245,7 +245,7 @@ class MyPageScreenState extends State<MyPageScreen> {
                     TextButton(
                       onPressed: logout,
                       child: Text(
-                        '로그아웃',
+                        'Log Out',
                         style: TextStyle(
                           color: getPlatformDependentColor(
                               context, Colors.black, Colors.white),
@@ -258,7 +258,8 @@ class MyPageScreenState extends State<MyPageScreen> {
                     ),
                     TextButton(
                       onPressed: withdrawal,
-                      child: Text('탈퇴하기', style: TextStyle(color: Colors.red)),
+                      child:
+                          Text('Sign Out', style: TextStyle(color: Colors.red)),
                     ),
                     // Container(
                     //   height: 1.0,

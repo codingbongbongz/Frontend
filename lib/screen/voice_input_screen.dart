@@ -236,7 +236,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
                 height: 56.0,
                 child: Center(
                     child: Text(
-                  "발음 연습하기",
+                  "Practice Pronunciation",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -345,21 +345,21 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
               child: Column(
                 children: [
                   button(
-                    '녹음 내용 듣기',
+                    'Listen to the recording',
                     playRecording,
                     Icon(Icons.replay, color: Colors.white),
                     blueColor,
                     Colors.white,
                   ),
                   button(
-                    '결과 확인하기',
+                    'Check the results',
                     readFile,
                     Icon(Icons.check, color: Colors.white),
                     blueColor,
                     Colors.white,
                   ),
                   button(
-                    '다시 연습하기',
+                    'Practice Again',
                     startRecording,
                     Icon(Icons.mic, color: blueColor),
                     blueColor.withOpacity(0.1),
