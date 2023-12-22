@@ -25,8 +25,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var username = TextEditingController(); // id 입력 저장
-  var password = TextEditingController(); // PW 저장
+  TextEditingController username = TextEditingController(); // id 입력 저장
+  TextEditingController password = TextEditingController(); // PW 저장
   static final storage = FlutterSecureStorage();
 
   LoginPlatform _loginPlatform = LoginPlatform.none;
@@ -35,9 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void signInWithID() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => LoginWithIDScreen(
-            // isSocial: false,
-            ),
+        builder: (BuildContext context) => LoginWithIDScreen(),
       ),
     );
   }
@@ -48,40 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
 
-    // Create a new credential
-    // final credential = GoogleAuthProvider.credential(
-    //   accessToken: googleAuth?.accessToken,
-    //   idToken: googleAuth?.idToken,
-    // );
-
     if (googleUser != null) {
-      print(googleUser.toString());
-      print('accessToken : ${googleAuth?.accessToken}');
-      print(googleAuth?.idToken);
-
-      // print(get(googleUser.idToken));
-      // print('name = ${googleUser.displayName}');
-      // print('email = ${googleUser.email}');
-      // print('id = ${googleUser.id}');
-      // print('serverAuthCode : ${googleUser.serverAuthCode}');
-
-      // print('_idToken = ${googleUser.idToken}');
-
       setState(() {
         _loginPlatform = LoginPlatform.google;
       });
-      // var dio = Dio();
-      // dio.options.baseUrl = baseURL;
-      // var param = {
-      //   'email': email.text,
-      //   'password': password.text
-      // };
 
-      // final response = await dio.post(
-      //   'auth/signup',
-      //   data: param,
-      // );
-      // if()
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (BuildContext context) => SignUpScreen(
@@ -104,21 +73,17 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
         webAuthenticationOptions: WebAuthenticationOptions(
           clientId: "Klearning.example.com",
-          // clientId: "k_learning.example.com",
           redirectUri: Uri.parse(
             "https://immense-granite-fernleaf.glitch.me/callbacks/sign_in_with_apple",
           ),
-          // redirectUri: Uri.parse(
-          //   "https://www.klearning.o-r.kr/apple/callback",
-          // ),
         ),
       );
 
-      print('credential.state = ${credential.toString()}');
-      print('credential.state = ${credential.email}');
-      print('credential.state = ${credential.userIdentifier}');
-      print('credential.state = ${credential.authorizationCode}');
-      print('credential.state = ${credential.identityToken}');
+      // print('credential.state = ${credential.toString()}');
+      // print('credential.state = ${credential.email}');
+      // print('credential.state = ${credential.userIdentifier}');
+      // print('credential.state = ${credential.authorizationCode}');
+      // print('credential.state = ${credential.identityToken}');
 
       List<String> jwt = credential.identityToken?.split('.') ?? [];
       String payload = jwt[1];
@@ -126,23 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final List<int> jsonData = base64.decode(payload);
       final userInfo = jsonDecode(utf8.decode(jsonData));
-      print(userInfo);
+
       String email = userInfo['email'];
-      print(email);
-
-      // setState(() {
-      //   _loginPlatform = LoginPlatform.apple;
-      // });
-
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (BuildContext context) => SignUpScreen(
-      //       isSocial: true,
-      //       email: credential.email ?? "",
-      //       name: (credential.familyName ?? "") + (credential.givenName ?? ""),
-      //     ),
-      //   ),
-      // );
     } catch (error) {
       print('error = $error');
     }
@@ -153,7 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: onTap,
       child: Image.asset(
         'assets/images/$path.png',
-        // height: 60,
       ),
     );
   }
@@ -182,23 +131,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   loginAction(username, password) async {
     try {
-      var dio = Dio();
+      final dio = Dio();
       dio.options.baseUrl = baseURL;
-      var param = {'account_name': '$username', 'password': '$password'};
-      // final rawString = '$username:$password';
+      Map<String, String> param = {
+        'account_name': '$username',
+        'password': '$password'
+      };
 
-      // Codec<String, String> stringToBase64 = utf8.fuse(base64);
-      // String token = stringToBase64.encode(rawString);
-      // final response = await dio.get('auth/signin',
-      //     options: Options(headers: {
-      //       'Authorization': 'Basic $token',
-      //     }));
       Response response = await dio.post('로그인 API URL', data: param);
 
       if (response.statusCode == 200) {
         final jsonBody = json.decode(response.data['user_id'].toString());
         // 직렬화를 이용하여 데이터를 입출력하기 위해 model.dart에 Login 정의 참고
-        var val = jsonEncode(
+        String val = jsonEncode(
             Token(accessToken: 'accessToken', refreshToken: 'refreshoken'));
 
         await storage.write(
@@ -232,8 +177,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Image.asset(
                   'assets/images/k-learning_logo.png',
-                  // width: 140,
-                  // height: 140,
                 ),
                 SizedBox(
                   height: 10,
@@ -242,7 +185,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      // color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                     'K-learning'),
@@ -257,97 +199,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 100,
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                //   child: TextField(
-                //     controller: username,
-                //     decoration: const InputDecoration(
-                //       // prefixIcon: Icon(Icons.link),
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.all(Radius.circular(10)),
-                //         borderSide: BorderSide(color: Colors.blue),
-                //       ),
-                //       labelText: 'username',
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: 20,
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                //   child: TextField(
-                //     controller: password,
-                //     decoration: const InputDecoration(
-                //       // prefixIcon: Icon(Icons.link),
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.all(Radius.circular(10)),
-                //         borderSide: BorderSide(color: Colors.blue),
-                //       ),
-                //       labelText: 'password',
-                //     ),
-                //   ),
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     TextButton(
-                //       onPressed: () async {
-                //         if (await loginAction(username.text, password.text) == true) {
-                //           print('로그인 성공');
-                //           // Navigator.pop(context, '/service'); // 로그인 이후 서비스 화면으로 이동
-                //           Navigator.of(context).pushAndRemoveUntil(
-                //               MaterialPageRoute(
-                //                 builder: (BuildContext context) => MainScreen(),
-                //               ),
-                //               (route) => false);
-                //         } else {
-                //           print('로그인 실패');
-                //         }
-                //       },
-                //       child: Container(
-                //         decoration: BoxDecoration(
-                //           color: Colors.blueAccent,
-                //           borderRadius: BorderRadius.circular(10.0),
-                //         ),
-                //         child: Padding(
-                //           padding: const EdgeInsets.all(8.0),
-                //           child: Text(
-                //             'LOGIN',
-                //             style: TextStyle(
-                //               fontSize: 30,
-                //               color: Colors.white,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     TextButton(
-                //       onPressed: () {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (BuildContext context) => SignUpScreen(),
-                //           ),
-                //         );
-                //       },
-                //       child: Container(
-                //         decoration: BoxDecoration(
-                //             color: Colors.blueAccent,
-                //             borderRadius: BorderRadius.circular(10.0)),
-                //         child: Padding(
-                //           padding: const EdgeInsets.all(8.0),
-                //           child: Text(
-                //             'SIGN IN',
-                //             style: TextStyle(
-                //               fontSize: 30,
-                //               color: Colors.white,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 Column(
                   children: [
                     if (Platform.isIOS)
@@ -360,9 +211,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     _loginButton('sign_in_with_ID', signInWithID),
                   ],
                 ),
-                // )SizedBox(
-                //   height: 50,
-                // ),
               ],
             ),
           ],

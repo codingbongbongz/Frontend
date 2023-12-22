@@ -23,23 +23,21 @@ class _LinkScreenState extends State<LinkScreen> {
   bool canPush = true;
 
   void uploadLink(context) async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
     FormData formData = FormData.fromMap({
-      // "Authorization": accessToken,
       "link": _youtubeLink,
     });
 
+    setState(() {
+      canPush = false;
+    });
     final response = await dio.post(
       'upload',
       data: formData,
       options: Options(
         headers: {"Content-Type": "multipart/form-data"},
-        // contentType: Headers.multipartFormDataContentType,
       ),
     );
-    // print(response.data['data']['videoId']);
-    // codingbongbongz://video/3fa0fsafsah
-    // iOS: x-callback-url
     videoID = response.data['data']['videoId'];
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -65,12 +63,7 @@ class _LinkScreenState extends State<LinkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final linkController = TextEditingController();
-
     void onPressed() {
-      setState(() {
-        canPush = false;
-      });
       final formKeyState = _formKey.currentState;
       if (formKeyState!.validate()) {
         formKeyState.save();
@@ -98,9 +91,6 @@ class _LinkScreenState extends State<LinkScreen> {
     void onSaved(String? value) {
       _youtubeLink = value!.substring(value.indexOf('=') + 1);
     }
-    // showModalBottomSheet(context: context, builder: (BuildContext context) {
-
-    // });
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -160,9 +150,6 @@ class _LinkScreenState extends State<LinkScreen> {
             width: MediaQuery.of(context).size.width / 1,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                // padding: EdgeInsets.symmetric(
-                //   horizontal: MediaQuery.of(context).size.width / 3,
-                // ),
                 backgroundColor: isTextEmpty ? Colors.grey : blueColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),

@@ -38,7 +38,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
     _transcript = widget.currentTranscript;
     _transcriptID = widget.transcriptID;
     _videoID = widget.videoID;
-    // getNouns();
   }
 
   @override
@@ -49,7 +48,7 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   }
 
   Future<dynamic> getTranslation() async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
 
     final response = await dio.get('translations/$_transcriptID');
 
@@ -60,15 +59,11 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
   }
 
   Future<dynamic> getNouns() async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
 
     FormData formData = FormData.fromMap({
-      // "Authorization": accessToken,
       "sentence": _transcript,
     });
-    // var formData = {
-    //   "sentence": _transcript,
-    // };
 
     final response = await dio.post(
       'openAI/nouns',
@@ -77,61 +72,29 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
         headers: {"Content-Type": "multipart/form-data"},
       ),
     );
-    // var tmp = response.data['data'];
-    // print(tmp);
 
     dynamic responseBody = response.data['data']['nounsAndExamples'];
-    // print(responseBody);
-    // print(responseBody.runtimeType);
 
     List<dynamic> resultList = [];
-    // List<Map<String, List<String>>>
     responseBody.forEach((key, value) {
-      // List<dynamic> innerList = [];
       Map<String, List<dynamic>> innerMap = {};
       innerMap[key] = value;
       resultList.add(innerMap);
-      // innerList.add(key);
-      // // innerList.addAll(value);
-      // resultList.add(key);
-      // resultList.addAll(value);
-      // print(key);
-      // print(value);
     });
 
-    // print(resultList);
-    // resultList.forEach((element) {
-    //   // print(element.keys);
-    //   print(element.keys.toList()[0]);
-    //   var values = element.values.toList()[0];
-    //   values.forEach((el) {
-    //     print(el);
-    //   });
-    //   // print(element.values);
-    // });
-    // var tmp = responseBody.toList();
-    // print(tmp);
     return resultList;
   }
 
   Future<void> playRecording() async {
     try {
-      var dio = await authDio(context);
-      // print('videos/$_videoID/transcripts/$_transcriptID/audio');
+      final dio = await authDio(context);
       final response = await dio.get(
         'videos/$_videoID/transcripts/$_transcriptID/audio',
-        // options: Options(
-        //   headers: {"Content-Type": "multipart/form-data"},
-        // )
       );
       if (kDebugMode) {
         print(response.realUri.toString());
-        // print('${baseURL}videos/$_videoID/transcripts/$_transcriptID/audio');
-        // print(response.data);
       }
       await audioPlayer.play(UrlSource(response.realUri.toString()));
-      // await audioPlayer.play(UrlSource(
-      //     '${baseURL}videos/$_videoID/transcripts/$_transcriptID/audio'));
     } catch (e) {
       if (kDebugMode) {
         print('playRecording Error : $e');
@@ -141,9 +104,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   // appBar: AppBar(),
-    //   body:
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,9 +131,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
                     Navigator.of(context).pop();
                   }))
         ]),
-        // SizedBox(
-        //   height: 10,
-        // ),
         Padding(
           padding: const EdgeInsets.only(
             left: 20.0,
@@ -189,9 +146,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
             ),
           ),
         ),
-        // SizedBox(
-        //   height: 10,
-        // ),
         Padding(
           padding: const EdgeInsets.only(
             left: 20.0,
@@ -221,7 +175,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
           padding: const EdgeInsets.all(20.0),
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 1.0,
-            // height: 40,
             child: ElevatedButton.icon(
               onPressed: playRecording,
               icon: Icon(
@@ -237,15 +190,10 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
               ),
               style: OutlinedButton.styleFrom(
                 backgroundColor: blueColor,
-                // padding: EdgeInsets.symmetric(
                 padding: EdgeInsets.symmetric(
                   vertical: 18,
                   horizontal: 20,
                 ),
-                //   horizontal: MediaQuery.of(context).size.width / 3,
-                // ),
-                // backgroundColor:
-                //     isTextEmpty ? Colors.grey : blueColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -253,10 +201,6 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
             ),
           ),
         ),
-        // ElevatedButton(
-        //   onPressed: getNouns,
-        //   child: const Text('용례 생성'),
-        // ),
         FutureBuilder(
           future: getNouns(),
           builder: (context, snapshot) {
@@ -271,13 +215,9 @@ class _VoiceListenScreenState extends State<VoiceListenScreen> {
                 flex: 1,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  // separatorBuilder: (BuildContext context, int index) =>
-                  //     const Divider(
-                  //   thickness: 0.0,
-                  // ),
                   itemCount: data!.length,
                   itemBuilder: (BuildContext context, int index) {
-                    var nouns = data[index].keys.first;
+                    String nouns = data[index].keys.first;
                     List<String> sentences = (data[index][nouns] as List)
                         .map((item) => item as String)
                         .toList();

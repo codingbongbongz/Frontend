@@ -17,8 +17,8 @@ class LoginWithIDScreen extends StatefulWidget {
 }
 
 class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
-  var email = TextEditingController();
-  var password = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   bool _passwordVisible = false;
   bool isTextEmpty = true;
 
@@ -43,28 +43,26 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
   }
 
   loginWithID() async {
-    var dio = Dio();
+    final dio = Dio();
     dio.options.baseUrl = baseURL;
-    print(email.text);
-    print(password.text);
 
-    var param = {'email': email.text, 'password': password.text};
+    Map<String, String> param = {
+      'email': email.text,
+      'password': password.text
+    };
 
     try {
       final response = await dio.post(
         'auth/signin',
         data: param,
       );
-      print(response);
 
       if (response.statusCode == 200) {
-        var accessToken = response.data['data']['accessToken'];
-        var refreshToken = response.data['data']['refreshToken'];
-        print(accessToken);
-        print(refreshToken);
+        String accessToken = response.data['data']['accessToken'];
+        String refreshToken = response.data['data']['refreshToken'];
         final storage = FlutterSecureStorage();
 
-        var val = jsonEncode(
+        String val = jsonEncode(
             Token(accessToken: accessToken, refreshToken: refreshToken));
         await storage.write(key: 'login', value: val);
 
@@ -78,7 +76,6 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
         showAlertDialog(context);
       }
     } on DioException catch (e) {
-      print('404');
       showAlertDialog(context);
     }
   }
@@ -125,9 +122,6 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
         children: [
           Column(
             children: [
-              // const SizedBox(
-              //   height: 50,
-              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Input('email', email),
@@ -152,11 +146,6 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
                 width: MediaQuery.of(context).size.width / 1,
                 child: ElevatedButton(
                   style: TextButton.styleFrom(
-                    // padding: EdgeInsets.symmetric(
-                    //   horizontal: MediaQuery.of(context).size.width / 3,
-                    // ),
-                    // backgroundColor: blueColor,
-
                     backgroundColor: isTextEmpty ? Colors.grey : blueColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
@@ -192,8 +181,6 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
                       MaterialPageRoute(
                         builder: (BuildContext context) => SignUpScreen(
                           isSocial: false,
-                          // email: googleUser.email,
-                          // name: googleUser.displayName!,
                         ),
                       ),
                     );
@@ -219,16 +206,9 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
 
   TextField Input(text, TextEditingController controller) {
     return TextField(
-      // readOnly: _isSocial && (text == 'email' || text == 'name'),
       obscureText: text == 'password' && _passwordVisible,
       controller: controller,
-      // maxLength: text == 'nickname' ? 8 : (text == 'introduce' ? 30 : null),
-      // maxLines: text == 'introduce' ? null : 1,
       decoration: InputDecoration(
-        // prefixIcon: Icon(Icons.link),
-        // contentPadding:
-        //     text == 'introduce' ? EdgeInsets.symmetric(vertical: 40.0) : null,
-
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: blueColor),
@@ -244,10 +224,8 @@ class _LoginWithIDScreenState extends State<LoginWithIDScreen> {
                 icon: Icon(
                   // Based on passwordVisible state choose the icon
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  // color: Theme.of(context).primaryColorDark,
                 ),
                 onPressed: () {
-                  // Update the state i.e. toogle the state of passwordVisible variable
                   setState(() {
                     _passwordVisible = !_passwordVisible;
                   });

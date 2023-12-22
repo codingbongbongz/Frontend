@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:k_learning/const/color.dart';
@@ -59,25 +58,23 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
   }
 
   Future<dynamic> getTranslation() async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
 
     final response = await dio.get('translations/$_transcriptID');
 
     dynamic responseBody = response.data['data'];
-    print(responseBody);
-    // 임시요
+
     return responseBody[0]['text'];
   }
 
   Future<void> readFile() async {
     try {
-      var dio = await authDio(context);
+      final dio = await authDio(context);
       final file = File.fromUri(Uri.parse(audioPath));
       final bytes = await file.readAsBytes();
 
       FormData formData = FormData.fromMap({
         "audio": MultipartFile.fromBytes(bytes, filename: "$_transcript.m4a"),
-        // "Authorization": _accessToken,
       });
 
       final response = await dio.post(
@@ -123,7 +120,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       setState(() {
         isRecording = false;
         audioPath = path!;
-        // neverRecorded = false;
       });
     } catch (e) {
       if (kDebugMode) {
@@ -153,10 +149,7 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       padding: const EdgeInsets.all(50.0),
       child: InkWell(
         // InkWell 위젯을 사용하여 터치 효과를 추가합니다.
-        borderRadius: BorderRadius.circular(
-            50.0), // 원형 버튼을 만들기 위해 BorderRadius.circular 사용
-        // onTap: isRecording ? stopRecording : startRecording,
-        onTap: func,
+        borderRadius: BorderRadius.circular(50.0),
         child: Container(
           width: 100, // 원형 버튼의 너비
           height: 100, // 원형 버튼의 높이
@@ -166,17 +159,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
           ),
           child: Center(
             child: icon,
-            // child: isRecording
-            //     ? Icon(
-            //         Icons.stop,
-            //         color: Colors.white, // 아이콘 색상
-            //         size: 40.0, // ),
-            //       )
-            //     : Icon(
-            //         Icons.mic,
-            //         color: Colors.white, // 아이콘 색상
-            //         size: 40.0, // ),
-            //       ),
           ),
         ),
       ),
@@ -189,14 +171,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
       width: MediaQuery.of(context).size.width,
       child: TextButton.icon(
         style: TextButton.styleFrom(
-          // padding: EdgeInsets.only(
-          //   top: 18,
-          //   bottom: 18,
-          //   left: 20,
-          //   right: 20,
-          // ),
-          //   vertical: 10,
-          // ),
           padding: EdgeInsets.symmetric(
             vertical: 15,
           ),
@@ -206,7 +180,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
         ),
         onPressed: func,
         icon: icon,
-        // icon: Icon(Icons., color: Colors.white),
         label: Text(
           text,
           style: TextStyle(
@@ -275,9 +248,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
               ),
             ),
           ),
-          // SizedBox(
-          //   height: 10,
-          // ),
           Padding(
             padding: const EdgeInsets.only(
               left: 20.0,
@@ -306,20 +276,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
               },
             ),
           ),
-          // if (isRecording)
-          // const Column(
-          //   children: [
-          //     CircularProgressIndicator(),
-          //     Text(
-          //       "Recording in Progress",
-          //       style: TextStyle(
-          //         fontSize: 20,
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Center
-          //(child: CircularProgressIndicator()),
           if (neverRecorded)
             Center(
               child: recordingButton(
@@ -368,34 +324,6 @@ class _VoiceInputScreenState extends State<VoiceInputScreen> {
                 ],
               ),
             ),
-
-          // ElevatedButton(
-          //   onPressed: isRecording ? stopRecording : startRecording,
-          //   child: isRecording
-          //       ? const Text('Stop Recording')
-          //       : const Icon(Icons.mic),
-          //   style: ElevatedButton.styleFrom(
-          //       shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(100),
-          //   )),
-          // ),
-          // const SizedBox(
-          //   height: 25,
-          // ),
-          // if (!isRecording && audioPath != '')
-          //   Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       ElevatedButton(
-          //         onPressed: readFile,
-          //         child: const Text('Submit'),
-          //       ),
-          //       ElevatedButton(
-          //         onPressed: playRecording,
-          //         child: const Text('Play Recording'),
-          //       )
-          //     ],
-          //   ),
         ],
       ),
     );

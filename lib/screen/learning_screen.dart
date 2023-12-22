@@ -52,8 +52,6 @@ class _LearningScreenState extends State<LearningScreen> {
 
   late PlayerState _playerState;
   late YoutubeMetaData _videoMetaData;
-  // double _volume = 100;
-  // bool _muted = false;
   bool _isPlayerReady = false;
 
   List<Transcript> _transcripts = [];
@@ -73,35 +71,25 @@ class _LearningScreenState extends State<LearningScreen> {
   }
 
   Future<dynamic> getTranslation(transcriptID) async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
 
     final response = await dio.get('translations/$transcriptID');
 
     dynamic responseBody = response.data['data'];
-    print(responseBody);
-    // 임시요
     return responseBody[0]['text'];
   }
 
   void getTranscripts() async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
     final response = await dio.get('videos/$videoId/transcripts');
     List<dynamic> responseBody = response.data['data']['transcripts'];
     _transcripts = responseBody.map((e) => Transcript.fromJson(e)).toList();
   }
 
   void getEvaluation() async {
-    var dio = await authDio(context);
-    // FormData formData = FormData.fromMap({
-    //   "Authorization": accessToken,
-    // });
+    final dio = await authDio(context);
     final response = await dio.get(
       'videos/$videoId/audio/previous',
-      // data: formData,
-      // options: Options(
-      //   headers: {"Content-Type": "multipart/form-data"},
-      //   // contentType: Headers.multipartFormDataContentType,
-      // ),
     );
 
     if (response.data['status'] == 404) {
@@ -242,8 +230,6 @@ class _LearningScreenState extends State<LearningScreen> {
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,
                                 padding: EdgeInsets.symmetric(
-                                  // horizontal:
-                                  //     MediaQuery.of(context).size.width / 6,
                                   vertical:
                                       MediaQuery.of(context).size.width / 15,
                                 ),
@@ -268,13 +254,10 @@ class _LearningScreenState extends State<LearningScreen> {
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,
                                 padding: EdgeInsets.symmetric(
-                                  // horizontal:
-                                  //     MediaQuery.of(context).size.width / 6,
                                   vertical:
                                       MediaQuery.of(context).size.width / 15,
                                 ),
                                 backgroundColor: blueColor,
-                                //     isTextEmpty ? Colors.grey : blueColor,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
                               ),
@@ -299,38 +282,6 @@ class _LearningScreenState extends State<LearningScreen> {
                     ],
                   ),
                 );
-
-                // return AlertDialog(
-                //   shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(10.0)),
-                //   content: const Column(
-                //     mainAxisSize: MainAxisSize.min,
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: <Widget>[
-                //       Text(
-                //         "Finish Learning?",
-                //       ),
-                //     ],
-                //   ),
-                //   actions: <Widget>[
-                //     ElevatedButton(
-                //       child: const Text("No"),
-                //       onPressed: () {
-                //         Navigator.pop(context);
-                //       },
-                //     ),
-                //     ElevatedButton(
-                //       child: const Text("Yes"),
-                //       onPressed: () {
-                //         Navigator.of(context).pushAndRemoveUntil(
-                //             MaterialPageRoute(
-                //               builder: (BuildContext context) => MainScreen(),
-                //             ),
-                //             (route) => false);
-                //       },
-                //     ),
-                //   ],
-                // );
               });
         }),
       ),
@@ -340,7 +291,7 @@ class _LearningScreenState extends State<LearningScreen> {
               context, Colors.white, Colors.grey[850]),
           elevation: 0,
           iconTheme: IconThemeData(
-            color: blueColor, //색변경
+            color: blueColor,
           ),
         ),
         body: ListView(
@@ -380,7 +331,7 @@ class _LearningScreenState extends State<LearningScreen> {
                       child: ListView.builder(
                         itemCount: _transcripts.length,
                         itemBuilder: (BuildContext context, int index) {
-                          var inkWell = InkWell(
+                          InkWell inkWell = InkWell(
                             onTap: () {
                               int sec = _transcripts[index].startTime.floor();
                               int milliSec =
@@ -488,7 +439,6 @@ class _LearningScreenState extends State<LearningScreen> {
                                 currentIndex = index;
 
                                 // 현재 자막에 해당하는 학습 결과 출력
-                                // print(_evaluations[index].overall);
                                 _data.add([
                                   _ChartData(
                                       'overall', _evaluations[index].overall),
@@ -519,19 +469,13 @@ class _LearningScreenState extends State<LearningScreen> {
                             padding: EdgeInsets.symmetric(
                               horizontal: 10,
                             ),
-                            //   horizontal: MediaQuery.of(context).size.width / 3,
-                            // ),
-                            // backgroundColor:
-                            //     isTextEmpty ? Colors.grey : blueColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
                           onPressed: () async {
                             _controller.pause();
-                            // var translation =
-                            //     await getTranslation(currentTrasncriptId);
-                            // print(translation);
+
                             showModalBottomSheet(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -550,18 +494,7 @@ class _LearningScreenState extends State<LearningScreen> {
                                       currentTranscript: currentTranscript,
                                       transcriptID: currentTrasncriptId,
                                       videoID: videoId,
-                                      // accessToken: accessToken,
                                     ),
-
-                                    // insetPadding: const EdgeInsets.all(8.0),
-                                    // actions: [
-                                    //   TextButton(
-                                    //     onPressed: () {
-                                    //       Navigator.of(context).pop();
-                                    //     },
-                                    //     child: const Text('확인'),
-                                    //   ),
-                                    // ],
                                   ),
                                 );
                               },
@@ -600,24 +533,18 @@ class _LearningScreenState extends State<LearningScreen> {
                       width: MediaQuery.of(context).size.width / 1,
                       child: TextButton.icon(
                         style: TextButton.styleFrom(
-                          // padding: EdgeInsets.symmetric(
-                          //   horizontal: MediaQuery.of(context).size.width / 3,
-                          // ),
                           backgroundColor: blueColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
                         onPressed: () async {
                           _controller.pause();
-                          // var translation =
-                          //     await getTranslation(currentTrasncriptId);
-                          // print(translation);
+
                           showModalBottomSheet(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(36.0),
                             ),
                             isScrollControlled: true,
-                            // isDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
                               return ClipRRect(
@@ -676,7 +603,6 @@ class _LearningScreenState extends State<LearningScreen> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: SfCartesianChart(
-              // borderColor: lightGreyColor,
               primaryXAxis: CategoryAxis(
                 labelStyle: const TextStyle(
                   fontSize: 16,
@@ -687,12 +613,9 @@ class _LearningScreenState extends State<LearningScreen> {
                 minimum: 0,
                 maximum: 100,
                 interval: 25,
-                // isVisible: false,
               ),
-              // primaryYAxis: CategoryAxis(),
               tooltipBehavior: _tooltip,
               margin: EdgeInsets.all(10),
-              // plotAreaBorderWidth: 0,
               series: <ChartSeries<_ChartData, String>>[
                 ColumnSeries<_ChartData, String>(
                   dataSource: data!,

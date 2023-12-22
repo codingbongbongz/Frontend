@@ -9,36 +9,20 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      // toolbarHeight: 80,
-      // systemOverlayStyle: SystemUiOverlayStyle.dark,
       backgroundColor:
           MediaQuery.of(context).platformBrightness == Brightness.light
               ? Colors.white
               : Colors.grey[850],
-      // title: const Text(
-      //   'K-Learning',
-      //   style: TextStyle(
-      //     color: Colors.white,
-      //     fontSize: 25,
-      //   ),
-      // ),
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: blueColor, //색변경
       ),
-      // centerTitle: false,
       elevation: 0,
-      // leading: Image.asset(
-      //   'assets/images/k-learning_logo.png',
-      //   height: 40,
-      // ),
       leadingWidth: 70,
       toolbarHeight: 140,
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Image.asset(
           'assets/images/k-learning_logo.png',
-          // height: 100,
-          // width: 100,
         ),
       ),
     );

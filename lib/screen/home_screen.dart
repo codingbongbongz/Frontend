@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       .toList();
 
   Future<List<Video>> getPopularVideos() async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
     final response = await dio.get('videos/popular');
 
     List<dynamic> responseBody = response.data['data']['popularVideo'];
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void getCategorieVideos(results) async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
     if (results.isEmpty) {
       _categoryVideos.clear();
       _events.add([]);
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     for (Map<String, dynamic> categories in responseBody) {
       List<dynamic> categoryVideoList = categories['categoryVideo'];
-      for (var videoData in categoryVideoList) {
+      for (Map<String, dynamic> videoData in categoryVideoList) {
         _categoryVideos.add(Video.fromJson(videoData));
       }
     }
@@ -153,20 +153,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Text('Error: ${snapshot.error}');
                   } else {
                     final data = snapshot.data;
-                    // print(data![0].link);
-                    // var length = _popularVideos.length;
+
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: data!.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var inkWell = InkWell(
+                        InkWell inkWell = InkWell(
                           onTap: () {
                             {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       LearningScreen(
-                                    // accessToken: accessToken,
                                     link: data[index].link,
                                     videoID: data[index].videoId,
                                   ),
@@ -180,9 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               YoutubeThumbnail(
                                 youtubeId: _popularVideos[index].link,
                               ).hd(),
-                              // width: MediaQuery.of(context).size.width / 1.5,
-                              // scale: 10.0,
-                              // height: 150,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -209,16 +204,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Text(
-                                    _popularVideos[index].creator,
-                                    style: const TextStyle(
-                                      fontSize: 13.0,
-                                      color: Colors.grey,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
+                                Text(
+                                  _popularVideos[index].creator,
+                                  style: const TextStyle(
+                                    fontSize: 13.0,
+                                    color: Colors.grey,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
@@ -229,21 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 }),
           ),
-          // const SizedBox(
-          //   height: 50,
-          //   child: Padding(
-          //     padding: EdgeInsets.all(8.0),
-          //     child: Text(
-          //       '카테고리',
-          //       textAlign: TextAlign.left,
-          //       style: TextStyle(
-          //         fontSize: 24,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //   ),
-          // // ),
-          // Icons.check_box_outline_blank
           Expanded(
             child: Column(
               children: [
@@ -262,7 +239,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             unselectedColor: getPlatformDependentColor(
                                 context, Colors.white, Colors.white),
-                            selectedItemsTextStyle: TextStyle(color: blueColor),
+                            selectedItemsTextStyle: TextStyle(
+                              color: blueColor,
+                            ),
                             title: Text(
                               "Select Categories",
                               style: TextStyle(),
@@ -315,17 +294,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             itemCount: data.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Container(
-                                // constraints: BoxConstraints(
-                                //   maxWidth:
-                                //       MediaQuery.of(context).size.width / 1.0,
-                                // ),
                                 alignment: Alignment.bottomLeft,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    // mainAxisAlignment: MainAxisAlignment.,
                                     children: [
                                       InkWell(
                                         onTap: () {
@@ -335,7 +309,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 builder:
                                                     (BuildContext context) =>
                                                         LearningScreen(
-                                                  // accessToken: accessToken,
                                                   link: data[index].link,
                                                   videoID: data[index].videoId,
                                                 ),
@@ -350,10 +323,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                             YoutubeThumbnail(
                                               youtubeId: data[index].link,
                                             ).hq(),
-                                            // width: MediaQuery.of(context)
-                                            //         .size
-                                            //         .width /
-                                            //     1.5,
                                           ),
                                         ),
                                       ),
@@ -370,13 +339,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(3.0),
-                                        child: Text(
-                                          _categoryVideos[index].creator,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _categoryVideos[index].creator,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Time : ${_categoryVideos[index].duration ~/ 60}m ${_categoryVideos[index].duration % 60}s",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],

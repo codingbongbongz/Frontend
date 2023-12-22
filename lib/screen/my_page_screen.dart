@@ -23,27 +23,8 @@ class MyPageScreenState extends State<MyPageScreen> {
 
   late Future myGetUserInfo;
 
-  // patchUserInfo2(String nickname, String introduce) async {
-  //   var dio = await authDio(context);
-  //   FormData formData = FormData.fromMap({
-  //     // "Authorization": accessToken,
-  //     "nickname": nickname,
-  //     "introduce": introduce,
-  //   });
-  //   final response = await dio.patch(
-  //     'mypage',
-  //     data: formData,
-  //     options: Options(
-  //       headers: {"Content-Type": "multipart/form-data"},
-  //     ),
-  //   );
-
-  //   dynamic responseBody = response.data['data'];
-  //   // print(responseBody);
-  // }
-
   patchUserInfo() async {
-    var updatedInroduce = showDialog(
+    Future updatedInroduce = showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -62,7 +43,6 @@ class MyPageScreenState extends State<MyPageScreen> {
           actions: [
             TextButton(
               onPressed: () async {
-                // Navigator.of(context).pop();
                 Navigator.pop(context);
                 setState(() {
                   myGetUserInfo = getUserInfo();
@@ -77,7 +57,6 @@ class MyPageScreenState extends State<MyPageScreen> {
     if (updatedInroduce != null) {
       print(updatedInroduce);
     }
-    // print(editedUserInfo);
   }
 
   logout() async {
@@ -91,29 +70,15 @@ class MyPageScreenState extends State<MyPageScreen> {
   }
 
   withdrawal() async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
     final response = await dio.delete('mypage');
     logout();
-    // final storage = FlutterSecureStorage();
-    // await storage.deleteAll();
-    // dynamic responseBody = response.data;
-    // print(responseBody);
-    // // main();
-    // Navigator.of(context).pushAndRemoveUntil(
-    //     MaterialPageRoute(
-    //       builder: (BuildContext context) => LoginScreen(),
-    //     ),
-    // (route) => false);
   }
 
   Future<dynamic> getUserInfo() async {
-    var dio = await authDio(context);
+    final dio = await authDio(context);
     final response = await dio.get('user');
     dynamic responseBody = response.data['data'];
-    // var _userInfo = responseBody.map((e) => User.fromJson(e));
-
-    // print(responseBody);
-    // print(responseBody.runtimeType);
     profileImageUrl ??= responseBody['profileImageUrl'];
     nickname = responseBody['nickname'];
     introduce = responseBody['introduce'];
@@ -125,7 +90,6 @@ class MyPageScreenState extends State<MyPageScreen> {
   void initState() {
     super.initState();
     myGetUserInfo = getUserInfo();
-    // getUserInfo();
   }
 
   @override
@@ -137,16 +101,12 @@ class MyPageScreenState extends State<MyPageScreen> {
           backgroundColor: getPlatformDependentColor(
               context, Colors.white, Colors.grey[850]),
           elevation: 0,
-          // bottom: 50,
         ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // SizedBox(
-          //   height: 10,
-          // ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: FutureBuilder(
@@ -164,7 +124,6 @@ class MyPageScreenState extends State<MyPageScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
-                            // mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -195,9 +154,6 @@ class MyPageScreenState extends State<MyPageScreen> {
                   }
                 }),
           ),
-          // SizedBox(
-          //   height: 10,
-          // ),
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: ClipRRect(
@@ -208,10 +164,6 @@ class MyPageScreenState extends State<MyPageScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Container(
-                    //   height: 1.0,
-                    //   color: lightGreyColor,
-                    // ),
                     TextButton(
                       onPressed: () {},
                       child: Text(
@@ -224,7 +176,6 @@ class MyPageScreenState extends State<MyPageScreen> {
                     ),
                     Container(
                       height: 1.0,
-                      // width: 300.0,
                       color: lightGreyColor,
                     ),
                     TextButton(
@@ -239,7 +190,6 @@ class MyPageScreenState extends State<MyPageScreen> {
                     ),
                     Container(
                       height: 1.0,
-                      // width: 300.0,
                       color: lightGreyColor,
                     ),
                     TextButton(
@@ -261,11 +211,6 @@ class MyPageScreenState extends State<MyPageScreen> {
                       child:
                           Text('Sign Out', style: TextStyle(color: Colors.red)),
                     ),
-                    // Container(
-                    //   height: 1.0,
-                    //   // width: 300.0,
-                    //   color: Colors.grey,
-                    // ),
                   ],
                 ),
               ),

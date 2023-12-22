@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -17,16 +18,13 @@ void main() async {
   // login 세션 관리
   WidgetsFlutterBinding.ensureInitialized();
 
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
-  print(ThemeMode.system);
+  if (kDebugMode) {
+    print(ThemeMode.system);
+  }
   final storage = FlutterSecureStorage();
-  // await storage.deleteAll();
   clearSecureStorageOnReinstall(storage);
 
   dynamic userInfo = await storage.read(key: 'login');
-  // print(userInfo['accessToken']);
   if (userInfo == null) {
     runApp(MaterialApp(
         theme: ThemeData(
@@ -35,27 +33,17 @@ void main() async {
         ),
         darkTheme: ThemeData.dark(),
         home: LoginScreen()));
-    // runApp(MaterialApp(
-    //     home: SignUpScreen(
-    //   isSocial: false,
-    // )));
   } else {
-    // final accessToken = jsonDecode(userInfo)['accessToken'];
-    // print(accessToken);
     runApp(
       MaterialApp(
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
           primaryColor: Colors.white,
           brightness: Brightness.light,
-          // primarySwatch: Colors.blue,
         ),
-        // theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.system,
-        // themeMode: mode,
         home: MainScreen(),
-        // home: LoginScreen(),
       ),
     );
   }
@@ -106,7 +94,6 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               );
             }
-            // print();
             return Center(
               child: _widgetOptions.elementAt(_selectedIndex),
             );
@@ -118,8 +105,6 @@ class _MainScreenState extends State<MainScreen> {
   BottomNavigationBar btmNavBar() {
     return BottomNavigationBar(
       onTap: onTap,
-      // backgroundColor: Colors.white,
-      // backgroundColor:
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -141,7 +126,6 @@ class _MainScreenState extends State<MainScreen> {
     if (_selectedIndex == index) return;
     setState(() {
       if (index == 1) {
-        // "add Video" 아이템을 클릭했을 때 linkScreen을 아래에서 올리기
         showModalBottomSheet(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -149,17 +133,6 @@ class _MainScreenState extends State<MainScreen> {
           context: context,
           builder: (BuildContext context) {
             return Container(
-              // color: Colors.white,
-              // decoration: BoxDecoration(
-              //     // borderRadius: BorderRadius.only(
-              //     //   topLeft: Radius.circular(30),
-              //     //   topRight: Radius.circular(30),
-              //     // ),
-              //     // border: Border.all(
-              //     //   color: Colors.grey, // 원하는 border 색상을 지정
-              //     //   width: 2.0, // border의 두께를 조절
-              //     // ),
-              //     ),
               height:
                   MediaQuery.of(context).size.height / 3.0, // 원하는 height로 조절
               child: LinkScreen(),
@@ -185,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
     if (cameraPermission != PermissionStatus.granted) {
       throw '카메라 권한이 없습니다.';
     }
-    // print(microphonePermission);
+
     return true;
   }
 }

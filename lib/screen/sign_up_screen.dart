@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -33,18 +32,16 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  var email = TextEditingController();
-  var name = TextEditingController();
-  var nickname = TextEditingController();
-  var introduce = TextEditingController();
-  var country = TextEditingController();
-  var password = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController nickname = TextEditingController();
+  TextEditingController introduce = TextEditingController();
+  TextEditingController country = TextEditingController();
+  TextEditingController password = TextEditingController();
   bool _passwordVisible = false;
   bool _isSocial = false;
   final _countryList = ["English", "Vitenamese", "Korean"];
   String _selectCountry = "English";
-
-  // LoginPlatform _loginPlatform = LoginPlatform.none;
 
   static final List<Categorie> _countries = [
     Categorie(id: 1, name: "English"),
@@ -53,89 +50,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     Categorie(id: 4, name: "Japanese"),
     Categorie(id: 5, name: "Chinese"),
   ];
-
-  // void signInWithGoogle() async {
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  //   if (googleUser != null) {
-  //     print('name = ${googleUser.displayName}');
-  //     print('email = ${googleUser.email}');
-  //     print('id = ${googleUser.id}');
-
-  //     setState(() {
-  //       _loginPlatform = LoginPlatform.google;
-  //     });
-  //   }
-  // }
-
-  // void signInWithApple() async {
-  //   try {
-  //     final AuthorizationCredentialAppleID credential =
-  //         await SignInWithApple.getAppleIDCredential(
-  //       scopes: [
-  //         AppleIDAuthorizationScopes.email,
-  //         AppleIDAuthorizationScopes.fullName,
-  //       ],
-  //       webAuthenticationOptions: WebAuthenticationOptions(
-  //         clientId: "Klearning.example.com",
-  //         redirectUri: Uri.parse(
-  //           "https://magnificent-east-turnip/glitch.me/callbacks/sign_in_with_apple",
-  //         ),
-  //       ),
-  //     );
-
-  //     print('credential.state = $credential');
-  //     print('credential.state = ${credential.email}');
-  //     print('credential.state = ${credential.userIdentifier}');
-  //     print('credential.state = ${credential.authorizationCode}');
-
-  //     List<String> jwt = credential.identityToken?.split('.') ?? [];
-  //     String payload = jwt[1];
-  //     payload = base64.normalize(payload);
-
-  //     final List<int> jsonData = base64.decode(payload);
-  //     final userInfo = jsonDecode(utf8.decode(jsonData));
-  //     print(userInfo);
-  //     String email = userInfo['email'];
-
-  //     setState(() {
-  //       _loginPlatform = LoginPlatform.apple;
-  //     });
-  //   } catch (error) {
-  //     print('error = $error');
-  //   }
-  // }
-
-  // void signOut() async {
-  //   switch (_loginPlatform) {
-  //     case LoginPlatform.google:
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   setState(() {
-  //     _loginPlatform = LoginPlatform.none;
-  //   });
-  // }
-
-  // Widget _loginButton(String path, VoidCallback onTap) {
-  //   return Card(
-  //     elevation: 5.0,
-  //     shape: const CircleBorder(),
-  //     clipBehavior: Clip.antiAlias,
-  //     child: Ink.image(
-  //       image: AssetImage('assets/images/$path.png'),
-  //       width: 60,
-  //       height: 60,
-  //       child: InkWell(
-  //         borderRadius: const BorderRadius.all(
-  //           Radius.circular(35.0),
-  //         ),
-  //         onTap: onTap,
-  //       ),
-  //     ),
-  //   );
-  // }
 
   @override
   void initState() {
@@ -177,9 +91,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Column(
             children: [
-              // const SizedBox(
-              //   height: 50,
-              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Input('email', email),
@@ -208,17 +119,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 20,
               ),
-
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Input('introduce', introduce),
               ),
-
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 20.0),
-              //   child: Input('country', country),
-              // ),
-
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: DropdownButton<String>(
@@ -238,12 +142,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 20,
               ),
-              // const SizedBox(
-              //   height: 50,
-              // ),
-
-              // if (Platform.isIOS) _loginButton('apple_logo', signInWithApple),
-              // if (Platform.isAndroid) _loginButton('google_logo', signInWithGoogle),
             ],
           ),
           Column(
@@ -256,18 +154,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: MediaQuery.of(context).size.width / 1,
                 child: ElevatedButton(
                   style: TextButton.styleFrom(
-                    // padding: EdgeInsets.symmetric(
-                    //   horizontal: MediaQuery.of(context).size.width / 3,
-                    // ),
                     backgroundColor: blueColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
                   onPressed: () async {
-                    // var dio = await authDio(context);
-                    var dio = Dio();
+                    final dio = Dio();
                     dio.options.baseUrl = baseURL;
-                    var param = {
+                    Map<String, String> param = {
                       'email': email.text,
                       'name': name.text,
                       'nickname': nickname.text,
@@ -282,20 +176,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     );
 
                     if (response.statusCode == 200) {
-                      var accessToken = response.data['data']['accessToken'];
-                      var refreshToken = response.data['data']['refreshToken'];
-                      print(accessToken);
-                      print(refreshToken);
+                      String accessToken = response.data['data']['accessToken'];
+                      String refreshToken =
+                          response.data['data']['refreshToken'];
                       final storage = FlutterSecureStorage();
 
-                      var val = jsonEncode(Token(
+                      String val = jsonEncode(Token(
                           accessToken: accessToken,
                           refreshToken: refreshToken));
                       await storage.write(key: 'login', value: val);
-
-                      // await storage.write(key: 'ACCESS_TOKEN', value: accessToken);
-                      // await storage.write(
-                      //     key: 'REFRESH_TOKEN', value: refreshToken);
 
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -331,10 +220,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       maxLength: text == 'nickname' ? 8 : (text == 'introduce' ? 30 : null),
       maxLines: text == 'introduce' ? null : 1,
       decoration: InputDecoration(
-        // prefixIcon: Icon(Icons.link),
-        // contentPadding:
-        //     text == 'introduce' ? EdgeInsets.symmetric(vertical: 40.0) : null,
-
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           borderSide: BorderSide(color: blueColor),
@@ -348,12 +233,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         suffixIcon: (text == 'password')
             ? IconButton(
                 icon: Icon(
-                  // Based on passwordVisible state choose the icon
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  // color: Theme.of(context).primaryColorDark,
                 ),
                 onPressed: () {
-                  // Update the state i.e. toogle the state of passwordVisible variable
                   setState(() {
                     _passwordVisible = !_passwordVisible;
                   });
