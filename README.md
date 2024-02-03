@@ -62,3 +62,6 @@ ex) `commit -m "{#issue number} [feat] users API 구현”`
 -	로그 아웃 및 회원 탈퇴 가능
 ---
 
+### Demo-Video
+[![Video Label](http://img.youtube.com/vi/bhXtnSjMuVY/0.jpg)](https://youtu.be/bhXtnSjMuVY)
+
